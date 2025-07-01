@@ -9,17 +9,17 @@ if (!SUPABASE_URL) {
 const nextConfig: NextConfig = {
   async headers() {
     return [
-      {
-        source: "/(.*)", // applies to all routes
-        headers: [
-          {
-            key: "Content-Security-Policy",
-            value: `default-src 'self'; connect-src 'self' ${SUPABASE_URL} https://uploadthing.com https://*.uploadthing.com;`
-          }
-        ]
-      }
+      // {
+      //   source: "/(.*)", // applies to all routes
+      //   headers: [
+      //     {
+      //       key: "Content-Security-Policy",
+      //       value: `default-src 'self'; connect-src 'self' ${SUPABASE_URL} https://uploadthing.com https://*.uploadthing.com;`
+      //     }
+      //   ]
+      // },
     ];
-  }
+  },
 };
 
 export default nextConfig;
