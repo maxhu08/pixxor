@@ -27,54 +27,54 @@ export function LoginForm({
   const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
-  e.preventDefault();
-  const supabase = createClient();
-  setIsLoading(true);
-  setError(null);
+    e.preventDefault();
+    const supabase = createClient();
+    setIsLoading(true);
+    setError(null);
 
-  try {
-    const { error: signInError } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    if (signInError) throw signInError;
-
-    const { data: userData, error: userError } = await supabase.auth.getUser();
-    if (userError || !userData?.user) {
-      throw userError || new Error("Could not fetch user after login");
-    }
-
-    const { id, user_metadata } = userData.user;
-
-    const { data: existingUsers, error: selectError } = await supabase
-      .from("users")
-      .select("id")
-      .eq("id", id)
-      .limit(1);
-
-    if (selectError) throw selectError;
-
-    if (!existingUsers || existingUsers.length === 0) {
-      const name = user_metadata?.full_name || user_metadata?.name || "";
-      const avatar_url = user_metadata?.avatar_url || null;
-
-      const { error: insertError } = await supabase.from("users").insert({
-        id,
-        name: `user-${id}`,
-        avatar_url,
+    try {
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
       });
+      if (signInError) throw signInError;
 
-      if (insertError) throw insertError;
+      const { data: userData, error: userError } =
+        await supabase.auth.getUser();
+      if (userError || !userData?.user) {
+        throw userError || new Error("Could not fetch user after login");
+      }
+
+      const { id, user_metadata } = userData.user;
+
+      const { data: existingUsers, error: selectError } = await supabase
+        .from("users")
+        .select("id")
+        .eq("id", id)
+        .limit(1);
+
+      if (selectError) throw selectError;
+
+      if (!existingUsers || existingUsers.length === 0) {
+        const name = user_metadata?.full_name || user_metadata?.name || "";
+        const avatar_url = user_metadata?.avatar_url || null;
+
+        const { error: insertError } = await supabase.from("users").insert({
+          id,
+          name: `user-${id}`,
+          avatar_url,
+        });
+
+        if (insertError) throw insertError;
+      }
+
+      router.push("/protected");
+    } catch (error: unknown) {
+      setError(error instanceof Error ? error.message : "An error occurred");
+    } finally {
+      setIsLoading(false);
     }
-
-    router.push("/protected");
-  } catch (error: unknown) {
-    setError(error instanceof Error ? error.message : "An error occurred");
-  } finally {
-    setIsLoading(false);
-  }
-};
-
+  };
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>

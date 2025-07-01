@@ -7,6 +7,9 @@ if (!SUPABASE_URL) {
 }
 
 const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: [new URL("https://ra59skly5c.ufs.sh/**")],
+  },
   async headers() {
     return [
       // {
