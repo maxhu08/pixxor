@@ -1,10 +1,21 @@
+import { createClient } from "@/lib/supabase/server";
 import { handleImageUpload } from "@/utils/handle-image-upload";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
 
 const f = createUploadthing();
 
-const auth = (req: Request) => ({ id: "fakeId" }); // Fake auth function
+async function auth(req: Request) {
+  const supabase = await createClient();
+
+  const { data: authData, error: authError } = await supabase.auth.getUser();
+
+  if (authError || !authData?.user) {
+    return null;
+  }
+
+  return { id: authData.user.id };
+}
 
 // FileRouter for your app, can contain multiple FileRoutes
 export const ourFileRouter = {
@@ -30,17 +41,16 @@ export const ourFileRouter = {
       // Whatever is returned here is accessible in onUploadComplete as `metadata`
       return { userId: user.id };
     })
-    .onUploadComplete(async ({ metadata, file }) => {
-      // This code RUNS ON YOUR SERVER after upload
-      console.log("Upload complete for userId:", metadata.userId);
+  .onUploadComplete(async ({ metadata, file }) => {
+    console.log("Upload complete for userId:", metadata.userId);
 
-      await handleImageUpload(file);
+    await handleImageUpload(file, metadata.userId);
 
-      console.log("file url", file.ufsUrl);
+    console.log("file url", file.ufsUrl);
 
-      // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
-      return { uploadedBy: metadata.userId };
-    }),
+    return { uploadedBy: metadata.userId };
+  }),
+
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof ourFileRouter;
