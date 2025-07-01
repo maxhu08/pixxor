@@ -1,6 +1,6 @@
 'use client'
 
-import { handleImageUpload } from '@/lib/actions/image-actions'
+import { handleImageUpload } from '@/utils/handle-image-upload'
 import { UploadButton } from '@/utils/uploadthing'
 
 export default function Home() {
@@ -10,8 +10,6 @@ export default function Home() {
         endpoint="imageUploader"
         onClientUploadComplete={async (res) => {
           console.log('Files:', res)
-
-          await handleImageUpload(res)
 
           alert('Upload Completed')
         }}

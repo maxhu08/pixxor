@@ -1,8 +1,7 @@
-"use server"
-
 import { createClient } from '@/lib/supabase/server'
+import type { UploadedFileData } from 'uploadthing/types'
 
-export async function handleImageUpload(res: any[]) {
+export async function handleImageUpload(file: UploadedFileData) {
   const supabase = await createClient()
   const { data: authData, error: authError } = await supabase.auth.getUser()
 
@@ -44,14 +43,9 @@ export async function handleImageUpload(res: any[]) {
     }
   }
 
-  const imageInserts = res.map(file => ({
-    album_id: albumId,
-    url: file.url
-  }))
-
   const { error: imageInsertError } = await supabase
     .from('images')
-    .insert(imageInserts)
+    .insert([{ album_id: albumId, url: file.url }])
 
   if (imageInsertError) {
     throw imageInsertError

@@ -1,3 +1,4 @@
+import { handleImageUpload } from "@/utils/handle-image-upload";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
 
@@ -32,6 +33,8 @@ export const ourFileRouter = {
     .onUploadComplete(async ({ metadata, file }) => {
       // This code RUNS ON YOUR SERVER after upload
       console.log("Upload complete for userId:", metadata.userId);
+
+     await handleImageUpload(file);
 
       console.log("file url", file.ufsUrl);
 
