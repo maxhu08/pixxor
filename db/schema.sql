@@ -25,6 +25,8 @@ CREATE TABLE IF NOT EXISTS album_members (
 CREATE TABLE IF NOT EXISTS images (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     album_id UUID NOT NULL REFERENCES albums(id) ON DELETE CASCADE,
+    user_id UUID NOT NULL,
+    filename TEXT NOT NULL,
     url TEXT NOT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );

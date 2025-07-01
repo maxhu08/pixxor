@@ -58,7 +58,7 @@ export async function handleImageUpload(file: UploadedFileData, userId: string) 
   console.log('12: Inserting image into images table');
   const { error: imageInsertError } = await supabase
     .from('images')
-    .insert([{ album_id: albumId, url: file.ufsUrl, filename: file.name }]);
+    .insert([{ user_id: userId, album_id: albumId, url: file.ufsUrl, filename: file.name }]);
 
   if (imageInsertError) {
     console.log('13: Error inserting image', imageInsertError);
