@@ -1,6 +1,5 @@
 'use client'
 
-import { handleImageUpload } from '@/utils/handle-image-upload'
 import { UploadButton } from '@/utils/uploadthing'
 
 export default function Home() {
@@ -8,7 +7,7 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-center justify-center p-24">
       <UploadButton
         endpoint="imageUploader"
-        onClientUploadComplete={async (res) => {
+        onClientUploadComplete={(res) => {
           console.log('Files:', res)
 
           alert('Upload Completed')
