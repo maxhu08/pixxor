@@ -53,4 +53,3 @@ export async function handleImageUpload(file: UploadedFileData) {
 
   return { success: true }
 }
-
