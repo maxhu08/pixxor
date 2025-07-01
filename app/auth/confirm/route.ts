@@ -12,36 +12,21 @@ export async function GET(request: NextRequest) {
   if (token_hash && type) {
     const supabase = await createClient();
 
-    const { error: verifyError } = await supabase.auth.verifyOtp({
+    const { error } = await supabase.auth.verifyOtp({
       type,
       token_hash,
     });
 
-    if (!verifyError) {
-      const { data: userData, error: userError } = await supabase.auth.getUser();
 
-      if (userData?.user && !userError) {
-        const { id, user_metadata } = userData.user;
-        const name = user_metadata?.full_name || user_metadata?.name || "";
-        const avatar_url = user_metadata?.avatar_url || null;
-
-        await supabase
-          .from("users")
-          .insert({
-            id,
-            name,
-            avatar_url,
-          })
-
-        redirect(next);
-      } else {
-        redirect(`/auth/error?error=Unable to fetch user`);
-      }
+    if (!error) {
+      // redirect user to specified redirect URL or root of app
+      redirect(next);
     } else {
-      redirect(`/auth/error?error=${verifyError.message}`);
+      // redirect the user to an error page with some instructions
+      redirect(`/auth/error?error=${error?.message}`);
     }
   }
 
+  // redirect the user to an error page with some instructions
   redirect(`/auth/error?error=No token hash or type`);
 }
-
