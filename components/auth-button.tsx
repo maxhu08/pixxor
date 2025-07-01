@@ -1,13 +1,13 @@
-import Link from "next/link";
-import { Button } from "./ui/button";
 import { createClient } from "@/lib/supabase/server";
+import Link from "next/link";
 import { LogoutButton } from "./logout-button";
+import { Button } from "./ui/button";
 
 export async function AuthButton() {
   const supabase = await createClient();
 
   const {
-    data: { user }
+    data: { user },
   } = await supabase.auth.getUser();
 
   return user ? (

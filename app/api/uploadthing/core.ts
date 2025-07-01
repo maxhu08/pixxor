@@ -15,8 +15,8 @@ export const ourFileRouter = {
        * @see https://docs.uploadthing.com/file-routes#route-config
        */
       maxFileSize: "4MB",
-      maxFileCount: 1
-    }
+      maxFileCount: 1,
+    },
   })
     // Set permissions and file types for this FileRoute
     .middleware(async ({ req }) => {
@@ -37,7 +37,7 @@ export const ourFileRouter = {
 
       // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
       return { uploadedBy: metadata.userId };
-    })
+    }),
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof ourFileRouter;
