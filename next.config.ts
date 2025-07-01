@@ -1,32 +1,25 @@
 import type { NextConfig } from "next";
 
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
+
+if (!SUPABASE_URL) {
+  throw new Error("Missing NEXT_PUBLIC_SUPABASE_URL in environment variables");
+}
+
 const nextConfig: NextConfig = {
-  experimental: {
-    reactCompiler: true,
-  },
   async headers() {
     return [
       {
-        source: "/(.*)",
+        source: "/(.*)", // applies to all routes
         headers: [
           {
-            key: "Permissions-Policy",
-            value:
-              "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()",
-          },
-          {
-            key: "Referrer-Policy",
-            value: "same-origin",
-          },
-          {
-            key: "X-Content-Type-Options",
-            value: "nosniff",
-          },
-        ],
-      },
+            key: "Content-Security-Policy",
+            value: `default-src 'self'; connect-src 'self' ${SUPABASE_URL} https://uploadthing.com https://*.uploadthing.com;`
+          }
+        ]
+      }
     ];
-  },
-  poweredByHeader: false,
+  }
 };
 
 export default nextConfig;
