@@ -1,21 +1,13 @@
-CREATE EXTENSION IF NOT EXISTS citext SCHEMA extensions;
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
 CREATE TABLE IF NOT EXISTS users (
     id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
-    username CITEXT,
-    name TEXT NOT NULL,
+    name TEXT NOT NULL UNIQUE,
     avatar_url TEXT,
     onboarded BOOLEAN NOT NULL DEFAULT false,
     completed_tour BOOLEAN NOT NULL DEFAULT false,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-    CONSTRAINT username_length CHECK (
-        username IS NULL OR length(username) BETWEEN 3 AND 32
-    ),
-    CONSTRAINT username_allowed_chars CHECK (
-        username IS NULL OR username ~* '^[a-z0-9._-]*$'
-    )
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
 CREATE TABLE IF NOT EXISTS albums (

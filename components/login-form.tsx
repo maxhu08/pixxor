@@ -60,7 +60,7 @@ export function LoginForm({
 
       const { error: insertError } = await supabase.from("users").insert({
         id,
-        name,
+        name: `user-${id}`,
         avatar_url,
       });
 
