@@ -1,7 +1,6 @@
 'use client'
 
-import { createClient } from '@/lib/supabase/server'
-import { handleImageUpload } from '@/utils/handle-image-upload'
+import { handleImageUpload } from '@/lib/actions/image-actions'
 import { UploadButton } from '@/utils/uploadthing'
 
 export default function Home() {
@@ -12,12 +11,7 @@ export default function Home() {
         onClientUploadComplete={async (res) => {
           console.log('Files:', res)
 
-          const supabase = await createClient()
-          const { data, error } = await supabase.auth.getUser()
-
-          if (error || !data?.user) return
-
-          await handleImageUpload(res, data.user.id)
+          await handleImageUpload(res)
 
           alert('Upload Completed')
         }}
