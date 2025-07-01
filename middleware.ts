@@ -8,7 +8,7 @@ export async function middleware(request: NextRequest) {
   const csp = `
     default-src 'self';
     script-src 'nonce-${nonce}' 'strict-dynamic' ${
-    process.env.NODE_ENV === "production" ? "" : `'unsafe-eval'`
+    process.env.NODE_ENV === "production" ? "unsafe-eval" : `'unsafe-eval'`
   };
     style-src 'self' 'unsafe-inline';
     connect-src 'self' ${process.env.NEXT_PUBLIC_SUPABASE_URL};
