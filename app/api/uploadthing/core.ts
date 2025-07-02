@@ -41,16 +41,11 @@ export const ourFileRouter = {
       // Whatever is returned here is accessible in onUploadComplete as `metadata`
       return { userId: user.id };
     })
-  .onUploadComplete(async ({ metadata, file }) => {
-    console.log("Upload complete for userId:", metadata.userId);
+    .onUploadComplete(async ({ metadata, file }) => {
+      await handleImageUpload(file, metadata.userId);
 
-    await handleImageUpload(file, metadata.userId);
-
-    console.log("file url", file.ufsUrl);
-
-    return { uploadedBy: metadata.userId };
-  }),
-
+      return { uploadedBy: metadata.userId };
+    }),
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof ourFileRouter;
