@@ -4,9 +4,14 @@ export type DialogType =
   | "sign-out"
   | "create-album"
   | "manage-album"
-  | "invite-members-to-album";
+  | "invite-members-to-album"
+  | "upload-image-to-album";
 
-interface DialogData {}
+interface DialogData {
+  uploadImageToAlbumData?: {
+    albumId: string;
+  };
+}
 
 interface DialogStore {
   type: DialogType | null;

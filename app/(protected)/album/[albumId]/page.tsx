@@ -4,8 +4,9 @@ import { UUID } from "crypto";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useDialogStore } from "@/hooks/use-dialog-store";
 import { createClient } from "@/lib/supabase/client";
-import { ArrowLeft, FileText } from "lucide-react";
+import { ArrowLeft, FileText, PlusCircle } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -128,22 +129,37 @@ function AlbumContent() {
     }
   }, [inView, isLoadingMore, isReachingEnd, setSize, size]);
 
+  const dialog = useDialogStore();
+
   return (
     <>
-      <div className="grid w-full">
-        <div className="mb-4 flex items-center justify-between">
-          <div className="flex h-5 items-center gap-4">
-            <Button variant="outline" asChild>
-              <Link href={`/gallery`} className="flex items-center gap-2">
-                <ArrowLeft className="size-4" /> Back to Gallery
-              </Link>
-            </Button>
-            <Separator orientation="vertical" />
-            <h3 className="w-full truncate overflow-hidden text-2xl font-bold whitespace-nowrap">
-              {album.name}
-            </h3>
-          </div>
+      <div className="mb-4 flex w-full items-center justify-between">
+        <div className="flex min-w-0 items-center gap-4">
+          <Button variant="outline" asChild>
+            <Link href="/gallery" className="flex items-center gap-2">
+              <ArrowLeft className="h-4 w-4" />
+              Back to Gallery
+            </Link>
+          </Button>
+
+          <Separator orientation="vertical" />
+
+          <h3 className="max-w-[300px] min-w-0 truncate overflow-hidden text-2xl font-bold whitespace-nowrap">
+            {album.name}
+          </h3>
         </div>
+
+        <Button
+          onClick={() =>
+            dialog.open("upload-image-to-album", {
+              uploadImageToAlbumData: { albumId },
+            })
+          }
+          className="flex cursor-pointer items-center space-x-2"
+        >
+          <PlusCircle className="h-4 w-4" />
+          <span>Upload Image</span>
+        </Button>
       </div>
 
       <Separator className="my-6" />
