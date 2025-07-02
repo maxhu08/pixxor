@@ -105,6 +105,7 @@ function AlbumContent() {
     fetchImages,
     {
       suspense: true,
+      parallel: true,
     },
   );
 
@@ -177,7 +178,7 @@ function AlbumContent() {
   );
 }
 
-export default function EditEntryPage() {
+export default function AlbumPage() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
