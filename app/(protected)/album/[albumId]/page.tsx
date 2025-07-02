@@ -1,5 +1,6 @@
 "use client";
 
+import { UUID } from "crypto";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -13,7 +14,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import useSWR from "swr";
 import useSWRInfinite from "swr/infinite";
 
-async function fetchAlbum(albumId: string) {
+async function fetchAlbum(albumId: UUID) {
   const supabase = createClient();
 
   const { data: albumData, error: albumError } = await supabase
@@ -28,13 +29,12 @@ async function fetchAlbum(albumId: string) {
   return albumData;
 }
 
-const PAGE_SIZE = 20;
+const PAGE_SIZE = 2;
 
 function getKey(pageIndex: number, previousPageData: any, albumId: string) {
   if (previousPageData && !previousPageData.length) return null;
   if (pageIndex === 0) return { lastCreatedAt: null, albumId };
-  const lastItem = previousPageData[previousPageData.length - 1];
-  return { lastCreatedAt: lastItem.created_at, albumId };
+  return { lastCreatedAt: previousPageData.at(-1).created_at, albumId };
 }
 
 async function fetchImages({
@@ -50,14 +50,13 @@ async function fetchImages({
     .from("images")
     .select("id, url, filename, created_at")
     .eq("album_id", albumId)
-    .order("created_at", { ascending: false })
-    .limit(PAGE_SIZE);
+    .order("created_at", { ascending: false });
 
   if (lastCreatedAt) {
     query = query.lt("created_at", lastCreatedAt);
   }
 
-  const { data: imagesData, error: imagesError } = await query;
+  const { data: imagesData, error: imagesError } = await query.limit(PAGE_SIZE);
 
   if (imagesError) throw imagesError;
 
@@ -105,7 +104,6 @@ function AlbumContent() {
     fetchImages,
     {
       suspense: true,
-      parallel: true,
     },
   );
 
