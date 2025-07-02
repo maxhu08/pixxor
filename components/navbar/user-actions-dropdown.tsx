@@ -13,7 +13,6 @@ import {
   ChevronDown,
   LayoutDashboard,
   LogOut,
-  NotebookPen,
   SquareLibrary,
   User,
   UserCog,
