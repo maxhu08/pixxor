@@ -8,6 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useDialogStore } from "@/hooks/use-dialog-store";
 import { createClient } from "@/lib/supabase/client";
 import {
   ChevronDown,
@@ -28,13 +29,9 @@ interface UserActionsDropdownProps {
 export const UserActionsDropdown: FC<UserActionsDropdownProps> = ({
   username,
 }) => {
-  const router = useRouter();
+  const dialog = useDialogStore();
 
-  const logout = async () => {
-    const supabase = createClient();
-    await supabase.auth.signOut();
-    router.push("/auth/login");
-  };
+  const router = useRouter();
 
   return (
     <DropdownMenu>
@@ -81,7 +78,7 @@ export const UserActionsDropdown: FC<UserActionsDropdownProps> = ({
         <DropdownMenuSeparator />
         <DropdownMenuItem
           className="flex cursor-pointer items-center gap-2 text-red-500"
-          onClick={() => logout()}
+          onClick={() => dialog.open("sign-out")}
         >
           <LogOut size={16} />
           <span>Sign out</span>

@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -6,6 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useDialogStore } from "@/hooks/use-dialog-store";
 import { Eye, Settings, UserPlus } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -22,6 +25,8 @@ interface AlbumCardProps {
 }
 
 export function AlbumCard({ album }: AlbumCardProps) {
+  const dialog = useDialogStore();
+
   return (
     <Card className="overflow-hidden transition-all hover:shadow-md">
       <div className="bg-muted relative aspect-video overflow-hidden">
@@ -49,7 +54,12 @@ export function AlbumCard({ album }: AlbumCardProps) {
         </p>
       </CardContent>
       <CardFooter className="flex justify-between gap-2 pt-0">
-        <Button asChild variant="default" size="sm" className="flex-1">
+        <Button
+          asChild
+          variant="default"
+          size="sm"
+          className="flex-1 cursor-pointer"
+        >
           <Link href={`/album/${album.id}`}>
             <Eye className="mr-1 h-4 w-4" />
             View
@@ -59,7 +69,8 @@ export function AlbumCard({ album }: AlbumCardProps) {
           asChild
           variant="outline"
           size="sm"
-          className="flex-1 bg-transparent"
+          className="flex-1 cursor-pointer bg-transparent"
+          onClick={() => dialog.open("invite-members-to-album")}
         >
           <div>
             <UserPlus className="mr-1 h-4 w-4" />
@@ -70,7 +81,8 @@ export function AlbumCard({ album }: AlbumCardProps) {
           asChild
           variant="outline"
           size="sm"
-          className="flex-1 bg-transparent"
+          className="flex-1 cursor-pointer bg-transparent"
+          onClick={() => dialog.open("manage-album")}
         >
           <div>
             <Settings className="mr-1 h-4 w-4" />

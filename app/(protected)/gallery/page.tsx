@@ -1,4 +1,5 @@
 import { AlbumCard } from "@/components/albums/album-card";
+import { CreateAlbumButton } from "@/components/albums/create-album-button";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/server";
 import { PlusCircle } from "lucide-react";
@@ -91,12 +92,7 @@ export default async function AlbumsPage() {
     <main className="container mx-auto px-4 py-10 md:px-6">
       <div className="mb-8 flex items-center justify-between">
         <h1 className="text-3xl font-bold tracking-tight">Your Albums</h1>
-        <Button asChild>
-          <div>
-            <PlusCircle className="mr-2 h-4 w-4" />
-            Create Album
-          </div>
-        </Button>
+        <CreateAlbumButton />
       </div>
       {processedAlbums.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-12 text-center">
@@ -105,12 +101,6 @@ export default async function AlbumsPage() {
             <p className="text-muted-foreground">
               Create your first album to start collecting and sharing memories.
             </p>
-            <Button asChild>
-              <div>
-                <PlusCircle className="mr-2 h-4 w-4" />
-                Create Your First Album (WIP)
-              </div>
-            </Button>
           </div>
         </div>
       ) : (

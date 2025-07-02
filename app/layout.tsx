@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import "./globals.css";
+import { DialogProvider } from "@/components/dialogs/dialog-provider";
 import { Navbar } from "@/components/navbar/navbar";
 
 const defaultUrl = process.env.VERCEL_URL
@@ -29,6 +30,7 @@ export default function RootLayout({
       <body className={`${geistSans.className} antialiased`}>
         <Navbar />
         {children}
+        <DialogProvider />
       </body>
     </html>
   );
