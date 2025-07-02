@@ -68,7 +68,7 @@ export function LoginForm({
         if (insertError) throw insertError;
       }
 
-      router.push("/protected");
+      router.push("/uploadthing-test");
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : "An error occurred");
     } finally {
