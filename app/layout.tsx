@@ -3,6 +3,7 @@ import { Geist } from "next/font/google";
 import "./globals.css";
 import { DialogProvider } from "@/components/dialogs/dialog-provider";
 import { Navbar } from "@/components/navbar/navbar";
+import { Toaster } from "sonner";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -31,6 +32,7 @@ export default function RootLayout({
         <Navbar />
         {children}
         <DialogProvider />
+        <Toaster />
       </body>
     </html>
   );
