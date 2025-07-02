@@ -11,6 +11,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
+import { useInView } from "react-intersection-observer";
 import useSWR from "swr";
 import useSWRInfinite from "swr/infinite";
 
@@ -29,7 +30,7 @@ async function fetchAlbum(albumId: UUID) {
   return albumData;
 }
 
-const PAGE_SIZE = 2;
+const PAGE_SIZE = 20;
 
 function getKey(pageIndex: number, previousPageData: any, albumId: string) {
   if (previousPageData && !previousPageData.length) return null;
@@ -108,6 +109,24 @@ function AlbumContent() {
   );
 
   const images = imagesData ? imagesData.flat() : [];
+  const isLoadingMore =
+    isLoading ||
+    (size > 0 && imagesData && typeof imagesData[size - 1] === "undefined");
+  const isEmpty = imagesData?.[0]?.length === 0;
+  const isReachingEnd =
+    isEmpty ||
+    (imagesData && imagesData[imagesData.length - 1]?.length < PAGE_SIZE);
+
+  const { ref: loadMoreRef, inView } = useInView({
+    threshold: 0,
+    rootMargin: "100px",
+  });
+
+  useEffect(() => {
+    if (inView && !isLoadingMore && !isReachingEnd) {
+      setSize(size + 1);
+    }
+  }, [inView, isLoadingMore, isReachingEnd, setSize, size]);
 
   return (
     <>
@@ -132,17 +151,21 @@ function AlbumContent() {
       <div className="space-y-6">
         <div className="space-y-4">
           {images && images.length > 0 ? (
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-              {images.map((image) => (
+            <div className="columns-1 gap-4 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-5">
+              {images.map((image, index) => (
                 <div
                   key={image.id}
-                  className="group relative aspect-square overflow-hidden rounded-lg border border-gray-200 bg-gray-50 transition-shadow duration-200 hover:shadow-md"
+                  className="group relative mb-4 break-inside-avoid overflow-hidden rounded-lg border border-gray-200 bg-gray-50 transition-shadow duration-200 hover:shadow-md"
                 >
                   <Image
                     src={image.url}
                     alt={image.filename}
-                    fill
-                    className="object-cover transition-transform duration-200 group-hover:scale-105"
+                    width={400}
+                    height={600}
+                    className="h-auto w-full object-cover transition-transform duration-200 group-hover:scale-105"
+                    style={{
+                      aspectRatio: "auto",
+                    }}
                   />
                 </div>
               ))}
@@ -162,13 +185,20 @@ function AlbumContent() {
               </div>
             </div>
           )}
+
+          {!isReachingEnd && (
+            <div ref={loadMoreRef} className="py-4 text-center">
+              {isLoadingMore && (
+                <div className="flex items-center justify-center space-x-2">
+                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-300 border-t-blue-600" />
+                  <span className="text-sm text-gray-500">
+                    Loading more images...
+                  </span>
+                </div>
+              )}
+            </div>
+          )}
         </div>
-        <Button
-          onClick={() => setSize(size + 1)}
-          disabled={isLoading || isValidating}
-        >
-          Load more
-        </Button>
 
         <Separator className="my-6" />
       </div>
