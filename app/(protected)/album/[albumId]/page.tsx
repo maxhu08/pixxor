@@ -7,10 +7,11 @@ import { createClient } from "@/lib/supabase/client";
 import { ArrowLeft, FileText } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import useSWR from "swr";
+import useSWRInfinite from "swr/infinite";
 
 async function fetchAlbum(albumId: string) {
   const supabase = createClient();
@@ -24,24 +25,43 @@ async function fetchAlbum(albumId: string) {
   if (albumError) throw new Error("Album not found");
   if (!albumData.name) throw new Error("Album name is missing");
 
-  return {
-    album: albumData,
-  };
+  return albumData;
 }
 
-async function fetchImages(albumId: string) {
+const PAGE_SIZE = 20;
+
+function getKey(pageIndex: number, previousPageData: any, albumId: string) {
+  if (previousPageData && !previousPageData.length) return null;
+  if (pageIndex === 0) return { lastCreatedAt: null, albumId };
+  const lastItem = previousPageData[previousPageData.length - 1];
+  return { lastCreatedAt: lastItem.created_at, albumId };
+}
+
+async function fetchImages({
+  lastCreatedAt,
+  albumId,
+}: {
+  lastCreatedAt: string | null;
+  albumId: string;
+}) {
   const supabase = createClient();
 
-  const { data: images, error } = await supabase
+  let query = supabase
     .from("images")
-    .select("id, url, filename")
-    .eq("album_id", albumId);
+    .select("id, url, filename, created_at")
+    .eq("album_id", albumId)
+    .order("created_at", { ascending: false })
+    .limit(PAGE_SIZE);
 
-  if (error) throw new Error("Failed to fetch images");
+  if (lastCreatedAt) {
+    query = query.lt("created_at", lastCreatedAt);
+  }
 
-  return {
-    images: images || [],
-  };
+  const { data: imagesData, error: imagesError } = await query;
+
+  if (imagesError) throw imagesError;
+
+  return imagesData;
 }
 
 function AlbumErrorFallback({ error }: { error: Error }) {
@@ -68,22 +88,27 @@ function AlbumSkeleton() {
 
 function AlbumContent() {
   const { albumId } = useParams<{ albumId: string }>();
-  const router = useRouter();
 
-  const { data, mutate } = useSWR(albumId, fetchAlbum, {
+  const { data: album, mutate } = useSWR(albumId, fetchAlbum, {
     suspense: true,
   });
 
-  const { data: imagesData } = useSWR(
-    `images-${albumId}`,
-    () => fetchImages(albumId),
+  const {
+    data: imagesData,
+    size,
+    setSize,
+    isLoading,
+    isValidating,
+  } = useSWRInfinite(
+    (pageIndex, previousPageData) =>
+      getKey(pageIndex, previousPageData, albumId),
+    fetchImages,
     {
       suspense: true,
     },
   );
 
-  const { album } = data;
-  const { images } = imagesData;
+  const images = imagesData ? imagesData.flat() : [];
 
   return (
     <>
@@ -139,6 +164,12 @@ function AlbumContent() {
             </div>
           )}
         </div>
+        <Button
+          onClick={() => setSize(size + 1)}
+          disabled={isLoading || isValidating}
+        >
+          Load more
+        </Button>
 
         <Separator className="my-6" />
       </div>
