@@ -1,10 +1,125 @@
-const Page = () => {
+import { AlbumCard } from "@/components/albums/album-card";
+import { Button } from "@/components/ui/button";
+import { createClient } from "@/lib/supabase/server";
+import { PlusCircle } from "lucide-react";
+import Link from "next/link";
+
+export default async function AlbumsPage() {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return (
+      <main className="flex min-h-screen flex-col items-center justify-center p-8">
+        <div className="w-full max-w-md space-y-4 text-center">
+          <h1 className="text-2xl font-bold tracking-tight">
+            Authentication Required
+          </h1>
+          <p className="text-muted-foreground">
+            You must be logged in to view your albums.
+          </p>
+          <Button asChild>
+            <Link href="/login">Sign In</Link>
+          </Button>
+        </div>
+      </main>
+    );
+  }
+
+  const { data: albums, error } = await supabase
+    .from("album_members")
+    .select(
+      `
+      album_id, 
+      albums:albums(
+        id, 
+        name,
+        created_at,
+        images:images(
+          id,
+          url,
+          created_at
+        )
+      )
+    `,
+    )
+    .eq("user_id", user.id)
+    .order("created_at", { foreignTable: "albums", ascending: false });
+
+  if (error) {
+    console.error("Failed to fetch albums", error);
+    return (
+      <main className="flex min-h-screen flex-col items-center justify-center p-8">
+        <div className="w-full max-w-md space-y-4 text-center">
+          <h1 className="text-2xl font-bold tracking-tight">
+            Something went wrong
+          </h1>
+          <p className="text-muted-foreground">
+            Error fetching albums. Please try again later.
+          </p>
+          <Button variant="outline" onClick={() => window.location.reload()}>
+            Retry
+          </Button>
+        </div>
+      </main>
+    );
+  }
+
+  const processedAlbums = albums.map((membership) => {
+    const album = Array.isArray(membership.albums)
+      ? membership.albums[0]
+      : membership.albums;
+
+    let latestImage = null;
+    if (album.images && album.images.length > 0) {
+      latestImage = [...album.images].sort(
+        (a, b) =>
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
+      )[0];
+    }
+
+    return {
+      ...album,
+      latestImage,
+    };
+  });
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24">
-      <h1 className="text-2xl font-bold">Gallery Page (WIP)</h1>
-      <p className="mt-4">This is the gallery page.</p>
+    <main className="container mx-auto px-4 py-10 md:px-6">
+      <div className="mb-8 flex items-center justify-between">
+        <h1 className="text-3xl font-bold tracking-tight">Your Albums</h1>
+        <Button asChild>
+          <div>
+            <PlusCircle className="mr-2 h-4 w-4" />
+            Create Album
+          </div>
+        </Button>
+      </div>
+      {processedAlbums.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-12 text-center">
+          <div className="max-w-md space-y-4">
+            <h2 className="text-xl font-semibold">No albums yet</h2>
+            <p className="text-muted-foreground">
+              Create your first album to start collecting and sharing memories.
+            </p>
+            <Button asChild>
+              <div>
+                <PlusCircle className="mr-2 h-4 w-4" />
+                Create Your First Album (WIP)
+              </div>
+            </Button>
+          </div>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {processedAlbums.map((album) => (
+            <AlbumCard key={album.id} album={album} />
+          ))}
+        </div>
+      )}
     </main>
   );
-};
-
-export default Page;
+}
