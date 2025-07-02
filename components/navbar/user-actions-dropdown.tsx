@@ -8,17 +8,18 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { createClient } from "@/lib/supabase/client";
 import {
   ChevronDown,
-  ClipboardList,
   LayoutDashboard,
   LogOut,
   NotebookPen,
-  Trophy,
+  SquareLibrary,
   User,
   UserCog,
 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { type FC } from "react";
 
 interface UserActionsDropdownProps {
@@ -28,6 +29,14 @@ interface UserActionsDropdownProps {
 export const UserActionsDropdown: FC<UserActionsDropdownProps> = ({
   username,
 }) => {
+  const router = useRouter();
+
+  const logout = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.push("/auth/login");
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -57,7 +66,7 @@ export const UserActionsDropdown: FC<UserActionsDropdownProps> = ({
             href="/gallery"
             className="flex w-full cursor-pointer items-center gap-2"
           >
-            <NotebookPen size={16} />
+            <SquareLibrary size={16} />
             <span>Gallery</span>
           </Link>
         </DropdownMenuItem>
@@ -73,7 +82,7 @@ export const UserActionsDropdown: FC<UserActionsDropdownProps> = ({
         <DropdownMenuSeparator />
         <DropdownMenuItem
           className="flex cursor-pointer items-center gap-2 text-red-500"
-          onClick={() => {}}
+          onClick={() => logout()}
         >
           <LogOut size={16} />
           <span>Sign out</span>
