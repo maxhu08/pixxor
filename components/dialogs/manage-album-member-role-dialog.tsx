@@ -79,7 +79,7 @@ export function ManageAlbumMemberRoleDialog({
               className="w-full rounded border border-gray-300 p-2"
               value={selectedRole}
               onChange={(e) =>
-                setSelectedRole(Number(e.target.value) as AlbumMemberRole)
+                setSelectedRole(e.target.value as AlbumMemberRole)
               }
               disabled={isPending}
             >
