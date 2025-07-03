@@ -11,6 +11,7 @@ export type DialogType =
 interface DialogData {
   uploadImageToAlbumData?: {
     albumId: string;
+    onSuccess?: () => void;
   };
   manageAlbumData?: {
     albumId: string;

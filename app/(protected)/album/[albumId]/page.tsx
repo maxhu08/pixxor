@@ -13,8 +13,17 @@ import { useParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { useInView } from "react-intersection-observer";
-import useSWR from "swr";
-import useSWRInfinite from "swr/infinite";
+import useSWR, { mutate, useSWRConfig } from "swr";
+import useSWRInfinite, { unstable_serialize } from "swr/infinite";
+
+function onUploadSuccess(albumId: UUID) {
+  console.log("Image uploaded successfully");
+  const keyPrefix = unstable_serialize((pageIndex, previousPageData) =>
+    getKey(pageIndex, previousPageData, albumId),
+  );
+
+  mutate(keyPrefix);
+}
 
 async function fetchAlbum(albumId: UUID) {
   const supabase = createClient();
@@ -88,7 +97,7 @@ function AlbumSkeleton() {
 }
 
 function AlbumContent() {
-  const { albumId } = useParams<{ albumId: string }>();
+  const { albumId } = useParams<{ albumId: UUID }>();
 
   const { data: album, mutate } = useSWR(albumId, fetchAlbum, {
     suspense: true,
@@ -152,7 +161,13 @@ function AlbumContent() {
         <Button
           onClick={() =>
             dialog.open("upload-image-to-album", {
-              uploadImageToAlbumData: { albumId },
+              uploadImageToAlbumData: {
+                albumId,
+                onSuccess: () => {
+                  console.log("success");
+                  onUploadSuccess(albumId);
+                },
+              },
             })
           }
           className="cursor-pointer"

@@ -33,6 +33,7 @@ export const DialogProvider = () => {
       <InviteMembersToAlbumDialog />
       <UploadImageToAlbumDialog
         albumId={dialog.data.uploadImageToAlbumData?.albumId as string}
+        onSuccess={dialog.data.uploadImageToAlbumData?.onSuccess}
       />
     </>
   );
