@@ -2,7 +2,6 @@ import { AlbumCard } from "@/components/albums/album-card";
 import { CreateAlbumButton } from "@/components/albums/create-album-button";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/server";
-import { PlusCircle } from "lucide-react";
 import Link from "next/link";
 
 export default async function AlbumsPage() {
@@ -34,12 +33,12 @@ export default async function AlbumsPage() {
     .from("album_members")
     .select(
       `
-      album_id, 
+      album_id,
       albums:albums(
-        id, 
+        id,
         name,
         created_at,
-        images:images(
+        images(
           id,
           url,
           created_at
@@ -74,17 +73,24 @@ export default async function AlbumsPage() {
       ? membership.albums[0]
       : membership.albums;
 
-    let latestImage = null;
-    if (album.images && album.images.length > 0) {
-      latestImage = [...album.images].sort(
-        (a, b) =>
-          new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
-      )[0];
-    }
+    const sortedImages = [...(album.images ?? [])].sort(
+      (a, b) =>
+        new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
+    );
+
+    const latestImage = sortedImages[0] ?? null;
 
     return {
-      ...album,
-      latestImage,
+      id: album.id,
+      name: album.name,
+      latestImage: latestImage
+        ? {
+            id: latestImage.id,
+            url: latestImage.url,
+          }
+        : null,
+      imageCount: album.images?.length ?? 0,
+      latestImageTimestamp: latestImage?.created_at ?? null,
     };
   });
 
@@ -106,7 +112,16 @@ export default async function AlbumsPage() {
       ) : (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {processedAlbums.map((album) => (
-            <AlbumCard key={album.id} album={album} />
+            <AlbumCard
+              key={album.id}
+              album={{
+                id: album.id,
+                name: album.name,
+                latestImage: album.latestImage,
+              }}
+              imageCount={album.imageCount}
+              latestImageTimestamp={album.latestImageTimestamp}
+            />
           ))}
         </div>
       )}

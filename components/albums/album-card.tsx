@@ -22,10 +22,18 @@ interface AlbumCardProps {
       url: string;
     } | null;
   };
+  imageCount: number;
+  latestImageTimestamp: string | null;
 }
 
-export function AlbumCard({ album }: AlbumCardProps) {
+export function AlbumCard({
+  album,
+  imageCount,
+  latestImageTimestamp,
+}: AlbumCardProps) {
   const dialog = useDialogStore();
+
+  console.log(album.latestImage);
 
   return (
     <Card className="overflow-hidden transition-all hover:shadow-md">
@@ -46,11 +54,14 @@ export function AlbumCard({ album }: AlbumCardProps) {
       <CardHeader className="pb-2">
         <CardTitle className="line-clamp-1">{album.name}</CardTitle>
       </CardHeader>
-      <CardContent className="pb-2">
+      <CardContent className="space-y-1 pb-2">
         <p className="text-muted-foreground text-sm">
-          {album.latestImage
-            ? "Last updated recently"
-            : "No images uploaded yet"}
+          {imageCount} photo{imageCount !== 1 ? "s" : ""}
+        </p>
+        <p className="text-muted-foreground text-sm">
+          {latestImageTimestamp
+            ? `Last updated ${new Date(latestImageTimestamp).toLocaleString()}`
+            : "No uploads yet"}
         </p>
       </CardContent>
       <CardFooter className="flex justify-between gap-2 pt-0">
