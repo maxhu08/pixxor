@@ -65,8 +65,7 @@ export function ManageAlbumDialog({
                           id: member.id,
                           name: member.name,
                         },
-                        // temp
-                        currentRole: AlbumMemberRole.VIEWER,
+                        currentRole: member.role,
                       },
                     })
                   }

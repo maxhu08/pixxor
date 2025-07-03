@@ -92,7 +92,7 @@ export default async function AlbumsPage() {
       id: m.user_id,
       name: m.users?.name ?? "Unknown",
       avatar_url: m.users?.avatar_url ?? null,
-      role: "Member",
+      role: m.role,
     }));
 
     return {

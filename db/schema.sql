@@ -16,10 +16,13 @@ CREATE TABLE IF NOT EXISTS albums (
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
+CREATE TYPE album_member_role AS ENUM ('ADMIN', 'MEMBER', 'VIEWER');
+
 CREATE TABLE IF NOT EXISTS album_members (
-    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    album_id UUID NOT NULL REFERENCES albums(id) ON DELETE CASCADE,
-    PRIMARY KEY (user_id, album_id)
+  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  album_id UUID NOT NULL REFERENCES albums(id) ON DELETE CASCADE,
+  role album_member_role NOT NULL DEFAULT 'MEMBER',
+  PRIMARY KEY (user_id, album_id)
 );
 
 CREATE TABLE IF NOT EXISTS images (
