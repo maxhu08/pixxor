@@ -1,3 +1,4 @@
+import { AlbumMember } from "@/types";
 import { create } from "zustand";
 
 export type DialogType =
@@ -10,6 +11,10 @@ export type DialogType =
 interface DialogData {
   uploadImageToAlbumData?: {
     albumId: string;
+  };
+  manageAlbumData?: {
+    albumId: string;
+    members: AlbumMember[];
   };
 }
 

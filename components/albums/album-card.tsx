@@ -9,6 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useDialogStore } from "@/hooks/use-dialog-store";
+import { AlbumMember } from "@/types";
 import { Eye, Settings, UserPlus } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -24,16 +25,16 @@ interface AlbumCardProps {
   };
   imageCount: number;
   latestImageTimestamp: string | null;
+  members: AlbumMember[];
 }
 
 export function AlbumCard({
   album,
   imageCount,
   latestImageTimestamp,
+  members,
 }: AlbumCardProps) {
   const dialog = useDialogStore();
-
-  console.log(album.latestImage);
 
   return (
     <Card className="overflow-hidden transition-all hover:shadow-md">
@@ -93,7 +94,14 @@ export function AlbumCard({
           variant="outline"
           size="sm"
           className="flex-1 cursor-pointer bg-transparent"
-          onClick={() => dialog.open("manage-album")}
+          onClick={() =>
+            dialog.open("manage-album", {
+              manageAlbumData: {
+                albumId: album.id,
+                members,
+              },
+            })
+          }
         >
           <div>
             <Settings className="mr-1 h-4 w-4" />

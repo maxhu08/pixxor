@@ -7,6 +7,7 @@ import { SignOutDialog } from "@/components/dialogs/sign-out-dialog";
 import { UploadImageToAlbumDialog } from "@/components/dialogs/upload-image-to-album-dialog";
 //
 import { useDialogStore } from "@/hooks/use-dialog-store";
+import { AlbumMember } from "@/types";
 //
 import { useEffect, useState } from "react";
 
@@ -25,7 +26,10 @@ export const DialogProvider = () => {
     <>
       <SignOutDialog />
       <CreateAlbumDialog />
-      <ManageAlbumDialog />
+      <ManageAlbumDialog
+        members={dialog.data.manageAlbumData?.members as AlbumMember[]}
+        albumId={dialog.data.manageAlbumData?.albumId as string}
+      />
       <InviteMembersToAlbumDialog />
       <UploadImageToAlbumDialog
         albumId={dialog.data.uploadImageToAlbumData?.albumId as string}

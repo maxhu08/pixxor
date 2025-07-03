@@ -42,6 +42,14 @@ export default async function AlbumsPage() {
           id,
           url,
           created_at
+        ),
+        album_members:album_members!inner(
+          user_id,
+          users:users!album_members_user_id_fkey (
+            id,
+            name,
+            avatar_url
+          )
         )
       )
     `,
@@ -80,6 +88,13 @@ export default async function AlbumsPage() {
 
     const latestImage = sortedImages[0] ?? null;
 
+    const members = (album.album_members ?? []).map((m: any) => ({
+      id: m.user_id,
+      name: m.users?.name ?? "Unknown",
+      avatar_url: m.users?.avatar_url ?? null,
+      role: "Member",
+    }));
+
     return {
       id: album.id,
       name: album.name,
@@ -91,6 +106,7 @@ export default async function AlbumsPage() {
         : null,
       imageCount: album.images?.length ?? 0,
       latestImageTimestamp: latestImage?.created_at ?? null,
+      members,
     };
   });
 
@@ -121,6 +137,7 @@ export default async function AlbumsPage() {
               }}
               imageCount={album.imageCount}
               latestImageTimestamp={album.latestImageTimestamp}
+              members={album.members}
             />
           ))}
         </div>

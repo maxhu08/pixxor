@@ -9,22 +9,79 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useDialogStore } from "@/hooks/use-dialog-store";
+import { AlbumMember } from "@/types";
+import { useTransition } from "react";
 
-export function ManageAlbumDialog() {
+interface ManageAlbumDialogProps {
+  members: AlbumMember[];
+  albumId: string;
+}
+
+export function ManageAlbumDialog({
+  members = [],
+  albumId,
+}: ManageAlbumDialogProps) {
   const dialog = useDialogStore();
+  const [isPending, startTransition] = useTransition();
 
   const isDialogOpen = dialog.isOpen && dialog.type === "manage-album";
+
+  function removeMember(memberId: string) {
+    startTransition(async () => {
+      console.log("Remove member", memberId, "from album", albumId);
+    });
+  }
+
+  function changeRole(memberId: string) {
+    startTransition(async () => {
+      console.log("Change role for member", memberId, "in album", albumId);
+    });
+  }
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={dialog.close}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Manage Album Dialog (WIP)</DialogTitle>
+          <DialogTitle>Manage Album Members</DialogTitle>
         </DialogHeader>
+        <div className="max-h-72 space-y-4 overflow-y-auto">
+          {members.length === 0 && <p>No members in this album.</p>}
+          {members.map((member) => (
+            <div
+              key={member.id}
+              className="flex items-center justify-between rounded border p-2"
+            >
+              <div>
+                <p className="font-medium">{member.name}</p>
+                <p className="text-muted-foreground text-sm">
+                  Role: {member.role}
+                </p>
+              </div>
+              <div className="flex gap-2">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  disabled={isPending}
+                  onClick={() => changeRole(member.id)}
+                >
+                  Change Role
+                </Button>
+                <Button
+                  size="sm"
+                  variant="destructive"
+                  disabled={isPending}
+                  onClick={() => removeMember(member.id)}
+                >
+                  Remove
+                </Button>
+              </div>
+            </div>
+          ))}
+        </div>
         <DialogFooter>
           <Button
             variant="outline"
-            className="mt-4 mr-auto cursor-pointer"
+            className="mt-4 mr-auto"
             onClick={() => dialog.close()}
           >
             Cancel
