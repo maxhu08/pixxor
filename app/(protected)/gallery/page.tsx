@@ -49,10 +49,10 @@ export default async function AlbumsPage() {
         ),
         album_members:album_members!inner(
           user_id,
+          role,
           users:users!album_members_user_id_fkey (
             id,
-            name,
-            avatar_url
+            name
           )
         )
       )
@@ -95,9 +95,10 @@ export default async function AlbumsPage() {
     const members = (album.album_members ?? []).map((m: any) => ({
       id: m.user_id,
       name: m.users?.name ?? "Unknown",
-      avatar_url: m.users?.avatar_url ?? null,
       role: m.role,
     }));
+
+    console.log(members);
 
     return {
       id: album.id,
