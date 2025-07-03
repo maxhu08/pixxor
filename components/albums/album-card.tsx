@@ -26,6 +26,7 @@ interface AlbumCardProps {
   imageCount: number;
   latestImageTimestamp: string | null;
   members: AlbumMember[];
+  currentUserId: string;
 }
 
 export function AlbumCard({
@@ -33,8 +34,12 @@ export function AlbumCard({
   imageCount,
   latestImageTimestamp,
   members,
+  currentUserId,
 }: AlbumCardProps) {
   const dialog = useDialogStore();
+
+  const currentUserMember = members.find((m) => m.id === currentUserId);
+  const currentUserRole = currentUserMember?.role ?? "MEMBER";
 
   return (
     <Card className="overflow-hidden transition-all hover:shadow-md">
@@ -56,8 +61,11 @@ export function AlbumCard({
           </div>
         )}
       </div>
-      <CardHeader className="pb-2">
+      <CardHeader className="flex items-center justify-between pb-2">
         <CardTitle className="line-clamp-1">{album.name}</CardTitle>
+        <span className="bg-muted text-muted-foreground rounded-md px-2 py-0.5 text-xs font-medium">
+          Your role: {currentUserRole}
+        </span>
       </CardHeader>
       <CardContent className="space-y-1 pb-2">
         <p className="text-muted-foreground text-sm">

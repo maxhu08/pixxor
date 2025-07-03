@@ -143,6 +143,7 @@ export default async function AlbumsPage() {
               imageCount={album.imageCount}
               latestImageTimestamp={album.latestImageTimestamp}
               members={album.members}
+              currentUserId={user.id}
             />
           ))}
         </div>
