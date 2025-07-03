@@ -10,70 +10,28 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { createClient } from "@/lib/supabase/client";
+import { loginAction } from "@/lib/actions/account-actions";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const supabase = createClient();
-    setIsLoading(true);
+  const onSubmit = (formData: FormData) => {
     setError(null);
 
-    try {
-      const { error: signInError } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-      if (signInError) throw signInError;
-
-      const { data: userData, error: userError } =
-        await supabase.auth.getUser();
-      if (userError || !userData?.user) {
-        throw userError || new Error("Could not fetch user after login");
+    startTransition(async () => {
+      try {
+        await loginAction(formData);
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : "An error occurred");
       }
-
-      const { id, user_metadata } = userData.user;
-
-      const { data: existingUsers, error: selectError } = await supabase
-        .from("users")
-        .select("id")
-        .eq("id", id)
-        .limit(1);
-
-      if (selectError) throw selectError;
-
-      if (!existingUsers || existingUsers.length === 0) {
-        const name = user_metadata?.full_name || user_metadata?.name || "";
-        const avatar_url = user_metadata?.avatar_url || null;
-
-        const { error: insertError } = await supabase.from("users").insert({
-          id,
-          name: `user-${id}`,
-          avatar_url,
-        });
-
-        if (insertError) throw insertError;
-      }
-
-      router.push("/uploadthing-test");
-    } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : "An error occurred");
-    } finally {
-      setIsLoading(false);
-    }
+    });
   };
 
   return (
@@ -86,17 +44,23 @@ export function LoginForm({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleLogin}>
+          <form
+            action={loginAction}
+            onSubmit={(e) => {
+              e.preventDefault();
+              const formData = new FormData(e.currentTarget);
+              onSubmit(formData);
+            }}
+          >
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
                   id="email"
+                  name="email"
                   type="email"
                   placeholder="m@example.com"
                   required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
               <div className="grid gap-2">
@@ -109,17 +73,11 @@ export function LoginForm({
                     Forgot your password?
                   </Link>
                 </div>
-                <Input
-                  id="password"
-                  type="password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
+                <Input id="password" name="password" type="password" required />
               </div>
               {error && <p className="text-sm text-red-500">{error}</p>}
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? "Logging in..." : "Login"}
+              <Button type="submit" className="w-full" disabled={isPending}>
+                {isPending ? "Logging in..." : "Login"}
               </Button>
             </div>
             <div className="mt-4 text-center text-sm">

@@ -8,15 +8,12 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useDialogStore } from "@/hooks/use-dialog-store";
-import { createClient } from "@/lib/supabase/client";
+import { signOutAction } from "@/lib/actions/account-actions";
 import { LoaderCircle } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { toast } from "sonner";
 
 export function SignOutDialog() {
-  const router = useRouter();
-
   const dialog = useDialogStore();
 
   const isDialogOpen = dialog.isOpen && dialog.type === "sign-out";
@@ -26,10 +23,7 @@ export function SignOutDialog() {
   function handleSignOut() {
     startTransition(async () => {
       try {
-        const supabase = createClient();
-        await supabase.auth.signOut();
-
-        router.push("/auth/login");
+        signOutAction();
 
         dialog.close();
       } catch {

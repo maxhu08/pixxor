@@ -11,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useDialogStore } from "@/hooks/use-dialog-store";
-import { createAlbum } from "@/lib/actions/album-action";
+import { createAlbum } from "@/lib/actions/album-actions";
 import { createAlbumSchema } from "@/lib/validators/albums";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState, useTransition } from "react";
