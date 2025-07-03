@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS albums (
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-CREATE TYPE album_member_role AS ENUM ('ADMIN', 'MEMBER', 'VIEWER');
+CREATE TYPE album_member_role AS ENUM ('OWNER', 'MEMBER', 'VIEWER');
 
 CREATE TABLE IF NOT EXISTS album_members (
   user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,

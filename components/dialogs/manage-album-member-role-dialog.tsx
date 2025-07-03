@@ -13,7 +13,7 @@ import { AlbumMemberRole } from "@/types";
 import { useEffect, useState, useTransition } from "react";
 
 const ROLE_OPTIONS = [
-  { label: "Admin", value: AlbumMemberRole.ADMIN },
+  { label: "Owner", value: AlbumMemberRole.OWNER },
   { label: "Member", value: AlbumMemberRole.MEMBER },
   { label: "Viewer", value: AlbumMemberRole.VIEWER },
 ];

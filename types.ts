@@ -5,7 +5,7 @@ export interface AlbumMember {
 }
 
 export enum AlbumMemberRole {
-  ADMIN,
-  MEMBER,
-  VIEWER,
+  OWNER = "OWNER",
+  MEMBER = "MEMBER",
+  VIEWER = "VIEWER",
 }

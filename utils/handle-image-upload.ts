@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { AlbumMemberRole } from "@/types";
 import type { UploadedFileData } from "uploadthing/types";
 
 export async function handleImageUpload(
@@ -42,7 +43,11 @@ export async function handleImageUpload(
 
       const { error: memberError } = await supabase
         .from("album_members")
-        .insert({ user_id: userId, album_id: targetAlbumId });
+        .insert({
+          user_id: userId,
+          album_id: targetAlbumId,
+          role: AlbumMemberRole.OWNER,
+        });
 
       if (memberError) {
         throw memberError;

@@ -2,6 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { createAlbumSchema } from "@/lib/validators/albums";
+import { AlbumMemberRole } from "@/types";
 
 export async function createAlbum(input: unknown) {
   const parsed = createAlbumSchema.parse(input);
@@ -30,13 +31,23 @@ export async function createAlbum(input: unknown) {
 
   const albumId = album.id;
 
-  const uniqueUserIds = Array.from(new Set([user.id, ...userIds]));
+  const ownerEntry = {
+    user_id: user.id,
+    album_id: albumId,
+    role: AlbumMemberRole.OWNER,
+  };
+
+  const memberEntries = userIds.map((userId) => ({
+    user_id: userId,
+    album_id: albumId,
+    role: AlbumMemberRole.MEMBER,
+  }));
+
+  const allMembers = [ownerEntry, ...memberEntries];
 
   const { error: memberError } = await supabase
     .from("album_members")
-    .insert(
-      uniqueUserIds.map((userId) => ({ user_id: userId, album_id: albumId })),
-    );
+    .insert(allMembers);
 
   if (memberError) {
     throw new Error(`Error adding members: ${memberError.message}`);
