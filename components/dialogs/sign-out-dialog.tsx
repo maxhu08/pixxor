@@ -1,39 +1,71 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useDialogStore } from "@/hooks/use-dialog-store";
+import { createClient } from "@/lib/supabase/client";
+import { LoaderCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useTransition } from "react";
+import { toast } from "sonner";
 
 export function SignOutDialog() {
+  const router = useRouter();
+
   const dialog = useDialogStore();
 
   const isDialogOpen = dialog.isOpen && dialog.type === "sign-out";
 
-  // const logout = async () => {
-  //   const supabase = createClient();
-  //   await supabase.auth.signOut();
-  //   router.push("/auth/login");
-  // };
+  const [isPending, startTransition] = useTransition();
+
+  function handleSignOut() {
+    startTransition(async () => {
+      try {
+        const supabase = createClient();
+        await supabase.auth.signOut();
+
+        router.push("/auth/login");
+
+        dialog.close();
+      } catch {
+        toast.error("Failed to sign out");
+      }
+    });
+  }
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={dialog.close}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Sign Out Dialog (WIP)</DialogTitle>
+          <DialogTitle>Sign Out</DialogTitle>
+          <DialogDescription>
+            Are you sure you want to sign out?
+          </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <Button
-            variant="outline"
-            className="mt-4 mr-auto cursor-pointer"
-            onClick={() => dialog.close()}
-          >
+          <Button variant="outline" onClick={() => dialog.close()}>
             Cancel
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={handleSignOut}
+            disabled={isPending}
+            className="cursor-pointer border-red-500 text-red-500 hover:bg-red-500 hover:text-white"
+          >
+            {isPending ? (
+              <>
+                <LoaderCircle className="mr-2 size-4 animate-spin" />
+                Signing out...
+              </>
+            ) : (
+              "Sign Out"
+            )}
           </Button>
         </DialogFooter>
       </DialogContent>
