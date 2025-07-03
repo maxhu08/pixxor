@@ -142,11 +142,11 @@ function AlbumContent() {
 
   return (
     <>
-      <div className="mb-4 flex w-full items-center justify-between">
-        <div className="flex min-w-0 items-center gap-4">
+      <div className="mb-4 flex w-full items-center justify-between gap-4">
+        <div className="flex h-8 min-w-0 items-center gap-4">
           <Button variant="outline" asChild>
-            <Link href="/gallery" className="flex items-center gap-2">
-              <ArrowLeft className="h-4 w-4" />
+            <Link href="gallery">
+              <ArrowLeft />
               Back to Gallery
             </Link>
           </Button>
@@ -173,7 +173,7 @@ function AlbumContent() {
           className="cursor-pointer"
         >
           <PlusCircle />
-          <span>Upload</span>
+          Upload
         </Button>
       </div>
 
