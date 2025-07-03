@@ -4,6 +4,10 @@ import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
 
+export const metadata = {
+  title: "Gallery",
+};
+
 export default async function AlbumsPage() {
   const supabase = await createClient();
 
