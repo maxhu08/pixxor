@@ -155,10 +155,10 @@ function AlbumContent() {
               uploadImageToAlbumData: { albumId },
             })
           }
-          className="flex cursor-pointer items-center space-x-2"
+          className="cursor-pointer"
         >
-          <PlusCircle className="h-4 w-4" />
-          <span>Upload Image</span>
+          <PlusCircle />
+          <span>Upload</span>
         </Button>
       </div>
 
