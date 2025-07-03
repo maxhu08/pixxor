@@ -2,7 +2,8 @@
 
 import { CreateAlbumDialog } from "@/components/dialogs/create-album-dialog";
 import { InviteMembersToAlbumDialog } from "@/components/dialogs/invite-users-to-album";
-import { ManageAlbumDialog } from "@/components/dialogs/manage-album";
+import { ManageAlbumDialog } from "@/components/dialogs/manage-album-dialog";
+import { ManageAlbumMemberRoleDialog } from "@/components/dialogs/manage-album-member-role-dialog";
 import { SignOutDialog } from "@/components/dialogs/sign-out-dialog";
 import { UploadImageToAlbumDialog } from "@/components/dialogs/upload-image-to-album-dialog";
 //
@@ -30,6 +31,13 @@ export const DialogProvider = () => {
         members={dialog.data.manageAlbumData?.members as AlbumMember[]}
         albumId={dialog.data.manageAlbumData?.albumId as string}
       />
+      {dialog.data.manageAlbumMemberRoleData?.member && (
+        <ManageAlbumMemberRoleDialog
+          albumId={dialog.data.manageAlbumMemberRoleData?.albumId as string}
+          member={dialog.data.manageAlbumMemberRoleData?.member}
+          currentRole={dialog.data.manageAlbumMemberRoleData?.currentRole}
+        />
+      )}
       <InviteMembersToAlbumDialog />
       <UploadImageToAlbumDialog
         albumId={dialog.data.uploadImageToAlbumData?.albumId as string}

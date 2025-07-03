@@ -3,3 +3,9 @@ export interface AlbumMember {
   name: string;
   role: string;
 }
+
+export enum AlbumMemberRole {
+  ADMIN,
+  MEMBER,
+  VIEWER,
+}

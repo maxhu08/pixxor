@@ -1,4 +1,4 @@
-import { AlbumMember } from "@/types";
+import { AlbumMember, AlbumMemberRole } from "@/types";
 import { create } from "zustand";
 
 export type DialogType =
@@ -6,7 +6,8 @@ export type DialogType =
   | "create-album"
   | "manage-album"
   | "invite-members-to-album"
-  | "upload-image-to-album";
+  | "upload-image-to-album"
+  | "manage-album-member-role";
 
 interface DialogData {
   uploadImageToAlbumData?: {
@@ -16,6 +17,14 @@ interface DialogData {
   manageAlbumData?: {
     albumId: string;
     members: AlbumMember[];
+  };
+  manageAlbumMemberRoleData?: {
+    albumId: string;
+    member: {
+      id: string;
+      name: string;
+    };
+    currentRole: AlbumMemberRole;
   };
 }
 

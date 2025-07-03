@@ -9,7 +9,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useDialogStore } from "@/hooks/use-dialog-store";
-import { AlbumMember } from "@/types";
+import { AlbumMember, AlbumMemberRole } from "@/types";
 import { useTransition } from "react";
 
 interface ManageAlbumDialogProps {
@@ -29,12 +29,6 @@ export function ManageAlbumDialog({
   function removeMember(memberId: string) {
     startTransition(async () => {
       console.log("Remove member", memberId, "from album", albumId);
-    });
-  }
-
-  function changeRole(memberId: string) {
-    startTransition(async () => {
-      console.log("Change role for member", memberId, "in album", albumId);
     });
   }
 
@@ -62,7 +56,20 @@ export function ManageAlbumDialog({
                   size="sm"
                   variant="outline"
                   disabled={isPending}
-                  onClick={() => changeRole(member.id)}
+                  className="cursor-pointer"
+                  onClick={() =>
+                    dialog.open("manage-album-member-role", {
+                      manageAlbumMemberRoleData: {
+                        albumId,
+                        member: {
+                          id: member.id,
+                          name: member.name,
+                        },
+                        // temp
+                        currentRole: AlbumMemberRole.VIEWER,
+                      },
+                    })
+                  }
                 >
                   Change Role
                 </Button>
@@ -70,6 +77,7 @@ export function ManageAlbumDialog({
                   size="sm"
                   variant="destructive"
                   disabled={isPending}
+                  className="cursor-pointer"
                   onClick={() => removeMember(member.id)}
                 >
                   Remove
@@ -81,7 +89,7 @@ export function ManageAlbumDialog({
         <DialogFooter>
           <Button
             variant="outline"
-            className="mt-4 mr-auto"
+            className="mt-4 mr-auto cursor-pointer"
             onClick={() => dialog.close()}
           >
             Cancel
