@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import { useDialogStore } from "@/hooks/use-dialog-store";
 import { AlbumMember } from "@/types";
-import { Eye, Settings, UserPlus } from "lucide-react";
+import { Eye, ImageIcon, Settings, UserPlus } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -38,17 +38,21 @@ export function AlbumCard({
 
   return (
     <Card className="overflow-hidden transition-all hover:shadow-md">
-      <div className="bg-muted relative aspect-video overflow-hidden">
+      <div
+        className="bg-muted relative mx-auto aspect-video overflow-hidden rounded-lg p-4"
+        style={{ width: "calc(100% - 32px)" }}
+      >
         {album.latestImage ? (
           <Image
             src={album.latestImage.url || "/placeholder.svg"}
             alt={`Cover image for ${album.name}`}
             fill
-            className="object-cover"
+            className="rounded-md object-cover"
           />
         ) : (
-          <div className="from-muted to-muted/50 flex h-full items-center justify-center bg-gradient-to-br">
-            <p className="text-muted-foreground">No images yet</p>
+          <div className="from-muted to-muted/50 text-muted-foreground flex h-full flex-col items-center justify-center rounded-md bg-gradient-to-br">
+            <ImageIcon className="mb-2 h-8 w-8" />
+            <p>No images yet</p>
           </div>
         )}
       </div>
