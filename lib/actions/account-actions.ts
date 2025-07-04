@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { encodedRedirect } from "@/utils/encoded-redirect";
 import { redirect } from "next/navigation";
 
 export async function loginAction(formData: FormData) {
@@ -50,7 +51,4 @@ export async function signOutAction() {
   await supabase.auth.signOut();
 
   return redirect("/auth/login");
-}
-function encodedRedirect(arg0: string, arg1: string, message: string) {
-  throw new Error("Function not implemented.");
 }
