@@ -121,9 +121,9 @@ function AlbumContent() {
 
   useEffect(() => {
     if (inView && !isLoading && !isReachingEnd) {
-      setSize(size + 1);
+      setSize((prev) => prev + 1);
     }
-  }, [inView, isLoading, isReachingEnd, setSize, size]);
+  }, [inView, isLoading, isReachingEnd, setSize]);
 
   const dialog = useDialogStore();
 
