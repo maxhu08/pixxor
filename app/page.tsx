@@ -35,7 +35,7 @@ const Page = async () => {
             </p>
           </div>
           <div className="flex flex-col place-items-center justify-center gap-4 sm:flex-row">
-            <Link href={signedIn ? "/dashboard" : "/login"}>
+            <Link href={signedIn ? "/dashboard" : "/auth/login"}>
               <Button
                 size="lg"
                 className="group cursor-pointer text-lg has-[>svg]:px-8"
