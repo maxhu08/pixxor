@@ -24,10 +24,10 @@ export function SignOutDialog() {
     startTransition(async () => {
       try {
         signOutAction();
-
-        dialog.close();
       } catch {
         toast.error("Failed to sign out");
+      } finally {
+        dialog.close();
       }
     });
   }
