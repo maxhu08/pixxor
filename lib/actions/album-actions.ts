@@ -79,6 +79,21 @@ export async function removeAlbumMember(albumId: string, userId: string) {
     throw new Error("Only the album owner can remove members.");
   }
 
+  const { data: targetEntry, error: targetError } = await supabase
+    .from("album_members")
+    .select("role")
+    .eq("album_id", albumId)
+    .eq("user_id", userId)
+    .single();
+
+  if (targetError || !targetEntry) {
+    throw new Error("Could not find the target member.");
+  }
+
+  if (targetEntry.role === AlbumMemberRole.OWNER) {
+    throw new Error("Cannot remove the album owner.");
+  }
+
   const { error: removeError } = await supabase
     .from("album_members")
     .delete()
