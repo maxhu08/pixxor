@@ -53,6 +53,27 @@ export async function handleImageUpload(
         throw memberError;
       }
     }
+  } else {
+    const { data: memberEntry, error: memberFetchError } = await supabase
+      .from("album_members")
+      .select("role")
+      .eq("album_id", targetAlbumId)
+      .eq("user_id", userId)
+      .single();
+
+    if (memberFetchError || !memberEntry) {
+      return { success: false, error: "User is not a member of this album." };
+    }
+
+    if (
+      memberEntry.role !== AlbumMemberRole.OWNER &&
+      memberEntry.role !== AlbumMemberRole.MEMBER
+    ) {
+      return {
+        success: false,
+        error: "User does not have permission to upload to this album.",
+      };
+    }
   }
 
   const { error: imageInsertError } = await supabase.from("images").insert([

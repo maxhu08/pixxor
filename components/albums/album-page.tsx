@@ -95,6 +95,26 @@ function AlbumSkeleton() {
 function AlbumContent() {
   const { albumId } = useParams<{ albumId: UUID }>();
   const { data: album } = useSWR(albumId, fetchAlbum, { suspense: true });
+  const [userRole, setUserRole] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function fetchRole() {
+      const supabase = createClient();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) return;
+      const { data: member, error } = await supabase
+        .from("album_members")
+        .select("role")
+        .eq("album_id", albumId)
+        .eq("user_id", user.id)
+        .single();
+      if (!error && member) setUserRole(member.role);
+      else setUserRole(null);
+    }
+    fetchRole();
+  }, [albumId]);
 
   const {
     data: images,
@@ -131,20 +151,27 @@ function AlbumContent() {
             {album.name}
           </h3>
         </div>
-
-        <Button
-          onClick={() =>
-            dialog.open("upload-image-to-album", {
-              uploadImageToAlbumData: {
-                albumId,
-                onSuccess: () => onImageUploaded(albumId),
-              },
-            })
-          }
-        >
-          <PlusCircle />
-          Upload
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button
+            onClick={() =>
+              dialog.open("upload-image-to-album", {
+                uploadImageToAlbumData: {
+                  albumId,
+                  onSuccess: () => onImageUploaded(albumId),
+                },
+              })
+            }
+            disabled={userRole === "VIEWER"}
+          >
+            <PlusCircle />
+            Upload
+          </Button>
+          {userRole === "VIEWER" && (
+            <span className="text-xs text-red-500 ml-2">
+              You do not have permission to upload images to this album.
+            </span>
+          )}
+        </div>
       </div>
 
       <Separator className="my-6" />
@@ -231,3 +258,4 @@ export function AlbumPage() {
     </div>
   );
 }
+
