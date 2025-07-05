@@ -8,9 +8,23 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useDialogStore } from "@/hooks/use-dialog-store";
 import { AlbumMember } from "@/types";
-import { Eye, ImageIcon, Settings, UserPlus } from "lucide-react";
+import {
+  Eye,
+  ImageIcon,
+  MoreHorizontal,
+  Settings,
+  Trash2,
+  UserPlus,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -98,44 +112,48 @@ export function AlbumCard({
         >
           <Link href={`/album/${album.id}`}>
             <Eye className="mr-1 h-4 w-4" />
-            View
+            Open
           </Link>
         </Button>
-        <Button
-          asChild
-          variant="outline"
-          size="sm"
-          className="flex-1 cursor-pointer bg-transparent"
-          onClick={() =>
-            dialog.open("invite-members-to-album", {
-              inviteMembersToAlbumData: { albumId: album.id },
-            })
-          }
-        >
-          <div>
-            <UserPlus className="mr-1 h-4 w-4" />
-            Invite (WIP)
-          </div>
-        </Button>
-        <Button
-          asChild
-          variant="outline"
-          size="sm"
-          className="flex-1 cursor-pointer bg-transparent"
-          onClick={() =>
-            dialog.open("manage-album", {
-              manageAlbumData: {
-                albumId: album.id,
-                members,
-              },
-            })
-          }
-        >
-          <div>
-            <Settings className="mr-1 h-4 w-4" />
-            Manage (WIP)
-          </div>
-        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" size="icon" className="bg-transparent">
+              <MoreHorizontal className="h-5 w-5 cursor-pointer" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem
+              onClick={() =>
+                dialog.open("invite-members-to-album", {
+                  inviteMembersToAlbumData: { albumId: album.id },
+                })
+              }
+              className="cursor-pointer"
+            >
+              <UserPlus className="mr-2 h-4 w-4" /> Invite
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() =>
+                dialog.open("manage-album", {
+                  manageAlbumData: {
+                    albumId: album.id,
+                    members,
+                  },
+                })
+              }
+              className="cursor-pointer"
+            >
+              <Settings className="mr-2 h-4 w-4" /> Manage
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              onClick={() => {}}
+              className="text-destructive cursor-pointer"
+            >
+              <Trash2 className="text-destructive mr-2 h-4 w-4" /> Delete (WIP)
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </CardFooter>
     </Card>
   );
