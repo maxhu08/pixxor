@@ -8,21 +8,34 @@ if (!SUPABASE_URL) {
 
 const nextConfig: NextConfig = {
   images: {
-    remotePatterns: [new URL("https://ra59skly5c.ufs.sh/**")],
+    remotePatterns: [new URL("https://ra59skly5c.ufs.sh/**")]
+  },
+  experimental: {
+    reactCompiler: true
   },
   async headers() {
     return [
-      // {
-      //   source: "/(.*)", // applies to all routes
-      //   headers: [
-      //     {
-      //       key: "Content-Security-Policy",
-      //       value: `default-src 'self'; connect-src 'self' ${SUPABASE_URL} https://uploadthing.com https://*.uploadthing.com;`
-      //     }
-      //   ]
-      // },
+      {
+        source: "/(.*)",
+        headers: [
+          {
+            key: "Permissions-Policy",
+            value:
+              "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()"
+          },
+          {
+            key: "Referrer-Policy",
+            value: "same-origin"
+          },
+          {
+            key: "X-Content-Type-Options",
+            value: "nosniff"
+          }
+        ]
+      }
     ];
   },
+  poweredByHeader: false
 };
 
 export default nextConfig;
