@@ -2,14 +2,7 @@
 
 import { createClient } from "@/lib/supabase/client";
 import { getPalette, Palette, palettes } from "@/lib/theme-palettes";
-import {
-  createContext,
-  memo,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-} from "react";
+import { createContext, memo, useCallback, useContext, useEffect, useMemo } from "react";
 import * as React from "react";
 import useSWR from "swr";
 
@@ -78,7 +71,7 @@ const DEFAULT_THEME: Theme = {
   palette: getPalette("lilac_mist") ?? { name: "system" },
   favoritePalettes: ["light", "dark"],
   sortPalettesBy: "name",
-  sortPalettesAscending: true,
+  sortPalettesAscending: true
 };
 
 function saveToLS(storageKey: string, value: string) {
@@ -106,7 +99,7 @@ export function ThemeProvider(props: ThemeProviderProps) {
 async function fetchTheme(): Promise<Theme> {
   const supabase = createClient();
   const {
-    data: { user },
+    data: { user }
   } = await supabase.auth.getUser();
 
   if (!user) {
@@ -125,7 +118,7 @@ async function fetchTheme(): Promise<Theme> {
 
   if (data.theme.palette.name) {
     data.theme.palette = getPalette(data.theme.palette.name) || {
-      name: data.theme.palette.name,
+      name: data.theme.palette.name
     };
   }
 
@@ -134,14 +127,14 @@ async function fetchTheme(): Promise<Theme> {
 
 function resolveTheme({
   base = DEFAULT_THEME,
-  overrides,
+  overrides
 }: {
   base?: Theme;
   overrides: Partial<Theme>;
 }) {
   return {
     ...base,
-    ...overrides,
+    ...overrides
   };
 }
 
@@ -152,13 +145,13 @@ function Theme({
   defaultTheme = DEFAULT_THEME,
   children,
   nonce,
-  scriptProps,
+  scriptProps
 }: ThemeProviderProps) {
   const { data: theme, mutate } = useSWR("theme", fetchTheme, {
     fallbackData: resolveTheme({ overrides: globalThis.__THEME__ }),
     onSuccess: (theme) => {
       saveToLS(storageKey, JSON.stringify(theme));
-    },
+    }
   });
 
   const mutateTheme = useCallback(
@@ -171,7 +164,7 @@ function Theme({
 
       const supabase = createClient();
       const {
-        data: { user },
+        data: { user }
       } = await supabase.auth.getUser();
 
       if (user) {
@@ -179,37 +172,35 @@ function Theme({
           user_id: user.id,
           theme: {
             ...newTheme,
-            palette: { name: newTheme.palette.name },
-          },
+            palette: { name: newTheme.palette.name }
+          }
         });
       }
     },
-    [mutate, storageKey, theme],
+    [mutate, storageKey, theme]
   );
 
   const paletteName = theme.palette.name;
 
   const setPaletteName = useCallback(
     async (name: string) => {
-      console.log("abdefg");
-      const newPalette = getPalette(name) || DEFAULT_THEME.palette;
+      const newPalette =
+        getPalette(name) ||
+        (name === "system" ? ({ name: "system" } as Palette) : DEFAULT_THEME.palette);
 
       mutateTheme({ palette: newPalette });
     },
-    [mutateTheme],
+    [mutateTheme]
   );
 
   const applyPalette = useCallback(() => {
-    console.log("applying", paletteName);
-
     if (!paletteName) return;
 
     if (disableTransitionOnChange) {
       disableAnimation(nonce)();
     }
 
-    const resolved =
-      paletteName === "system" ? (getSystemTheme() ?? "dark") : paletteName;
+    const resolved = paletteName === "system" ? (getSystemTheme() ?? "dark") : paletteName;
     const el = document.documentElement;
 
     if (resolved) el.classList.add(resolved);
@@ -222,7 +213,6 @@ function Theme({
     if (!palette) return;
 
     Object.entries(palette.colors).forEach(([k, v]) => {
-      console.log("Setting color", k, v);
       el.style.setProperty(k, v);
     });
   }, [disableTransitionOnChange, nonce, paletteName]);
@@ -266,7 +256,7 @@ function Theme({
 
       mutateTheme({ favoritePalettes: newFavoritePalettes });
     },
-    [mutateTheme, theme],
+    [mutateTheme, theme]
   );
 
   const setSortPalettesBy = useCallback(
@@ -274,7 +264,7 @@ function Theme({
       if (sortBy === theme.sortPalettesBy) return;
       mutateTheme({ sortPalettesBy: sortBy });
     },
-    [mutateTheme, theme.sortPalettesBy],
+    [mutateTheme, theme.sortPalettesBy]
   );
 
   const setSortPalettesAscending = useCallback(
@@ -282,7 +272,7 @@ function Theme({
       if (ascending === theme.sortPalettesAscending) return;
       mutateTheme({ sortPalettesAscending: ascending });
     },
-    [mutateTheme, theme.sortPalettesAscending],
+    [mutateTheme, theme.sortPalettesAscending]
   );
 
   const providerValue = useMemo(
@@ -297,7 +287,7 @@ function Theme({
       sortPalettesBy: theme.sortPalettesBy,
       setSortPalettesBy,
       sortPalettesAscending: theme.sortPalettesAscending,
-      setSortPalettesAscending,
+      setSortPalettesAscending
     }),
     [
       theme,
@@ -306,8 +296,8 @@ function Theme({
       forcedTheme,
       setFavoritePalette,
       setSortPalettesBy,
-      setSortPalettesAscending,
-    ],
+      setSortPalettesAscending
+    ]
   );
 
   return (
@@ -318,7 +308,7 @@ function Theme({
           storageKey,
           defaultPalette: defaultTheme.palette.name,
           nonce,
-          scriptProps,
+          scriptProps
         }}
       />
       {children}
@@ -336,7 +326,7 @@ function script(storageKey: string, defaultTheme: string, forcedTheme: string) {
       el.style.colorScheme = theme;
     } else {
       const { colors }: { colors: Record<string, string> } = JSON.parse(
-        localStorage.getItem(storageKey) || "{}",
+        localStorage.getItem(storageKey) || "{}"
       ).palette;
 
       if (colors) {
@@ -348,9 +338,7 @@ function script(storageKey: string, defaultTheme: string, forcedTheme: string) {
   }
 
   function getSystemTheme() {
-    return window.matchMedia("(prefers-color-scheme: dark)").matches
-      ? "dark"
-      : "light";
+    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
   }
 
   const theme = JSON.parse(localStorage.getItem(storageKey) || "{}");
@@ -359,9 +347,7 @@ function script(storageKey: string, defaultTheme: string, forcedTheme: string) {
 
   try {
     const themeName = forcedTheme || theme.palette?.name || defaultTheme;
-    updateDOM(
-      !forcedTheme && themeName === "system" ? getSystemTheme() : themeName,
-    );
+    updateDOM(!forcedTheme && themeName === "system" ? getSystemTheme() : themeName);
   } catch {
     //
   }
@@ -373,13 +359,9 @@ const ThemeScript = memo(
     storageKey,
     defaultPalette,
     nonce,
-    scriptProps,
+    scriptProps
   }: Omit<ThemeProviderProps, "children"> & { defaultPalette: string }) => {
-    const scriptArgs = JSON.stringify([
-      storageKey,
-      defaultPalette,
-      forcedTheme,
-    ]).slice(1, -1);
+    const scriptArgs = JSON.stringify([storageKey, defaultPalette, forcedTheme]).slice(1, -1);
 
     return (
       <script
@@ -387,11 +369,11 @@ const ThemeScript = memo(
         suppressHydrationWarning
         nonce={typeof window === "undefined" ? nonce : ""}
         dangerouslySetInnerHTML={{
-          __html: `(${script.toString()})(${scriptArgs})`,
+          __html: `(${script.toString()})(${scriptArgs})`
         }}
       />
     );
-  },
+  }
 );
 
 ThemeScript.displayName = "ThemeScript";
@@ -401,8 +383,8 @@ function disableAnimation(nonce?: string) {
   if (nonce) css.setAttribute("nonce", nonce);
   css.appendChild(
     document.createTextNode(
-      `*,*::before,*::after{-webkit-transition:none!important;-moz-transition:none!important;-o-transition:none!important;-ms-transition:none!important;transition:none!important}`,
-    ),
+      `*,*::before,*::after{-webkit-transition:none!important;-moz-transition:none!important;-o-transition:none!important;-ms-transition:none!important;transition:none!important}`
+    )
   );
   document.head.appendChild(css);
 
