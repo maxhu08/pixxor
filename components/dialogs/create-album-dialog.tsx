@@ -6,7 +6,7 @@ import {
   DialogContent,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
+  DialogTitle
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -25,48 +25,48 @@ export function CreateAlbumDialog({ onSuccess }: { onSuccess?: () => void }) {
   const dialog = useDialogStore();
   const isDialogOpen = dialog.isOpen && dialog.type === "create-album";
 
-  const [userIds, setUserIds] = useState<string[]>([]);
-  const [currentUserId, setCurrentUserId] = useState("");
+  const [userNames, setUserNames] = useState<string[]>([]);
+  const [currentUserName, setCurrentUserName] = useState("");
   const [isPending, startTransition] = useTransition();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
+    reset
   } = useForm<FormValues>({
     resolver: zodResolver(createAlbumSchema),
     defaultValues: {
       name: "",
-      userIds: [],
-    },
+      userIds: []
+    }
   });
 
   const onSubmit = (data: FormValues) => {
     startTransition(() => {
       createAlbum({
         name: data.name,
-        userIds,
-      }).then(() => {
-        reset();
-        setUserIds([]);
-        dialog.close();
-        onSuccess?.();
-        toast.success("Album created successfully");
-      });
+        userNames
+      })
+        .then(() => {
+          reset();
+          setUserNames([]);
+          dialog.close();
+          onSuccess?.();
+          toast.success("Album created successfully");
+        })
+        .catch((err) => {
+          toast.error(err?.message || "Failed to create album");
+        });
     });
   };
 
-  const addUserId = () => {
-    try {
-      const parsed = z.string().uuid().parse(currentUserId);
-      if (!userIds.includes(parsed)) {
-        setUserIds((prev) => [...prev, parsed]);
-      }
-      setCurrentUserId("");
-    } catch (err) {
-      console.log(err);
+  const addUserName = () => {
+    const trimmed = currentUserName.trim();
+    if (trimmed && !userNames.includes(trimmed)) {
+      setUserNames((prev) => [...prev, trimmed]);
     }
+    setCurrentUserName("");
   };
 
   return (
@@ -79,32 +79,30 @@ export function CreateAlbumDialog({ onSuccess }: { onSuccess?: () => void }) {
           <div className="flex flex-col gap-2">
             <Label htmlFor="name">Album Name</Label>
             <Input id="name" {...register("name")} />
-            {errors.name && (
-              <p className="text-sm text-red-500">{errors.name.message}</p>
-            )}
+            {errors.name && <p className="text-sm text-red-500">{errors.name.message}</p>}
           </div>
           <div className="flex flex-col gap-2">
-            <Label htmlFor="user-id">Invite User</Label>
+            <Label htmlFor="user-name">Invite User</Label>
             <div className="flex gap-2">
               <Input
-                id="user-id"
-                placeholder="Paste user ID"
-                value={currentUserId}
-                onChange={(e) => setCurrentUserId(e.target.value)}
+                id="user-name"
+                placeholder="Enter user name"
+                value={currentUserName}
+                onChange={(e) => setCurrentUserName(e.target.value)}
               />
               <Button
                 type="button"
-                onClick={addUserId}
-                disabled={!currentUserId.trim()}
+                onClick={addUserName}
+                disabled={!currentUserName.trim()}
                 className="cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
               >
                 +
               </Button>
             </div>
-            {userIds.length > 0 && (
+            {userNames.length > 0 && (
               <ul className="text-muted-foreground mt-2 list-disc pl-5 text-sm">
-                {userIds.map((id) => (
-                  <li key={id}>{id}</li>
+                {userNames.map((name) => (
+                  <li key={name}>{name}</li>
                 ))}
               </ul>
             )}
@@ -116,17 +114,13 @@ export function CreateAlbumDialog({ onSuccess }: { onSuccess?: () => void }) {
               className="mr-auto cursor-pointer"
               onClick={() => {
                 reset();
-                setUserIds([]);
+                setUserNames([]);
                 dialog.close();
               }}
             >
               Cancel
             </Button>
-            <Button
-              type="submit"
-              disabled={isPending}
-              className="cursor-pointer"
-            >
+            <Button type="submit" disabled={isPending} className="cursor-pointer">
               {isPending ? "Creating..." : "Create Album"}
             </Button>
           </DialogFooter>

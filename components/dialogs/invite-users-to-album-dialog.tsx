@@ -6,7 +6,7 @@ import {
   DialogContent,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
+  DialogTitle
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -18,36 +18,31 @@ import { z } from "zod";
 
 export function InviteMembersToAlbumDialog({ albumId }: { albumId: string }) {
   const dialog = useDialogStore();
-  const isDialogOpen =
-    dialog.isOpen && dialog.type === "invite-members-to-album";
+  const isDialogOpen = dialog.isOpen && dialog.type === "invite-members-to-album";
 
-  const [userIds, setUserIds] = useState<string[]>([]);
-  const [currentUserId, setCurrentUserId] = useState("");
+  const [userNames, setUserNames] = useState<string[]>([]);
+  const [currentUserName, setCurrentUserName] = useState("");
   const [isPending, startTransition] = useTransition();
 
-  const addUserId = () => {
-    try {
-      const parsed = z.string().uuid().parse(currentUserId.trim());
-      if (!userIds.includes(parsed)) {
-        setUserIds((prev) => [...prev, parsed]);
-      }
-      setCurrentUserId("");
-    } catch {
-      toast.error("Invalid user ID format");
+  const addUserName = () => {
+    const trimmed = currentUserName.trim();
+    if (trimmed && !userNames.includes(trimmed)) {
+      setUserNames((prev) => [...prev, trimmed]);
     }
+    setCurrentUserName("");
   };
 
   const onInvite = () => {
     startTransition(() => {
-      inviteMembersToAlbum(albumId, userIds)
+      inviteMembersToAlbum(albumId, userNames)
         .then(() => {
           toast.success("Members invited");
-          setUserIds([]);
-          setCurrentUserId("");
+          setUserNames([]);
+          setCurrentUserName("");
           dialog.close();
         })
-        .catch(() => {
-          toast.error("Failed to invite members");
+        .catch((err) => {
+          toast.error(err?.message || "Failed to invite members");
         });
     });
   };
@@ -60,27 +55,27 @@ export function InviteMembersToAlbumDialog({ albumId }: { albumId: string }) {
         </DialogHeader>
         <div className="space-y-4">
           <div className="flex flex-col gap-2">
-            <Label htmlFor="user-id">Invite User by ID</Label>
+            <Label htmlFor="user-name">Invite User by Name</Label>
             <div className="flex gap-2">
               <Input
-                id="user-id"
-                placeholder="Paste user ID"
-                value={currentUserId}
-                onChange={(e) => setCurrentUserId(e.target.value)}
+                id="user-name"
+                placeholder="Enter user name"
+                value={currentUserName}
+                onChange={(e) => setCurrentUserName(e.target.value)}
               />
               <Button
                 type="button"
-                onClick={addUserId}
+                onClick={addUserName}
                 className="cursor-pointer"
-                disabled={!currentUserId.trim()}
+                disabled={!currentUserName.trim()}
               >
                 +
               </Button>
             </div>
-            {userIds.length > 0 && (
+            {userNames.length > 0 && (
               <ul className="text-muted-foreground mt-2 list-disc pl-5 text-sm">
-                {userIds.map((id) => (
-                  <li key={id}>{id}</li>
+                {userNames.map((name) => (
+                  <li key={name}>{name}</li>
                 ))}
               </ul>
             )}
@@ -92,8 +87,8 @@ export function InviteMembersToAlbumDialog({ albumId }: { albumId: string }) {
             type="button"
             className="mr-auto cursor-pointer"
             onClick={() => {
-              setUserIds([]);
-              setCurrentUserId("");
+              setUserNames([]);
+              setCurrentUserName("");
               dialog.close();
             }}
           >
@@ -101,7 +96,7 @@ export function InviteMembersToAlbumDialog({ albumId }: { albumId: string }) {
           </Button>
           <Button
             type="button"
-            disabled={isPending || userIds.length === 0}
+            disabled={isPending || userNames.length === 0}
             className="cursor-pointer"
             onClick={onInvite}
           >
