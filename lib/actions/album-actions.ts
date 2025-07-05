@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createAlbumSchema } from "@/lib/validators/albums";
 import { AlbumMemberRole } from "@/types";
 
-export async function createAlbum(input: unknown) {
+export async function createAlbum(input: { name: string; userIds: string[] }) {
   const parsed = createAlbumSchema.parse(input);
   const { name, userIds } = parsed;
 
