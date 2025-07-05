@@ -1,30 +1,17 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
-  DropdownMenuTrigger,
+  DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { useDialogStore } from "@/hooks/use-dialog-store";
 import { AlbumMember } from "@/types";
-import {
-  Eye,
-  ImageIcon,
-  MoreHorizontal,
-  Settings,
-  Trash2,
-  UserPlus,
-} from "lucide-react";
+import { Eye, ImageIcon, MoreHorizontal, Settings, Trash2, UserPlus } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -50,7 +37,7 @@ export function AlbumCard({
   latestImageTimestamp,
   members,
   currentUserId,
-  onDelete,
+  onDelete
 }: AlbumCardProps) {
   const dialog = useDialogStore();
 
@@ -116,11 +103,7 @@ export function AlbumCard({
         </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button
-              variant="outline"
-              size="icon"
-              className="cursor-pointer bg-transparent"
-            >
+            <Button variant="outline" size="icon" className="cursor-pointer bg-transparent">
               <MoreHorizontal />
             </Button>
           </DropdownMenuTrigger>
@@ -128,9 +111,10 @@ export function AlbumCard({
             <DropdownMenuItem
               onClick={() =>
                 dialog.open("invite-members-to-album", {
-                  inviteMembersToAlbumData: { albumId: album.id },
+                  inviteMembersToAlbumData: { albumId: album.id }
                 })
               }
+              className="cursor-pointer"
             >
               <UserPlus className="mr-2 h-4 w-4" /> Invite (WIP)
             </DropdownMenuItem>
@@ -139,10 +123,11 @@ export function AlbumCard({
                 dialog.open("manage-album", {
                   manageAlbumData: {
                     albumId: album.id,
-                    members,
-                  },
+                    members
+                  }
                 })
               }
+              className="cursor-pointer"
             >
               <Settings className="mr-2 h-4 w-4" /> Manage (WIP)
             </DropdownMenuItem>
@@ -151,11 +136,11 @@ export function AlbumCard({
                 dialog.open("delete-album", {
                   deleteAlbumData: {
                     albumId: album.id,
-                    onAlbumDeleted: onDelete,
-                  },
+                    onAlbumDeleted: onDelete
+                  }
                 })
               }
-              className="text-destructive"
+              className="text-destructive cursor-pointer"
             >
               <Trash2 className="text-destructive mr-2 h-4 w-4" /> Delete Album
             </DropdownMenuItem>
