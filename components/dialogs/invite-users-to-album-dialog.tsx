@@ -32,6 +32,10 @@ export function InviteMembersToAlbumDialog({ albumId }: { albumId: string }) {
     setCurrentUserName("");
   };
 
+  const removeUserName = (name: string) => {
+    setUserNames((prev) => prev.filter((n) => n !== name));
+  };
+
   const onInvite = () => {
     startTransition(() => {
       inviteMembersToAlbum(albumId, userNames)
@@ -75,7 +79,19 @@ export function InviteMembersToAlbumDialog({ albumId }: { albumId: string }) {
             {userNames.length > 0 && (
               <ul className="text-muted-foreground mt-2 list-disc pl-5 text-sm">
                 {userNames.map((name) => (
-                  <li key={name}>{name}</li>
+                  <li key={name} className="flex items-center gap-2">
+                    <span>{name}</span>
+                    <Button
+                      type="button"
+                      size="icon"
+                      variant="ghost"
+                      className="h-5 w-5 p-0 text-red-500"
+                      onClick={() => removeUserName(name)}
+                      aria-label={`Remove ${name}`}
+                    >
+                      ×
+                    </Button>
+                  </li>
                 ))}
               </ul>
             )}
