@@ -9,7 +9,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useDialogStore } from "@/hooks/use-dialog-store";
-import { AlbumMember, AlbumMemberRole } from "@/types";
+import { AlbumMember } from "@/types";
 import { useTransition } from "react";
 
 interface ManageAlbumDialogProps {

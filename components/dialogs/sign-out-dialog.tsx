@@ -42,7 +42,11 @@ export function SignOutDialog() {
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <Button variant="outline" onClick={() => dialog.close()}>
+          <Button
+            variant="outline"
+            onClick={() => dialog.close()}
+            className="cursor-pointer"
+          >
             Cancel
           </Button>
           <Button

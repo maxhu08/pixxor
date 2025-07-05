@@ -33,7 +33,7 @@ export function RemoveAlbumMemberDialog() {
       } catch {
         toast.error("Failed to remove member");
       } finally {
-        dialog.close();
+        dialog.open("manage-album");
       }
     });
   }
@@ -48,7 +48,11 @@ export function RemoveAlbumMemberDialog() {
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <Button variant="outline" onClick={dialog.close}>
+          <Button
+            variant="outline"
+            onClick={dialog.close}
+            className="cursor-pointer"
+          >
             Cancel
           </Button>
           <Button
