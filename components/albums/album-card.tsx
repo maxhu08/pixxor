@@ -78,7 +78,9 @@ export function AlbumCard({
         )}
       </div>
       <CardHeader className="flex items-center justify-between pb-2">
-        <CardTitle className="line-clamp-1">{album.name}</CardTitle>
+        <CardTitle className="line-clamp-1">
+          <Link href={`/album/${album.id}`}>{album.name}</Link>
+        </CardTitle>
         <span className="bg-muted text-muted-foreground rounded-md px-2 py-0.5 text-xs font-medium">
           Your role: {currentUserRole}
         </span>
@@ -106,21 +108,20 @@ export function AlbumCard({
         </p>
       </CardContent>
       <CardFooter className="flex justify-between gap-2 pt-0">
-        <Button
-          asChild
-          variant="default"
-          size="sm"
-          className="flex-1 cursor-pointer"
-        >
+        <Button asChild size="sm" className="flex-1 cursor-pointer">
           <Link href={`/album/${album.id}`}>
-            <Eye className="mr-1 h-4 w-4" />
+            <Eye />
             Open
           </Link>
         </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="icon" className="bg-transparent">
-              <MoreHorizontal className="h-5 w-5 cursor-pointer" />
+            <Button
+              variant="outline"
+              size="icon"
+              className="cursor-pointer bg-transparent"
+            >
+              <MoreHorizontal />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
