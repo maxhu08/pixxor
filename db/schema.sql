@@ -2,12 +2,18 @@ CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
 CREATE TABLE IF NOT EXISTS users (
     id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
-    name TEXT NOT NULL UNIQUE,
+    name CITEXT UNIQUE,
     avatar_url TEXT,
     onboarded BOOLEAN NOT NULL DEFAULT false,
     completed_tour BOOLEAN NOT NULL DEFAULT false,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    CONSTRAINT name_length CHECK (
+        name IS NULL OR length(name) BETWEEN 3 AND 32
+    ),
+    CONSTRAINT username_allowed_chars CHECK (
+        name IS NULL OR name ~* '^[a-z0-9._]*$'
+    )
 );
 
 CREATE TABLE IF NOT EXISTS albums (
