@@ -77,7 +77,14 @@ export function ManageAlbumDialog({
                   variant="destructive"
                   disabled={isPending}
                   className="cursor-pointer"
-                  onClick={() => removeMember(member.id)}
+                  onClick={() =>
+                    dialog.open("remove-album-member", {
+                      removeAlbumMemberData: {
+                        albumId,
+                        memberId: member.id,
+                      },
+                    })
+                  }
                 >
                   Remove
                 </Button>

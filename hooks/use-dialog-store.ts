@@ -7,7 +7,8 @@ export type DialogType =
   | "manage-album"
   | "invite-members-to-album"
   | "upload-image-to-album"
-  | "manage-album-member-role";
+  | "manage-album-member-role"
+  | "remove-album-member";
 
 interface DialogData {
   uploadImageToAlbumData?: {
@@ -25,6 +26,10 @@ interface DialogData {
       name: string;
     };
     currentRole: AlbumMemberRole;
+  };
+  removeAlbumMemberData?: {
+    albumId: string;
+    memberId: string;
   };
 }
 
