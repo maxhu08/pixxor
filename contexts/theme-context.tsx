@@ -75,7 +75,7 @@ const MEDIA = "(prefers-color-scheme: dark)";
 const ThemeContext = createContext<UseThemeProps | undefined>(undefined);
 
 const DEFAULT_THEME: Theme = {
-  palette: { name: "system" },
+  palette: getPalette("lilac_mist") ?? { name: "system" },
   favoritePalettes: ["light", "dark"],
   sortPalettesBy: "name",
   sortPalettesAscending: true,
