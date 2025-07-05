@@ -10,7 +10,9 @@ import {
 } from "@/components/ui/dialog";
 import { useDialogStore } from "@/hooks/use-dialog-store";
 import { AlbumMemberRole } from "@/types";
+import { changeAlbumMemberRole } from "@/lib/actions/album-actions";
 import { useEffect, useState, useTransition } from "react";
+import { toast } from "sonner";
 
 const ROLE_OPTIONS = [
   { label: "Owner", value: AlbumMemberRole.OWNER },
@@ -25,12 +27,17 @@ interface ManageAlbumMemberRoleDialogProps {
     name: string;
   };
   currentRole: AlbumMemberRole;
+  onAlbumMemberRoleUpdated: (
+    memberId: string,
+    newRole: AlbumMemberRole,
+  ) => void;
 }
 
 export function ManageAlbumMemberRoleDialog({
   albumId,
   member,
   currentRole,
+  onAlbumMemberRoleUpdated,
 }: ManageAlbumMemberRoleDialogProps) {
   const dialog = useDialogStore();
   const [isPending, startTransition] = useTransition();
@@ -48,13 +55,19 @@ export function ManageAlbumMemberRoleDialog({
     }
   }, [currentRole]);
 
-  function onSave() {
+  async function onSave() {
+    if (!albumId || !member) return;
+
     startTransition(async () => {
-      if (!albumId || !member) return;
+      try {
+        await changeAlbumMemberRole(albumId, member.id, selectedRole);
+        toast.success("Member role updated");
+        onAlbumMemberRoleUpdated(member.id, selectedRole);
 
-      // TODO: make it actually work later
-
-      dialog.close();
+        dialog.open("manage-album");
+      } catch (error) {
+        toast.error("Failed to update member role");
+      }
     });
   }
 
@@ -97,11 +110,20 @@ export function ManageAlbumMemberRoleDialog({
         )}
 
         <DialogFooter>
-          <Button variant="outline" onClick={dialog.close} disabled={isPending}>
+          <Button
+            variant="outline"
+            onClick={dialog.close}
+            disabled={isPending}
+            className="cursor-pointer"
+          >
             Cancel
           </Button>
           {member && (
-            <Button onClick={onSave} disabled={isPending}>
+            <Button
+              onClick={onSave}
+              disabled={isPending}
+              className="cursor-pointer"
+            >
               Save
             </Button>
           )}

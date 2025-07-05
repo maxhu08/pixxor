@@ -164,3 +164,62 @@ export async function removeAlbumMember(albumId: string, userId: string) {
 
   return { success: true };
 }
+
+export async function changeAlbumMemberRole(
+  albumId: string,
+  userId: string,
+  newRole: AlbumMemberRole,
+) {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  if (userError || !user) {
+    throw new Error("Unauthenticated");
+  }
+
+  const { data: ownerEntry, error: ownerError } = await supabase
+    .from("album_members")
+    .select("role")
+    .eq("album_id", albumId)
+    .eq("user_id", user.id)
+    .single();
+
+  if (ownerError || !ownerEntry || ownerEntry.role !== AlbumMemberRole.OWNER) {
+    throw new Error("Only the album owner can change member roles.");
+  }
+
+  if (userId === user.id) {
+    throw new Error("Owner cannot change their own role.");
+  }
+
+  if (newRole === AlbumMemberRole.OWNER) {
+    throw new Error("Cannot assign OWNER role to another user.");
+  }
+
+  const { data: targetEntry, error: targetError } = await supabase
+    .from("album_members")
+    .select("role")
+    .eq("album_id", albumId)
+    .eq("user_id", userId)
+    .single();
+
+  if (targetError || !targetEntry) {
+    throw new Error("Could not find the target member.");
+  }
+
+  const { error: updateError } = await supabase
+    .from("album_members")
+    .update({ role: newRole })
+    .eq("album_id", albumId)
+    .eq("user_id", userId);
+
+  if (updateError) {
+    throw new Error(`Error changing member role: ${updateError.message}`);
+  }
+
+  return { success: true };
+}

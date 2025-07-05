@@ -36,6 +36,9 @@ export const DialogProvider = () => {
           albumId={dialog.data.manageAlbumMemberRoleData?.albumId as string}
           member={dialog.data.manageAlbumMemberRoleData?.member}
           currentRole={dialog.data.manageAlbumMemberRoleData?.currentRole}
+          onAlbumMemberRoleUpdated={
+            dialog.data.manageAlbumMemberRoleData?.onAlbumMemberRoleUpdated
+          }
         />
       )}
       <RemoveAlbumMemberDialog

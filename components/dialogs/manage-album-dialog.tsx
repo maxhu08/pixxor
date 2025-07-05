@@ -9,7 +9,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useDialogStore } from "@/hooks/use-dialog-store";
-import { AlbumMember } from "@/types";
+import { AlbumMember, AlbumMemberRole } from "@/types";
 import { useEffect, useState, useTransition } from "react";
 
 interface ManageAlbumDialogProps {
@@ -33,6 +33,19 @@ export function ManageAlbumDialog({
 
   function removeLocalAlbumMember(memberId: string) {
     setLocalMembers((prev) => prev.filter((m) => m.id !== memberId));
+  }
+
+  function updateLocalMemberRole(memberId: string, newRole: AlbumMemberRole) {
+    setLocalMembers((prev) =>
+      prev.map((m) =>
+        m.id === memberId
+          ? {
+              ...m,
+              role: newRole,
+            }
+          : m,
+      ),
+    );
   }
 
   return (
@@ -69,6 +82,7 @@ export function ManageAlbumDialog({
                           name: member.name,
                         },
                         currentRole: member.role,
+                        onAlbumMemberRoleUpdated: updateLocalMemberRole,
                       },
                     })
                   }

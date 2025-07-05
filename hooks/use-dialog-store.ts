@@ -29,6 +29,10 @@ interface DialogData {
       name: string;
     };
     currentRole: AlbumMemberRole;
+    onAlbumMemberRoleUpdated: (
+      memberId: string,
+      newRole: AlbumMemberRole,
+    ) => void;
   };
   removeAlbumMemberData?: {
     albumId: string;
