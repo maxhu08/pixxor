@@ -9,8 +9,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useDialogStore } from "@/hooks/use-dialog-store";
-import { AlbumMemberRole } from "@/types";
 import { changeAlbumMemberRole } from "@/lib/actions/album-actions";
+import { AlbumMemberRole } from "@/types";
 import { useEffect, useState, useTransition } from "react";
 import { toast } from "sonner";
 

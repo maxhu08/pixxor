@@ -8,7 +8,7 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue
+  SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { useTheme } from "@/contexts/theme-context";
@@ -17,12 +17,23 @@ import { Palette, palettes } from "@/lib/theme-palettes";
 import { cn } from "@/lib/utils";
 import { parse } from "culori";
 import { ArrowDownUp, ArrowUpDown, Search, Star, StarHalf } from "lucide-react";
-import { createContext, ReactNode, useContext, useEffect, useRef, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 export function PaletteInput() {
   const { query, setQuery } = usePaletteSelectorContext();
-  const { sortPalettesBy, setSortPalettesBy, sortPalettesAscending, setSortPalettesAscending } =
-    useTheme();
+  const {
+    sortPalettesBy,
+    setSortPalettesBy,
+    sortPalettesAscending,
+    setSortPalettesAscending,
+  } = useTheme();
 
   return (
     <Input className="text-muted-foreground m-4 flex h-10 items-center">
@@ -37,7 +48,10 @@ export function PaletteInput() {
         onChange={(e) => setQuery(e.target.value)}
       />
       <div className="flex items-center gap-1 px-1 pl-3">
-        <Separator orientation="vertical" className="bg-muted-foreground min-h-5" />
+        <Separator
+          orientation="vertical"
+          className="bg-muted-foreground min-h-5"
+        />
         <Select value={sortPalettesBy} onValueChange={setSortPalettesBy}>
           <Button variant="ghost" className="cursor-pointer" asChild>
             <SelectTrigger className="max-h-8 border-0 text-xs shadow-none dark:bg-transparent">
@@ -59,7 +73,10 @@ export function PaletteInput() {
             </SelectItem>
           </SelectContent>
         </Select>
-        <Separator orientation="vertical" className="bg-muted-foreground min-h-5" />
+        <Separator
+          orientation="vertical"
+          className="bg-muted-foreground min-h-5"
+        />
         <Button
           variant="ghost"
           size="icon"
@@ -85,7 +102,8 @@ function formatPaletteName(name: string) {
 }
 
 export function PaletteGrid({ palettes }: { palettes: Palette[] }) {
-  const { paletteName, setPaletteName, favoritePalettes, setFavoritePalette } = useTheme();
+  const { paletteName, setPaletteName, favoritePalettes, setFavoritePalette } =
+    useTheme();
 
   const [isFavoriteHovered, setIsFavoriteHovered] = useState(false);
 
@@ -98,7 +116,10 @@ export function PaletteGrid({ palettes }: { palettes: Palette[] }) {
 
   const setFocusedIndex = (next: number | ((prev: number) => number)) => {
     _setFocusedIndex((prev) => {
-      const value = typeof next === "function" ? (next as (n: number) => number)(prev) : next;
+      const value =
+        typeof next === "function"
+          ? (next as (n: number) => number)(prev)
+          : next;
       return value >= 0 && value < palettes.length ? value : prev;
     });
   };
@@ -123,7 +144,7 @@ export function PaletteGrid({ palettes }: { palettes: Palette[] }) {
     onUp: () => setFocusedIndex((i) => i - numCols),
     onDown: () => setFocusedIndex((i) => i + numCols),
     onLeft: () => setFocusedIndex((i) => i - 1),
-    onRight: () => setFocusedIndex((i) => i + 1)
+    onRight: () => setFocusedIndex((i) => i + 1),
   });
 
   const [isContainerFocused, setIsContainerFocused] = useState(false);
@@ -163,13 +184,16 @@ export function PaletteGrid({ palettes }: { palettes: Palette[] }) {
                 paletteRefs.current[i] = el;
               }}
               type="button"
-              className={cn("peer w-full cursor-pointer py-5 text-current", isCurrent && "ring-2")}
+              className={cn(
+                "peer w-full cursor-pointer py-5 text-current",
+                isCurrent && "ring-2",
+              )}
               style={{
                 backgroundColor: colors["--color-background"],
                 boxShadow:
                   !isCurrent && isContainerFocused && isFocused
                     ? `0 0 0 3px ${colors["--color-ring"].replace(")", " / 0.5)")}`
-                    : undefined
+                    : undefined,
               }}
               onClick={() => {
                 setPaletteName(name);
@@ -178,13 +202,17 @@ export function PaletteGrid({ palettes }: { palettes: Palette[] }) {
               }}
               tabIndex={isFocused ? 0 : -1}
             >
-              <span className="truncate text-sm font-medium">{formatPaletteName(name)}</span>
+              <span className="truncate text-sm font-medium">
+                {formatPaletteName(name)}
+              </span>
             </Button>
-            <div className="pointer-events-none absolute flex aspect-square min-h-full items-center justify-center opacity-0 transition-opacity focus-within:opacity-100 group-hover:opacity-100 peer-focus:opacity-100">
+            <div className="pointer-events-none absolute flex aspect-square min-h-full items-center justify-center opacity-0 transition-opacity group-hover:opacity-100 peer-focus:opacity-100 focus-within:opacity-100">
               <button
                 className="group/favorite pointer-events-auto flex cursor-pointer items-center"
                 style={{
-                  color: isFavoriteHovered ? colors["--color-accent-foreground"] : "inherit"
+                  color: isFavoriteHovered
+                    ? colors["--color-accent-foreground"]
+                    : "inherit",
                 }}
                 onClick={() => setFavoritePalette(name, !isFavorite)}
                 onMouseEnter={() => setIsFavoriteHovered(true)}
@@ -195,13 +223,13 @@ export function PaletteGrid({ palettes }: { palettes: Palette[] }) {
                 <StarHalf
                   className={cn(
                     "absolute size-4 fill-current opacity-0 transition-opacity group-hover/favorite:opacity-100",
-                    isFavorite && "opacity-100"
+                    isFavorite && "opacity-100",
                   )}
                 />
                 <Star
                   className={cn(
                     "absolute size-4 fill-current opacity-0 transition-opacity",
-                    isFavorite && "opacity-100 group-hover/favorite:opacity-0"
+                    isFavorite && "opacity-100 group-hover/favorite:opacity-0",
                   )}
                 />
               </button>
@@ -223,14 +251,15 @@ export function usePaletteSelectorContext() {
   const ctx = useContext(PaletteSelectorContext);
   if (!ctx)
     throw new Error(
-      "usePaletteSelectorContext must be used within PaletteSelectorContext.Provider"
+      "usePaletteSelectorContext must be used within PaletteSelectorContext.Provider",
     );
   return ctx;
 }
 
 export function PaletteSelector({ children }: { children?: ReactNode }) {
   const [query, setQuery] = useState("");
-  const { favoritePalettes, sortPalettesBy, sortPalettesAscending } = useTheme();
+  const { favoritePalettes, sortPalettesBy, sortPalettesAscending } =
+    useTheme();
   const [filteredPalettes, setFilteredPalettes] = useState<Palette[]>(palettes);
 
   function getOKLCH(colorStr: string) {
@@ -239,13 +268,15 @@ export function PaletteSelector({ children }: { children?: ReactNode }) {
     return {
       l: parsed.l,
       c: parsed.c,
-      h: parsed.h ?? 0
+      h: parsed.h ?? 0,
     };
   }
 
   useEffect(() => {
     const q = query.trim();
-    const result = q ? palettes.filter((p) => p.name.toLowerCase().includes(q)) : [...palettes];
+    const result = q
+      ? palettes.filter((p) => p.name.toLowerCase().includes(q))
+      : [...palettes];
 
     result.sort((a, b) => {
       const aColor = getOKLCH(a.colors["--color-background"]);
@@ -289,7 +320,7 @@ export function PaletteSelector({ children }: { children?: ReactNode }) {
       value={{
         query,
         setQuery,
-        filteredPalettes
+        filteredPalettes,
       }}
     >
       {children ? (
@@ -298,22 +329,27 @@ export function PaletteSelector({ children }: { children?: ReactNode }) {
         <div className="flex min-h-0 w-full flex-1 flex-col items-center">
           <PaletteInput />
           <ScrollArea className="min-h-0 w-full flex-1">
-            <div className="flex w-full flex-col items-center gap-4 pb-4 pt-1">
+            <div className="flex w-full flex-col items-center gap-4 pt-1 pb-4">
               {filteredPalettes.length ? (
                 <>
-                  {favoriteFiltered.length > 0 && <PaletteGrid palettes={favoriteFiltered} />}
-                  {favoriteFiltered.length > 0 && nonFavoriteFiltered.length > 0 && (
-                    <div className="w-full px-4">
-                      <Separator className="border" />
-                    </div>
+                  {favoriteFiltered.length > 0 && (
+                    <PaletteGrid palettes={favoriteFiltered} />
                   )}
-                  {nonFavoriteFiltered.length > 0 && <PaletteGrid palettes={nonFavoriteFiltered} />}
+                  {favoriteFiltered.length > 0 &&
+                    nonFavoriteFiltered.length > 0 && (
+                      <div className="w-full px-4">
+                        <Separator className="border" />
+                      </div>
+                    )}
+                  {nonFavoriteFiltered.length > 0 && (
+                    <PaletteGrid palettes={nonFavoriteFiltered} />
+                  )}
                 </>
               ) : (
                 <div className="mt-6 w-full px-4">
                   <p className="text-muted-foreground text-center">
                     No palettes found matching{" "}
-                    <span className="inline-block max-w-72 overflow-hidden text-ellipsis whitespace-nowrap align-bottom">
+                    <span className="inline-block max-w-72 overflow-hidden align-bottom text-ellipsis whitespace-nowrap">
                       "{query}
                     </span>
                     "
