@@ -41,6 +41,7 @@ interface AlbumCardProps {
   latestImageTimestamp: string | null;
   members: AlbumMember[];
   currentUserId: string;
+  onDelete?: () => void;
 }
 
 export function AlbumCard({
@@ -49,6 +50,7 @@ export function AlbumCard({
   latestImageTimestamp,
   members,
   currentUserId,
+  onDelete,
 }: AlbumCardProps) {
   const dialog = useDialogStore();
 
@@ -128,9 +130,8 @@ export function AlbumCard({
                   inviteMembersToAlbumData: { albumId: album.id },
                 })
               }
-              className="cursor-pointer"
             >
-              <UserPlus className="mr-2 h-4 w-4" /> Invite
+              <UserPlus className="mr-2 h-4 w-4" /> Invite (WIP)
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() =>
@@ -141,16 +142,21 @@ export function AlbumCard({
                   },
                 })
               }
-              className="cursor-pointer"
             >
-              <Settings className="mr-2 h-4 w-4" /> Manage
+              <Settings className="mr-2 h-4 w-4" /> Manage (WIP)
             </DropdownMenuItem>
-            <DropdownMenuSeparator />
             <DropdownMenuItem
-              onClick={() => {}}
-              className="text-destructive cursor-pointer"
+              onClick={() =>
+                dialog.open("delete-album", {
+                  deleteAlbumData: {
+                    albumId: album.id,
+                    onAlbumDeleted: onDelete,
+                  },
+                })
+              }
+              className="text-destructive"
             >
-              <Trash2 className="text-destructive mr-2 h-4 w-4" /> Delete (WIP)
+              <Trash2 className="text-destructive mr-2 h-4 w-4" /> Delete Album
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

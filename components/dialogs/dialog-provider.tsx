@@ -1,6 +1,7 @@
 "use client";
 
 import { CreateAlbumDialog } from "@/components/dialogs/create-album-dialog";
+import { DeleteAlbumDialog } from "@/components/dialogs/delete-album-dialog";
 import { InviteMembersToAlbumDialog } from "@/components/dialogs/invite-users-to-album-dialog";
 import { ManageAlbumDialog } from "@/components/dialogs/manage-album-dialog";
 import { ManageAlbumMemberRoleDialog } from "@/components/dialogs/manage-album-member-role-dialog";
@@ -54,6 +55,12 @@ export const DialogProvider = () => {
       <UploadImageToAlbumDialog
         albumId={dialog.data.uploadImageToAlbumData?.albumId as string}
         onSuccess={dialog.data.uploadImageToAlbumData?.onSuccess}
+      />
+      <DeleteAlbumDialog
+        albumId={dialog.data.deleteAlbumData?.albumId as string}
+        onAlbumDeleted={
+          dialog.data.deleteAlbumData?.onAlbumDeleted ?? (() => {})
+        }
       />
     </>
   );

@@ -4,6 +4,7 @@ import { create } from "zustand";
 export type DialogType =
   | "sign-out"
   | "create-album"
+  | "delete-album"
   | "manage-album"
   | "invite-members-to-album"
   | "upload-image-to-album"
@@ -11,6 +12,10 @@ export type DialogType =
   | "remove-album-member";
 
 interface DialogData {
+  deleteAlbumData?: {
+    albumId: string;
+    onAlbumDeleted?: () => void;
+  };
   uploadImageToAlbumData?: {
     albumId: string;
     onSuccess?: () => void;

@@ -223,3 +223,38 @@ export async function changeAlbumMemberRole(
 
   return { success: true };
 }
+
+export async function deleteAlbum(albumId: string) {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  if (userError || !user) {
+    throw new Error("Unauthenticated");
+  }
+
+  const { data: ownerEntry, error: ownerError } = await supabase
+    .from("album_members")
+    .select("role")
+    .eq("album_id", albumId)
+    .eq("user_id", user.id)
+    .single();
+
+  if (ownerError || !ownerEntry || ownerEntry.role !== AlbumMemberRole.OWNER) {
+    throw new Error("Only the album owner can delete the album.");
+  }
+
+  const { error: deleteError } = await supabase
+    .from("albums")
+    .delete()
+    .eq("id", albumId);
+
+  if (deleteError) {
+    throw new Error(`Error deleting album: ${deleteError.message}`);
+  }
+
+  return { success: true };
+}

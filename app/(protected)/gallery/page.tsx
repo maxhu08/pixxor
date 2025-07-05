@@ -188,11 +188,30 @@ function AlbumsContent() {
     },
   });
 
+  const [deletingAlbumId, setDeletingAlbumId] = useState<string | null>(null);
+
   const handleAlbumCreated = () => {
     if (user) {
       mutateAlbums();
       onAlbumCreated(user.id);
     }
+  };
+
+  const handleAlbumDeleted = (albumId: string) => {
+    mutateAlbums((current: any[] = []) => {
+      return current
+        .map((page) =>
+          Array.isArray(page)
+            ? page.filter((membership) => {
+                const album = Array.isArray(membership.albums)
+                  ? membership.albums[0]
+                  : membership.albums;
+                return album && album.id !== albumId;
+              })
+            : page,
+        )
+        .filter((page) => (Array.isArray(page) ? page.length > 0 : true));
+    }, false);
   };
 
   if (!user) {
@@ -250,6 +269,7 @@ function AlbumsContent() {
                 latestImageTimestamp={album.latestImageTimestamp}
                 members={album.members}
                 currentUserId={user.id}
+                onDelete={() => handleAlbumDeleted(album.id)}
               />
             ))}
           </div>
