@@ -76,6 +76,18 @@ export function AlbumCard({
             ? `Last updated ${new Date(latestImageTimestamp).toLocaleString()}`
             : "No uploads yet"}
         </p>
+        <p className="text-muted-foreground text-sm">
+          {(() => {
+            const others = members.filter((m) => m.id !== currentUserId);
+            if (members.length === 1) {
+              return "You";
+            }
+            if (members.length === 2) {
+              return `You and ${others[0].name}`;
+            }
+            return `You, ${others[0].name} and ${others.length - 1} more`;
+          })()}
+        </p>
       </CardContent>
       <CardFooter className="flex justify-between gap-2 pt-0">
         <Button
