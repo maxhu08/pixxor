@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useDialogStore } from "@/hooks/use-dialog-store";
+import { useInfiniteScroll } from "@/hooks/use-infinite-scroll";
 import { createClient } from "@/lib/supabase/client";
 import { ArrowLeft, FileText, PlusCircle } from "lucide-react";
 import Image from "next/image";
@@ -12,16 +13,13 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
-import { useInView } from "react-intersection-observer";
 import useSWR, { mutate } from "swr";
-import useSWRInfinite, { unstable_serialize } from "swr/infinite";
 
-function onUploadSuccess(albumId: UUID) {
-  const keyPrefix = unstable_serialize((pageIndex, previousPageData) =>
-    getKey(pageIndex, previousPageData, albumId),
+function onImageUploaded(albumId: UUID) {
+  mutate(
+    (key: string) =>
+      typeof key === "string" && key.startsWith(`album-images:${albumId}`),
   );
-
-  mutate(keyPrefix);
 }
 
 async function fetchAlbum(albumId: UUID) {
@@ -41,36 +39,35 @@ async function fetchAlbum(albumId: UUID) {
 
 const PAGE_SIZE = 20;
 
-function getKey(pageIndex: number, previousPageData: any, albumId: string) {
-  if (previousPageData && !previousPageData.length) return null;
-  if (pageIndex === 0) return { lastCreatedAt: null, albumId };
-  return { lastCreatedAt: previousPageData.at(-1).created_at, albumId };
-}
+async function fetchImages(key: string) {
+  const [, albumId, cursorData] = key.split(":");
 
-async function fetchImages({
-  lastCreatedAt,
-  albumId,
-}: {
-  lastCreatedAt: string | null;
-  albumId: string;
-}) {
   const supabase = createClient();
 
   let query = supabase
     .from("images")
     .select("id, url, filename, created_at")
     .eq("album_id", albumId)
-    .order("created_at", { ascending: false });
+    .order("created_at", { ascending: false })
+    .limit(PAGE_SIZE);
 
-  if (lastCreatedAt) {
-    query = query.lt("created_at", lastCreatedAt);
+  if (cursorData && cursorData !== "0") {
+    try {
+      const cursor = JSON.parse(cursorData);
+      if (cursor.lastCreatedAt) {
+        query = query.lt("created_at", cursor.lastCreatedAt);
+      }
+    } catch {
+      const page = parseInt(cursorData);
+      query = query.range(page * PAGE_SIZE, (page + 1) * PAGE_SIZE - 1);
+    }
   }
 
-  const { data: imagesData, error: imagesError } = await query.limit(PAGE_SIZE);
+  const { data: imagesData, error: imagesError } = await query;
 
   if (imagesError) throw imagesError;
 
-  return imagesData;
+  return imagesData || [];
 }
 
 function AlbumErrorFallback({ error }: { error: Error }) {
@@ -100,30 +97,22 @@ function AlbumContent() {
   const { data: album } = useSWR(albumId, fetchAlbum, { suspense: true });
 
   const {
-    data: imagesData,
-    size,
-    setSize,
+    data: images,
     isLoading,
-  } = useSWRInfinite(
-    (pageIndex, previousPageData) =>
-      getKey(pageIndex, previousPageData, albumId),
-    fetchImages,
-    { suspense: true },
-  );
-
-  const images = imagesData ? imagesData.flat() : [];
-  const isEmpty = imagesData?.[0]?.length === 0;
-  const isReachingEnd =
-    isEmpty ||
-    (imagesData && imagesData[imagesData.length - 1]?.length < PAGE_SIZE);
-
-  const { ref: loadMoreRef, inView } = useInView({ rootMargin: "100px" });
-
-  useEffect(() => {
-    if (inView && !isLoading && !isReachingEnd) {
-      setSize((prev) => prev + 1);
-    }
-  }, [inView, isLoading, isReachingEnd, setSize]);
+    isLoadingMore,
+    isEmpty,
+    isReachingEnd,
+    loadMoreRef,
+  } = useInfiniteScroll(`album-images:${albumId}`, {
+    fetcher: fetchImages,
+    pageSize: PAGE_SIZE,
+    suspense: true,
+    getNextPageParam: (lastPage) => {
+      if (!lastPage || lastPage.length === 0) return null;
+      const lastImage = lastPage[lastPage.length - 1];
+      return { lastCreatedAt: lastImage.created_at };
+    },
+  });
 
   const dialog = useDialogStore();
 
@@ -148,7 +137,7 @@ function AlbumContent() {
             dialog.open("upload-image-to-album", {
               uploadImageToAlbumData: {
                 albumId,
-                onSuccess: () => onUploadSuccess(albumId),
+                onSuccess: () => onImageUploaded(albumId),
               },
             })
           }
@@ -161,24 +150,7 @@ function AlbumContent() {
       <Separator className="my-6" />
 
       <div className="space-y-6">
-        {images && images.length > 0 ? (
-          <div className="columns-1 gap-4 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-5">
-            {images.map((image) => (
-              <div
-                key={image.id}
-                className="group relative mb-4 break-inside-avoid overflow-hidden rounded-lg border border-gray-200 bg-gray-50 transition-shadow hover:shadow-md"
-              >
-                <Image
-                  src={image.url}
-                  alt={image.filename}
-                  width={400}
-                  height={600}
-                  className="h-auto w-full object-cover transition-transform group-hover:scale-105"
-                />
-              </div>
-            ))}
-          </div>
-        ) : (
+        {isEmpty ? (
           <div className="py-12 text-center">
             <div className="mx-auto max-w-sm">
               <div className="rounded-lg border-2 border-dashed border-gray-300 p-8">
@@ -192,17 +164,38 @@ function AlbumContent() {
               </div>
             </div>
           </div>
-        )}
+        ) : (
+          <>
+            <div className="columns-1 gap-4 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-5">
+              {images.map((image) => (
+                <div
+                  key={image.id}
+                  className="group relative mb-4 break-inside-avoid overflow-hidden rounded-lg border border-gray-200 bg-gray-50 transition-shadow hover:shadow-md"
+                >
+                  <Image
+                    src={image.url}
+                    alt={image.filename}
+                    width={400}
+                    height={600}
+                    className="h-auto w-full object-cover transition-transform group-hover:scale-105"
+                  />
+                </div>
+              ))}
+            </div>
 
-        {!isReachingEnd && (
-          <div ref={loadMoreRef} className="py-4 text-center">
-            {isLoading && (
-              <div className="flex items-center justify-center space-x-2">
-                <div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-300 border-t-blue-600" />
-                <span className="text-sm text-gray-500">Loading more...</span>
+            {!isReachingEnd && (
+              <div ref={loadMoreRef} className="py-4 text-center">
+                {isLoadingMore && (
+                  <div className="flex items-center justify-center space-x-2">
+                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-300 border-t-blue-600" />
+                    <span className="text-sm text-gray-500">
+                      Loading more...
+                    </span>
+                  </div>
+                )}
               </div>
             )}
-          </div>
+          </>
         )}
       </div>
     </>

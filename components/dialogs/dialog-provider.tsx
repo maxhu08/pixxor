@@ -27,7 +27,7 @@ export const DialogProvider = () => {
   return (
     <>
       <SignOutDialog />
-      <CreateAlbumDialog />
+      <CreateAlbumDialog onSuccess={dialog.data.createAlbumData?.onSuccess} />
       <ManageAlbumDialog
         members={dialog.data.manageAlbumData?.members ?? []}
         albumId={dialog.data.manageAlbumData?.albumId as string}

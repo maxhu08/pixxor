@@ -21,7 +21,7 @@ import { z } from "zod";
 
 type FormValues = z.infer<typeof createAlbumSchema>;
 
-export function CreateAlbumDialog() {
+export function CreateAlbumDialog({ onSuccess }: { onSuccess?: () => void }) {
   const dialog = useDialogStore();
   const isDialogOpen = dialog.isOpen && dialog.type === "create-album";
 
@@ -51,6 +51,7 @@ export function CreateAlbumDialog() {
         reset();
         setUserIds([]);
         dialog.close();
+        onSuccess?.();
         toast.success("Album created successfully");
       });
     });

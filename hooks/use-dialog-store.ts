@@ -32,6 +32,9 @@ interface DialogData {
     memberId: string;
     onAlbumMemberRemoved: () => void;
   };
+  createAlbumData?: {
+    onSuccess?: () => void;
+  };
 }
 
 interface DialogStore {
