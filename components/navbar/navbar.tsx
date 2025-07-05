@@ -1,4 +1,5 @@
 import HeaderAuth from "@/components/navbar/header-auth";
+import { ThemeSwitcher } from "@/components/theme/theme-switcher";
 import { Image } from "lucide-react";
 import Link from "next/link";
 import type { FC } from "react";
@@ -19,7 +20,7 @@ export const Navbar: FC = () => {
         </div>
         <div className="flex items-center gap-3">
           <HeaderAuth />
-          {/* <ThemeSwitcher /> */}
+          <ThemeSwitcher />
         </div>
       </div>
     </nav>

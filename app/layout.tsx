@@ -3,6 +3,8 @@ import { Geist } from "next/font/google";
 import "./globals.css";
 import { DialogProvider } from "@/components/dialogs/dialog-provider";
 import { Navbar } from "@/components/navbar/navbar";
+import { ThemeProvider } from "@/contexts/theme-context";
+import { headers } from "next/headers";
 import { Toaster } from "sonner";
 
 const defaultUrl = process.env.VERCEL_URL
@@ -22,18 +24,22 @@ const geistSans = Geist({
   subsets: ["latin"],
 });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const nonce = (await headers()).get("x-nonce") || undefined;
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.className} antialiased`}>
-        <Navbar />
-        {children}
-        <DialogProvider />
-        <Toaster />
+        <ThemeProvider disableTransitionOnChange nonce={nonce}>
+          <Navbar />
+          {children}
+          <DialogProvider />
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   );
