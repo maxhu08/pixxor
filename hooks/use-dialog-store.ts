@@ -30,6 +30,7 @@ interface DialogData {
   removeAlbumMemberData?: {
     albumId: string;
     memberId: string;
+    onAlbumMemberRemoved: () => void;
   };
 }
 

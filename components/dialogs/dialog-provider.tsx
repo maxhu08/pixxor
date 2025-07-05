@@ -29,7 +29,7 @@ export const DialogProvider = () => {
       <SignOutDialog />
       <CreateAlbumDialog />
       <ManageAlbumDialog
-        members={dialog.data.manageAlbumData?.members as AlbumMember[]}
+        members={dialog.data.manageAlbumData?.members ?? []}
         albumId={dialog.data.manageAlbumData?.albumId as string}
       />
       {dialog.data.manageAlbumMemberRoleData?.member && (
@@ -39,7 +39,13 @@ export const DialogProvider = () => {
           currentRole={dialog.data.manageAlbumMemberRoleData?.currentRole}
         />
       )}
-      <RemoveAlbumMemberDialog />
+      <RemoveAlbumMemberDialog
+        albumId={dialog.data.removeAlbumMemberData?.albumId as string}
+        memberId={dialog.data.removeAlbumMemberData?.memberId as string}
+        onAlbumMemberRemoved={
+          dialog.data.removeAlbumMemberData?.onAlbumMemberRemoved as () => void
+        }
+      />
       <InviteMembersToAlbumDialog />
       <UploadImageToAlbumDialog
         albumId={dialog.data.uploadImageToAlbumData?.albumId as string}

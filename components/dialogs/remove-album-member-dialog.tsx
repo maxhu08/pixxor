@@ -13,7 +13,17 @@ import { LoaderCircle } from "lucide-react";
 import { useTransition } from "react";
 import { toast } from "sonner";
 
-export function RemoveAlbumMemberDialog() {
+interface RemoveAlbumMemberDialogProps {
+  memberId: string;
+  albumId: string;
+  onAlbumMemberRemoved: (memberId: string) => void;
+}
+
+export function RemoveAlbumMemberDialog({
+  memberId,
+  albumId,
+  onAlbumMemberRemoved,
+}: RemoveAlbumMemberDialogProps) {
   const dialog = useDialogStore();
 
   const isDialogOpen = dialog.isOpen && dialog.type === "remove-album-member";
@@ -21,15 +31,13 @@ export function RemoveAlbumMemberDialog() {
   const [isPending, startTransition] = useTransition();
 
   function handleRemove() {
-    const memberId = dialog.data.removeAlbumMemberData?.memberId;
-    const albumId = dialog.data.removeAlbumMemberData?.albumId;
-
     if (!memberId || !albumId) return;
 
     startTransition(async () => {
       try {
         await removeAlbumMember(albumId, memberId);
         toast.success("Member removed");
+        onAlbumMemberRemoved(memberId);
       } catch {
         toast.error("Failed to remove member");
       } finally {
