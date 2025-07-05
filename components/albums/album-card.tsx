@@ -106,7 +106,11 @@ export function AlbumCard({
           variant="outline"
           size="sm"
           className="flex-1 cursor-pointer bg-transparent"
-          onClick={() => dialog.open("invite-members-to-album")}
+          onClick={() =>
+            dialog.open("invite-members-to-album", {
+              inviteMembersToAlbumData: { albumId: album.id },
+            })
+          }
         >
           <div>
             <UserPlus className="mr-1 h-4 w-4" />

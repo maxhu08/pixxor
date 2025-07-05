@@ -1,7 +1,7 @@
 "use client";
 
 import { CreateAlbumDialog } from "@/components/dialogs/create-album-dialog";
-import { InviteMembersToAlbumDialog } from "@/components/dialogs/invite-users-to-album";
+import { InviteMembersToAlbumDialog } from "@/components/dialogs/invite-users-to-album-dialog";
 import { ManageAlbumDialog } from "@/components/dialogs/manage-album-dialog";
 import { ManageAlbumMemberRoleDialog } from "@/components/dialogs/manage-album-member-role-dialog";
 import { RemoveAlbumMemberDialog } from "@/components/dialogs/remove-album-member-dialog";
@@ -9,7 +9,6 @@ import { SignOutDialog } from "@/components/dialogs/sign-out-dialog";
 import { UploadImageToAlbumDialog } from "@/components/dialogs/upload-image-to-album-dialog";
 //
 import { useDialogStore } from "@/hooks/use-dialog-store";
-import { AlbumMember } from "@/types";
 //
 import { useEffect, useState } from "react";
 
@@ -46,7 +45,9 @@ export const DialogProvider = () => {
           dialog.data.removeAlbumMemberData?.onAlbumMemberRemoved as () => void
         }
       />
-      <InviteMembersToAlbumDialog />
+      <InviteMembersToAlbumDialog
+        albumId={dialog.data.inviteMembersToAlbumData?.albumId as string}
+      />
       <UploadImageToAlbumDialog
         albumId={dialog.data.uploadImageToAlbumData?.albumId as string}
         onSuccess={dialog.data.uploadImageToAlbumData?.onSuccess}

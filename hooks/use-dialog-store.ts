@@ -19,6 +19,9 @@ interface DialogData {
     albumId: string;
     members: AlbumMember[];
   };
+  inviteMembersToAlbumData?: {
+    albumId: string;
+  };
   manageAlbumMemberRoleData?: {
     albumId: string;
     member: {

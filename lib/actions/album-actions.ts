@@ -56,6 +56,64 @@ export async function createAlbum(input: { name: string; userIds: string[] }) {
   return albumId;
 }
 
+export async function inviteMembersToAlbum(albumId: string, userIds: string[]) {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  if (userError || !user) {
+    throw new Error("Unauthenticated");
+  }
+
+  const { data: ownerEntry, error: ownerError } = await supabase
+    .from("album_members")
+    .select("role")
+    .eq("album_id", albumId)
+    .eq("user_id", user.id)
+    .single();
+
+  if (ownerError || !ownerEntry || ownerEntry.role !== AlbumMemberRole.OWNER) {
+    throw new Error("Only the album owner can invite members.");
+  }
+
+  const { data: existingMembers, error: existingError } = await supabase
+    .from("album_members")
+    .select("user_id")
+    .eq("album_id", albumId);
+
+  if (existingError) {
+    throw new Error(
+      `Failed to fetch current members: ${existingError.message}`,
+    );
+  }
+
+  const existingUserIds = new Set(existingMembers.map((m) => m.user_id));
+  const newMembers = userIds
+    .filter((id) => !existingUserIds.has(id))
+    .map((userId) => ({
+      user_id: userId,
+      album_id: albumId,
+      role: AlbumMemberRole.MEMBER,
+    }));
+
+  if (newMembers.length === 0) {
+    return { success: true, message: "No new users to invite" };
+  }
+
+  const { error: insertError } = await supabase
+    .from("album_members")
+    .insert(newMembers);
+
+  if (insertError) {
+    throw new Error(`Failed to invite members: ${insertError.message}`);
+  }
+
+  return { success: true };
+}
+
 export async function removeAlbumMember(albumId: string, userId: string) {
   const supabase = await createClient();
 
