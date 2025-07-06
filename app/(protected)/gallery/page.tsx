@@ -14,16 +14,13 @@ import useSWR, { mutate } from "swr";
 const PAGE_SIZE = 12;
 
 function onAlbumCreated(userId: string) {
-  mutate(
-    (key: string) =>
-      typeof key === "string" && key.startsWith(`user-albums:${userId}`),
-  );
+  mutate((key: string) => typeof key === "string" && key.startsWith(`user-albums:${userId}`));
 }
 
 async function fetchCurrentUser() {
   const supabase = createClient();
   const {
-    data: { user },
+    data: { user }
   } = await supabase.auth.getUser();
   return user;
 }
@@ -41,26 +38,26 @@ async function fetchAlbums(key: string) {
     .from("album_members")
     .select(
       `
-      album_id,
-      albums:albums(
+    album_id,
+    albums:albums(
+      id,
+      name,
+      created_at,
+      images:images(
         id,
-        name,
-        created_at,
-        images(
+        url,
+        created_at
+      ),
+      album_members:album_members!inner(
+        user_id,
+        role,
+        users:users!album_members_user_id_fkey (
           id,
-          url,
-          created_at
-        ),
-        album_members:album_members!inner(
-          user_id,
-          role,
-          users:users!album_members_user_id_fkey (
-            id,
-            name
-          )
+          name
         )
       )
-    `,
+    )
+  `
     )
     .eq("user_id", userId)
     .order("created_at", { foreignTable: "albums", ascending: false })
@@ -89,13 +86,10 @@ async function fetchAlbums(key: string) {
 
 function processAlbums(albums: any[]) {
   return albums.map((membership) => {
-    const album = Array.isArray(membership.albums)
-      ? membership.albums[0]
-      : membership.albums;
+    const album = Array.isArray(membership.albums) ? membership.albums[0] : membership.albums;
 
     const sortedImages = [...(album.images ?? [])].sort(
-      (a, b) =>
-        new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
+      (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
     );
 
     const latestImage = sortedImages[0] ?? null;
@@ -103,7 +97,7 @@ function processAlbums(albums: any[]) {
     const members = (album.album_members ?? []).map((m: any) => ({
       id: m.user_id,
       name: m.users?.name ?? "Unknown",
-      role: m.role,
+      role: m.role
     }));
 
     return {
@@ -112,12 +106,12 @@ function processAlbums(albums: any[]) {
       latestImage: latestImage
         ? {
             id: latestImage.id,
-            url: latestImage.url,
+            url: latestImage.url
           }
         : null,
       imageCount: album.images?.length ?? 0,
       latestImageTimestamp: latestImage?.created_at ?? null,
-      members,
+      members
     };
   });
 }
@@ -126,9 +120,7 @@ function AlbumsErrorFallback({ error }: { error: Error }) {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-8">
       <div className="w-full max-w-md space-y-4 text-center">
-        <h1 className="text-2xl font-bold tracking-tight">
-          Something went wrong
-        </h1>
+        <h1 className="text-2xl font-bold tracking-tight">Something went wrong</h1>
         <p className="text-muted-foreground">
           {error.message || "Error fetching albums. Please try again later."}
         </p>
@@ -162,7 +154,7 @@ function AlbumsSkeleton() {
 
 function AlbumsContent() {
   const { data: user } = useSWR("current-user", fetchCurrentUser, {
-    suspense: true,
+    suspense: true
   });
 
   const {
@@ -173,7 +165,7 @@ function AlbumsContent() {
     isReachingEnd,
     loadMoreRef,
     error,
-    mutate: mutateAlbums,
+    mutate: mutateAlbums
   } = useInfiniteScroll(user ? `user-albums:${user.id}` : "user-albums:null", {
     fetcher: fetchAlbums,
     pageSize: PAGE_SIZE,
@@ -181,11 +173,9 @@ function AlbumsContent() {
     getNextPageParam: (lastPage) => {
       if (!lastPage || lastPage.length === 0) return null;
       const lastAlbum = lastPage[lastPage.length - 1];
-      const album = Array.isArray(lastAlbum.albums)
-        ? lastAlbum.albums[0]
-        : lastAlbum.albums;
+      const album = Array.isArray(lastAlbum.albums) ? lastAlbum.albums[0] : lastAlbum.albums;
       return { lastCreatedAt: album.created_at };
-    },
+    }
   });
 
   const [deletingAlbumId, setDeletingAlbumId] = useState<string | null>(null);
@@ -208,7 +198,7 @@ function AlbumsContent() {
                   : membership.albums;
                 return album && album.id !== albumId;
               })
-            : page,
+            : page
         )
         .filter((page) => (Array.isArray(page) ? page.length > 0 : true));
     }, false);
@@ -218,12 +208,8 @@ function AlbumsContent() {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center p-8">
         <div className="w-full max-w-md space-y-4 text-center">
-          <h1 className="text-2xl font-bold tracking-tight">
-            Authentication Required
-          </h1>
-          <p className="text-muted-foreground">
-            You must be logged in to view your albums.
-          </p>
+          <h1 className="text-2xl font-bold tracking-tight">Authentication Required</h1>
+          <p className="text-muted-foreground">You must be logged in to view your albums.</p>
           <Button asChild>
             <Link href="/login">Sign In</Link>
           </Button>
@@ -263,7 +249,7 @@ function AlbumsContent() {
                 album={{
                   id: album.id,
                   name: album.name,
-                  latestImage: album.latestImage,
+                  latestImage: album.latestImage
                 }}
                 imageCount={album.imageCount}
                 latestImageTimestamp={album.latestImageTimestamp}
@@ -279,9 +265,7 @@ function AlbumsContent() {
               {isLoadingMore && (
                 <div className="flex items-center justify-center space-x-2">
                   <div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-300 border-t-blue-600" />
-                  <span className="text-sm text-gray-500">
-                    Loading more albums...
-                  </span>
+                  <span className="text-sm text-gray-500">Loading more albums...</span>
                 </div>
               )}
             </div>
