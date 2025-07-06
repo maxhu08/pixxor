@@ -82,7 +82,7 @@ export function CreateAlbumDialog({ onSuccess }: { onSuccess?: () => void }) {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div className="flex flex-col gap-2">
             <Label htmlFor="name">Album Name</Label>
-            <Input id="name" {...register("name")} />
+            <Input id="name" {...register("name")} autoComplete="off" />
             {errors.name && <p className="text-sm text-red-500">{errors.name.message}</p>}
           </div>
           <div className="flex flex-col gap-2">
@@ -93,6 +93,7 @@ export function CreateAlbumDialog({ onSuccess }: { onSuccess?: () => void }) {
                 placeholder="Enter user name"
                 value={currentUserName}
                 onChange={(e) => setCurrentUserName(e.target.value)}
+                autoComplete="off"
               />
               <Button
                 type="button"

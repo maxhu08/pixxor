@@ -66,6 +66,7 @@ export function InviteMembersToAlbumDialog({ albumId }: { albumId: string }) {
                 placeholder="Enter user name"
                 value={currentUserName}
                 onChange={(e) => setCurrentUserName(e.target.value)}
+                autoComplete="off"
               />
               <Button
                 type="button"

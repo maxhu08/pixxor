@@ -131,6 +131,7 @@ export function OnboardProfile({ onSuccess }: { onSuccess: () => void }) {
                       ? "not-focus-visible:border-red-500 focus-visible:ring-red-500"
                       : ""
                 }`}
+                autoComplete="off"
               />
             </div>
             <div className="mt-1 text-left text-xs text-red-500">
