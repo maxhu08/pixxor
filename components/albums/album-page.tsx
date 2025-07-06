@@ -1,6 +1,6 @@
 "use client";
 
-import { UUID } from "crypto";
+import type { UUID } from "crypto";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -21,7 +21,6 @@ function onImageUploaded(albumId: UUID) {
 
 async function fetchAlbum(albumId: UUID) {
   const supabase = createClient();
-
   const { data: albumData, error: albumError } = await supabase
     .from("albums")
     .select("id, name")
@@ -38,7 +37,6 @@ const PAGE_SIZE = 20;
 
 async function fetchImages(key: string) {
   const [, albumId, cursorData] = key.split(":");
-
   const supabase = createClient();
 
   let query = supabase
@@ -55,13 +53,12 @@ async function fetchImages(key: string) {
         query = query.lt("created_at", cursor.lastCreatedAt);
       }
     } catch {
-      const page = parseInt(cursorData);
+      const page = Number.parseInt(cursorData);
       query = query.range(page * PAGE_SIZE, (page + 1) * PAGE_SIZE - 1);
     }
   }
 
   const { data: imagesData, error: imagesError } = await query;
-
   if (imagesError) throw imagesError;
 
   return imagesData || [];
@@ -76,14 +73,41 @@ function AlbumErrorFallback({ error }: { error: Error }) {
 }
 
 function AlbumSkeleton() {
+  const getRandomHeight = () => {
+    const heights = ["h-48", "h-56", "h-64", "h-72", "h-80", "h-96"];
+    return heights[Math.floor(Math.random() * heights.length)];
+  };
+
   return (
     <>
-      <Skeleton className="mx-auto h-8 w-1/2" />
-      <Separator />
-      <div className="space-y-4">
-        {Array.from({ length: 15 }).map((_, i) => (
-          <Skeleton key={i} className="h-4 w-full" />
-        ))}
+      <div className="mb-4 flex w-full items-center justify-between gap-4">
+        <div className="flex h-8 min-w-0 items-center gap-4">
+          <Skeleton className="h-10 w-32" />
+          <div className="bg-border h-6 w-px" />
+          <Skeleton className="h-8 w-48" />
+        </div>
+        <div className="flex items-center gap-2">
+          <Skeleton className="h-10 w-24" />
+        </div>
+      </div>
+      <Separator className="my-6" />
+      <div className="space-y-6">
+        <div className="columns-1 gap-4 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-5">
+          {Array.from({ length: 12 }).map((_, i) => (
+            <div
+              key={i}
+              className="mb-4 break-inside-avoid overflow-hidden rounded-lg border border-gray-200 bg-gray-50"
+            >
+              <Skeleton className={`w-full ${getRandomHeight()}`} />
+            </div>
+          ))}
+        </div>
+        <div className="py-4 text-center">
+          <div className="flex items-center justify-center space-x-2">
+            <Skeleton className="h-4 w-4 rounded-full" />
+            <Skeleton className="h-4 w-24" />
+          </div>
+        </div>
       </div>
     </>
   );
@@ -100,16 +124,20 @@ function AlbumContent() {
       const {
         data: { user }
       } = await supabase.auth.getUser();
+
       if (!user) return;
+
       const { data: member, error } = await supabase
         .from("album_members")
         .select("role")
         .eq("album_id", albumId)
         .eq("user_id", user.id)
         .single();
+
       if (!error && member) setUserRole(member.role);
       else setUserRole(null);
     }
+
     fetchRole();
   }, [albumId]);
 
@@ -168,9 +196,7 @@ function AlbumContent() {
           )}
         </div>
       </div>
-
       <Separator className="my-6" />
-
       <div className="space-y-6">
         {isEmpty ? (
           <div className="py-12 text-center">
@@ -202,7 +228,7 @@ function AlbumContent() {
                   className="group relative mb-4 break-inside-avoid overflow-hidden rounded-lg border border-gray-200 bg-gray-50 transition-shadow hover:shadow-md"
                 >
                   <Image
-                    src={image.url}
+                    src={image.url || "/placeholder.svg"}
                     alt={image.filename}
                     width={400}
                     height={600}
@@ -212,7 +238,6 @@ function AlbumContent() {
                 </div>
               ))}
             </div>
-
             {!isReachingEnd && (
               <div ref={loadMoreRef} className="py-4 text-center">
                 {isLoadingMore && (
