@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useDialogStore } from "@/hooks/use-dialog-store";
-import { useInfiniteScroll } from "@/hooks/use-infinite-scroll";
 import { createClient } from "@/lib/supabase/client";
 import { ArrowLeft, FileText, PlusCircle } from "lucide-react";
 import Image from "next/image";
@@ -13,11 +12,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
-import useSWR, { mutate } from "swr";
-
-function onImageUploaded(albumId: UUID) {
-  mutate((key: string) => typeof key === "string" && key.startsWith(`album-images:${albumId}`));
-}
+import useSWR from "swr";
 
 async function fetchAlbum(albumId: UUID) {
   const supabase = createClient();
@@ -118,6 +113,9 @@ function AlbumContent() {
   const { data: album } = useSWR(albumId, fetchAlbum, { suspense: true });
   const [userRole, setUserRole] = useState<string | null>(null);
 
+  const [images, setImages] = useState<any[]>([]);
+  const [isImagesLoaded, setIsImagesLoaded] = useState(false);
+
   useEffect(() => {
     async function fetchRole() {
       const supabase = createClient();
@@ -141,23 +139,24 @@ function AlbumContent() {
     fetchRole();
   }, [albumId]);
 
-  const {
-    data: images,
-    isLoading,
-    isLoadingMore,
-    isEmpty,
-    isReachingEnd,
-    loadMoreRef
-  } = useInfiniteScroll(`album-images:${albumId}`, {
-    fetcher: fetchImages,
-    pageSize: PAGE_SIZE,
-    suspense: true,
-    getNextPageParam: (lastPage) => {
-      if (!lastPage || lastPage.length === 0) return null;
-      const lastImage = lastPage[lastPage.length - 1];
-      return { lastCreatedAt: lastImage.created_at };
+  useEffect(() => {
+    let isMounted = true;
+    async function fetchInitialImages() {
+      const initialImages = await fetchImages(`album-images:${albumId}:0`);
+      if (isMounted) {
+        setImages(initialImages);
+        setIsImagesLoaded(true);
+      }
     }
-  });
+    fetchInitialImages();
+    return () => {
+      isMounted = false;
+    };
+  }, [albumId]);
+
+  function onImageUploaded(newImage: any) {
+    setImages((prev) => [newImage, ...prev]);
+  }
 
   const dialog = useDialogStore();
 
@@ -180,11 +179,12 @@ function AlbumContent() {
               dialog.open("upload-image-to-album", {
                 uploadImageToAlbumData: {
                   albumId,
-                  onSuccess: () => onImageUploaded(albumId)
+                  onSuccess: (newImage: any) => onImageUploaded(newImage)
                 }
               })
             }
             disabled={userRole === "VIEWER"}
+            className={userRole !== "VIEWER" ? "cursor-pointer" : ""}
           >
             <PlusCircle />
             Upload
@@ -198,7 +198,9 @@ function AlbumContent() {
       </div>
       <Separator className="my-6" />
       <div className="space-y-6">
-        {isEmpty ? (
+        {!isImagesLoaded ? (
+          <AlbumSkeleton />
+        ) : images.length === 0 ? (
           <div className="py-12 text-center">
             <div className="mx-auto max-w-sm">
               <div className="rounded-lg border-2 border-dashed border-gray-300 p-8">
@@ -215,7 +217,7 @@ function AlbumContent() {
             <div className="cursor-pointer columns-1 gap-4 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-5">
               {images.map((image) => (
                 <div
-                  key={image.id}
+                  key={`${image.id}-${image.fileHash}`}
                   onClick={() =>
                     dialog.open("view-photo", {
                       viewPhotoData: {
@@ -228,8 +230,8 @@ function AlbumContent() {
                   className="group relative mb-4 break-inside-avoid overflow-hidden rounded-lg border border-gray-200 bg-gray-50 transition-shadow hover:shadow-md"
                 >
                   <Image
-                    src={image.url || "/placeholder.svg"}
-                    alt={image.filename}
+                    src={image.ufsUrl ?? image.url ?? "/placeholder.svg"}
+                    alt={image.filename ?? image.name}
                     width={400}
                     height={600}
                     className="h-auto w-full object-cover transition-transform group-hover:scale-105"
@@ -238,16 +240,6 @@ function AlbumContent() {
                 </div>
               ))}
             </div>
-            {!isReachingEnd && (
-              <div ref={loadMoreRef} className="py-4 text-center">
-                {isLoadingMore && (
-                  <div className="flex items-center justify-center space-x-2">
-                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-300 border-t-blue-600" />
-                    <span className="text-sm text-gray-500">Loading more...</span>
-                  </div>
-                )}
-              </div>
-            )}
           </>
         )}
       </div>

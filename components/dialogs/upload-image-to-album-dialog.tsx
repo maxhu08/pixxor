@@ -6,7 +6,7 @@ import {
   DialogContent,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
+  DialogTitle
 } from "@/components/ui/dialog";
 import { useDialogStore } from "@/hooks/use-dialog-store";
 import { UploadButton } from "@/utils/uploadthing";
@@ -14,10 +14,10 @@ import { toast } from "sonner";
 
 export function UploadImageToAlbumDialog({
   albumId,
-  onSuccess,
+  onSuccess
 }: {
   albumId: string;
-  onSuccess?: () => void;
+  onSuccess: (newImage: any) => void;
 }) {
   const dialog = useDialogStore();
 
@@ -33,9 +33,16 @@ export function UploadImageToAlbumDialog({
           <UploadButton
             endpoint="imageUploader"
             headers={{ "x-album-id": albumId }}
-            onClientUploadComplete={() => {
-              onSuccess?.();
-              toast.success(`Upload completed to album ${albumId}!`);
+            onClientUploadComplete={(res) => {
+              if (res && res[0]) {
+                onSuccess(res[0]);
+
+                console.log("res", res);
+                toast.success(`Upload completed to album ${albumId}!`);
+              } else {
+                toast.success(`Upload completed to album ${albumId}!`);
+                onSuccess(null);
+              }
               dialog.close();
             }}
             onUploadError={(error: Error) => {
@@ -44,11 +51,7 @@ export function UploadImageToAlbumDialog({
           />
         </div>
         <DialogFooter>
-          <Button
-            variant="outline"
-            className="cursor-pointer"
-            onClick={() => dialog.close()}
-          >
+          <Button variant="outline" className="cursor-pointer" onClick={() => dialog.close()}>
             Cancel
           </Button>
         </DialogFooter>

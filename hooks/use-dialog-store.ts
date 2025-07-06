@@ -21,7 +21,7 @@ interface DialogData {
   };
   uploadImageToAlbumData?: {
     albumId: string;
-    onSuccess?: () => void;
+    onSuccess: (newImage: any) => void;
   };
   manageAlbumData?: {
     albumId: string;
