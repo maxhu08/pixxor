@@ -40,15 +40,16 @@ export function ViewPhotoDialog({ photoId, photoUrl, onAddEffects }: ViewPhotoDi
 
       if (userError || !user) return;
 
-      const { data: imageData, error: imageError } = await supabase
-        .from("images")
+      // Fetch album_id from album_image table
+      const { data: albumImageData, error: albumImageError } = await supabase
+        .from("album_image")
         .select("album_id")
-        .eq("id", photoId)
+        .eq("image_id", photoId)
         .single();
 
-      if (imageError || !imageData) return;
+      if (albumImageError || !albumImageData) return;
 
-      const albumId = imageData.album_id;
+      const albumId = albumImageData.album_id;
 
       const { data: memberData, error: memberError } = await supabase
         .from("album_members")
