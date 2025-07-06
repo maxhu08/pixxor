@@ -11,7 +11,7 @@ export async function loginAction(formData: FormData) {
 
   const { error, data: authData } = await supabase.auth.signInWithPassword({
     email,
-    password,
+    password
   });
 
   if (error) {
@@ -31,7 +31,7 @@ export async function loginAction(formData: FormData) {
     const { error: insertError } = await supabase.from("users").insert({
       id: user.id,
       name: user.user_metadata.full_name || user.email,
-      avatar_url: user.user_metadata.avatar_url || null,
+      avatar_url: user.user_metadata.avatar_url || null
     });
 
     if (insertError) {
@@ -43,7 +43,7 @@ export async function loginAction(formData: FormData) {
     return encodedRedirect("error", "/auth/login", userError.message);
   }
 
-  return redirect("/dashboard");
+  return redirect("/gallery");
 }
 
 export async function signOutAction() {

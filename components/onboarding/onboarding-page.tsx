@@ -35,7 +35,7 @@ export function OnboardingPage() {
 
   useEffect(() => {
     if (state?.success) {
-      router.push("/dashboard");
+      router.push("/gallery");
     }
   }, [state, router]);
 

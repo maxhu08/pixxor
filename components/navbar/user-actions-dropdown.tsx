@@ -6,18 +6,10 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
-  DropdownMenuTrigger,
+  DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { useDialogStore } from "@/hooks/use-dialog-store";
-import { createClient } from "@/lib/supabase/client";
-import {
-  ChevronDown,
-  LayoutDashboard,
-  LogOut,
-  SquareLibrary,
-  User,
-  UserCog,
-} from "lucide-react";
+import { ChevronDown, LogOut, SquareLibrary, User, UserCog } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type FC } from "react";
@@ -26,9 +18,7 @@ interface UserActionsDropdownProps {
   username: string;
 }
 
-export const UserActionsDropdown: FC<UserActionsDropdownProps> = ({
-  username,
-}) => {
+export const UserActionsDropdown: FC<UserActionsDropdownProps> = ({ username }) => {
   const dialog = useDialogStore();
 
   const router = useRouter();
@@ -49,28 +39,13 @@ export const UserActionsDropdown: FC<UserActionsDropdownProps> = ({
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem asChild>
-          <Link
-            href="/dashboard"
-            className="flex w-full cursor-pointer items-center gap-2"
-          >
-            <LayoutDashboard size={16} />
-            <span>Dashboard</span>
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <Link
-            href="/gallery"
-            className="flex w-full cursor-pointer items-center gap-2"
-          >
+          <Link href="/gallery" className="flex w-full cursor-pointer items-center gap-2">
             <SquareLibrary size={16} />
             <span>Gallery</span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link
-            href="/manage-account"
-            className="flex w-full cursor-pointer items-center gap-2"
-          >
+          <Link href="/manage-account" className="flex w-full cursor-pointer items-center gap-2">
             <UserCog size={16} />
             <span>Manage Account</span>
           </Link>

@@ -3,18 +3,18 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 
 export const metadata = {
-  title: "Login",
+  title: "Login"
 };
 
 export default async function Page() {
   const supabase = await createClient();
 
   const {
-    data: { user },
+    data: { user }
   } = await supabase.auth.getUser();
 
   if (user) {
-    return redirect("/dashboard");
+    return redirect("/gallery");
   }
 
   return (

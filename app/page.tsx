@@ -9,7 +9,7 @@ const Page = async () => {
   const supabase = await createClient();
 
   const {
-    data: { user },
+    data: { user }
   } = await supabase.auth.getUser();
 
   const signedIn = !!user;
@@ -25,29 +25,22 @@ const Page = async () => {
             <h1 className="text-4xl font-bold tracking-tight md:text-6xl">
               Your creative space for
               <br />
-              <span className="text-muted-foreground">
-                photo albums and effects
-              </span>
+              <span className="text-muted-foreground">photo albums and effects</span>
             </h1>
             <p className="text-muted-foreground mx-auto max-w-2xl text-xl leading-relaxed">
-              Organize your photos, add stunning effects, and share your stories
-              with beautifully crafted albums.
+              Organize your photos, add stunning effects, and share your stories with beautifully
+              crafted albums.
             </p>
           </div>
           <div className="flex flex-col place-items-center justify-center gap-4 sm:flex-row">
-            <Link href={signedIn ? "/dashboard" : "/auth/login"}>
-              <Button
-                size="lg"
-                className="group cursor-pointer text-lg has-[>svg]:px-8"
-              >
-                {signedIn ? "Go to Dashboard" : "Get Started"}
+            <Link href={signedIn ? "/gallery" : "/auth/login"}>
+              <Button size="lg" className="group cursor-pointer text-lg has-[>svg]:px-8">
+                {signedIn ? "Go to Gallery" : "Get Started"}
                 <ArrowRight className="size-5 transform transition-transform duration-200 group-hover:translate-x-1" />
               </Button>
             </Link>
           </div>
-          <p className="text-muted-foreground text-sm">
-            Free & private • Your photos, your style
-          </p>
+          <p className="text-muted-foreground text-sm">Free & private • Your photos, your style</p>
         </div>
         <div className="mx-auto mt-24 grid max-w-6xl gap-6 md:grid-cols-3">
           <Card className="text-center">
@@ -57,8 +50,8 @@ const Page = async () => {
               </div>
               <h3 className="mb-2 text-lg font-semibold">Create Albums</h3>
               <p className="text-muted-foreground text-sm">
-                Group your photos into personalized albums to keep your memories
-                organized and easy to find.
+                Group your photos into personalized albums to keep your memories organized and easy
+                to find.
               </p>
             </CardContent>
           </Card>
@@ -67,12 +60,10 @@ const Page = async () => {
               <div className="bg-primary/10 mx-auto mb-4 flex size-12 items-center justify-center rounded-lg">
                 <TrendingUp className="text-primary size-6" />
               </div>
-              <h3 className="mb-2 text-lg font-semibold">
-                Add Stunning Effects
-              </h3>
+              <h3 className="mb-2 text-lg font-semibold">Add Stunning Effects</h3>
               <p className="text-muted-foreground text-sm">
-                Enhance your photos with filters, overlays, and adjustments that
-                bring your vision to life.
+                Enhance your photos with filters, overlays, and adjustments that bring your vision
+                to life.
               </p>
             </CardContent>
           </Card>
@@ -83,8 +74,8 @@ const Page = async () => {
               </div>
               <h3 className="mb-2 text-lg font-semibold">Share & Enjoy</h3>
               <p className="text-muted-foreground text-sm">
-                Share your favorite albums with friends and family or keep them
-                private for your own enjoyment.
+                Share your favorite albums with friends and family or keep them private for your own
+                enjoyment.
               </p>
             </CardContent>
           </Card>
@@ -92,10 +83,7 @@ const Page = async () => {
       </main>
       <footer className="mt-24 border-t">
         <div className="text-muted-foreground container mx-auto px-4 py-8 text-center text-sm">
-          <p>
-            All your photos organized, edited, and shared in one beautiful
-            place.
-          </p>
+          <p>All your photos organized, edited, and shared in one beautiful place.</p>
         </div>
       </footer>
     </div>

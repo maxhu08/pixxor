@@ -18,7 +18,7 @@ export default async function Page() {
   }
 
   if (profile?.onboarded) {
-    redirect("/dashboard");
+    redirect("/gallery");
   }
 
   return <OnboardingPage />;
