@@ -9,7 +9,7 @@ import {
   DialogTitle
 } from "@/components/ui/dialog";
 import { useDialogStore } from "@/hooks/use-dialog-store";
-import { UploadButton } from "@/utils/uploadthing";
+import { UploadDropzone } from "@/utils/uploadthing";
 import { toast } from "sonner";
 
 export function UploadImageToAlbumDialog({
@@ -30,14 +30,12 @@ export function UploadImageToAlbumDialog({
           <DialogTitle>Upload Image to Album</DialogTitle>
         </DialogHeader>
         <div className="my-4">
-          <UploadButton
+          <UploadDropzone
             endpoint="imageUploader"
             headers={{ "x-album-id": albumId }}
             onClientUploadComplete={(res) => {
               if (res && res[0]) {
                 onSuccess(res[0]);
-
-                console.log("res", res);
                 toast.success(`Upload completed to album ${albumId}!`);
               } else {
                 toast.success(`Upload completed to album ${albumId}!`);
@@ -48,6 +46,7 @@ export function UploadImageToAlbumDialog({
             onUploadError={(error: Error) => {
               toast.error(`Upload failed: ${error.message}`);
             }}
+            className="ut-upload-dropzone"
           />
         </div>
         <DialogFooter>
