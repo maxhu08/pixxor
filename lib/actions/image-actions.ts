@@ -9,15 +9,26 @@ export type EffectsInput = Partial<Record<ImageEffect, boolean>>;
 
 export async function addEffect(photoId: string, effects: EffectsInput) {
   const supabase = await createClient();
+
   const { data: image, error } = await supabase
     .from("images")
-    .select("url, filename, user_id, album_id")
+    .select("url, filename, user_id")
     .eq("id", photoId)
     .single();
 
   if (error || !image) {
     throw new Error("Photo not found");
   }
+
+  const { data: albumImage, error: albumImageError } = await supabase
+    .from("album_image")
+    .select("album_id")
+    .eq("image_id", photoId)
+    .single();
+  if (albumImageError || !albumImage) {
+    throw new Error("Album for photo not found");
+  }
+  const albumId = albumImage.album_id;
 
   const url = image.url;
   const res = await fetch(url);
@@ -59,14 +70,26 @@ export async function addEffect(photoId: string, effects: EffectsInput) {
     throw new Error("Failed to upload processed image");
   }
 
-  const { error: insertError } = await supabase.from("images").insert({
-    album_id: image.album_id,
-    user_id: image.user_id,
-    filename: fileName,
-    url: uploadedUrl
-  });
-  if (insertError) {
+  const { data: insertedImage, error: insertError } = await supabase
+    .from("images")
+    .insert({
+      user_id: image.user_id,
+      filename: fileName,
+      url: uploadedUrl
+    })
+    .select("id")
+    .single();
+  if (insertError || !insertedImage) {
     throw new Error("Failed to save processed image");
+  }
+
+  const { error: albumImageInsertError } = await supabase.from("album_image").insert({
+    album_id: albumId,
+    image_id: insertedImage.id,
+    user_id: image.user_id
+  });
+  if (albumImageInsertError) {
+    throw new Error("Failed to link processed image to album");
   }
 
   return { success: true, url: uploadedUrl };
@@ -74,6 +97,14 @@ export async function addEffect(photoId: string, effects: EffectsInput) {
 
 export async function deletePhoto(photoId: string) {
   const supabase = await createClient();
+
+  const { error: albumImageError } = await supabase
+    .from("album_image")
+    .delete()
+    .eq("image_id", photoId);
+  if (albumImageError) {
+    throw new Error("Failed to remove photo from album");
+  }
 
   const { data: image, error } = await supabase
     .from("images")

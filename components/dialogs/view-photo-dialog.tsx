@@ -40,7 +40,6 @@ export function ViewPhotoDialog({ photoId, photoUrl, onAddEffects }: ViewPhotoDi
 
       if (userError || !user) return;
 
-      // Fetch album_id from album_image table
       const { data: albumImageData, error: albumImageError } = await supabase
         .from("album_image")
         .select("album_id")
