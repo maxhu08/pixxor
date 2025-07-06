@@ -55,3 +55,27 @@ export async function addEffect(photoId: string, effect: "monotone") {
 
   return { success: true, url: uploadedUrl };
 }
+
+export async function deletePhoto(photoId: string) {
+  const supabase = await createClient();
+
+  const { data: image, error } = await supabase
+    .from("images")
+    .select("id, url")
+    .eq("id", photoId)
+    .single();
+  if (error || !image) {
+    throw new Error("Photo not found");
+  }
+
+  const utapi = new UTApi();
+  const key = image.url.split("/f/")[1];
+  if (key) {
+    await utapi.deleteFiles([key]);
+  }
+  const { error: dbError } = await supabase.from("images").delete().eq("id", photoId);
+  if (dbError) {
+    throw new Error("Failed to delete photo from database");
+  }
+  return { success: true };
+}

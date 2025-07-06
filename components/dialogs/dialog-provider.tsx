@@ -1,7 +1,9 @@
 "use client";
 
+import { AddEffectsDialog } from "@/components/dialogs/add-effects-dialog";
 import { CreateAlbumDialog } from "@/components/dialogs/create-album-dialog";
 import { DeleteAlbumDialog } from "@/components/dialogs/delete-album-dialog";
+import { DeletePhotoDialog } from "@/components/dialogs/delete-photo-dialog";
 import { InviteMembersToAlbumDialog } from "@/components/dialogs/invite-users-to-album-dialog";
 import { ManageAlbumDialog } from "@/components/dialogs/manage-album-dialog";
 import { ManageAlbumMemberRoleDialog } from "@/components/dialogs/manage-album-member-role-dialog";
@@ -60,7 +62,22 @@ export const DialogProvider = () => {
       <ViewPhotoDialog
         photoUrl={dialog.data.viewPhotoData?.photoUrl as string}
         photoId={dialog.data.viewPhotoData?.photoId as string}
-        onAddEffects={() => {}}
+        onAddEffects={() => {
+          dialog.open("add-effects", {
+            addEffectsData: {
+              photoId: dialog.data.viewPhotoData?.photoId as string,
+              onEffectsApplied: dialog.data.viewPhotoData?.onAddEffects
+            }
+          });
+        }}
+      />
+      <AddEffectsDialog
+        photoId={dialog.data.addEffectsData?.photoId as string}
+        onEffectsApplied={dialog.data.addEffectsData?.onEffectsApplied}
+      />
+      <DeletePhotoDialog
+        photoId={dialog.data.deletePhotoData?.photoId as string}
+        onPhotoDeleted={dialog.data.deletePhotoData?.onPhotoDeleted}
       />
     </>
   );

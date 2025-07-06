@@ -10,7 +10,9 @@ export type DialogType =
   | "upload-image-to-album"
   | "manage-album-member-role"
   | "remove-album-member"
-  | "view-photo";
+  | "view-photo"
+  | "add-effects"
+  | "delete-photo";
 
 interface DialogData {
   deleteAlbumData?: {
@@ -49,6 +51,14 @@ interface DialogData {
     photoUrl: string;
     photoId: string;
     onAddEffects: () => void;
+  };
+  addEffectsData?: {
+    photoId: string;
+    onEffectsApplied?: () => void;
+  };
+  deletePhotoData?: {
+    photoId: string;
+    onPhotoDeleted?: () => void;
   };
 }
 

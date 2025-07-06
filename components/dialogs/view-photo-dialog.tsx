@@ -12,7 +12,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { useDialogStore } from "@/hooks/use-dialog-store";
 import { addEffect } from "@/lib/actions/image-actions";
-import { Wand2 } from "lucide-react";
+import { Trash2, Wand2 } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState, useTransition } from "react";
 import { toast } from "sonner";
@@ -29,7 +29,6 @@ export function ViewPhotoDialog({ photoId, photoUrl, onAddEffects }: ViewPhotoDi
   const [isPending, startTransition] = useTransition();
   const [isImageLoaded, setIsImageLoaded] = useState(false);
 
-  // Reset image loaded state when dialog opens with a new image
   useEffect(() => {
     if (isDialogOpen) {
       setIsImageLoaded(false);
@@ -39,7 +38,7 @@ export function ViewPhotoDialog({ photoId, photoUrl, onAddEffects }: ViewPhotoDi
   const handleAddEffects = () => {
     startTransition(async () => {
       try {
-        setIsImageLoaded(false); // Hide image while applying effect
+        setIsImageLoaded(false);
         await addEffect(photoId, "monotone");
         toast.success("Monotone effect applied!");
         dialog.close();
@@ -75,17 +74,42 @@ export function ViewPhotoDialog({ photoId, photoUrl, onAddEffects }: ViewPhotoDi
           />
         </div>
         <DialogFooter className="flex flex-row items-center justify-between sm:justify-between">
-          <Button variant="outline" onClick={() => dialog.close()} className="cursor-pointer">
-            Close
-          </Button>
+          <div className="flex gap-2">
+            <Button variant="outline" onClick={() => dialog.close()} className="cursor-pointer">
+              Close
+            </Button>
+            <Button
+              type="button"
+              variant="destructive"
+              onClick={() =>
+                dialog.open("delete-photo", {
+                  deletePhotoData: {
+                    photoId
+                  }
+                })
+              }
+              className="cursor-pointer"
+              disabled={isPending}
+            >
+              <Trash2 className="mr-2 size-4" />
+              Delete Photo
+            </Button>
+          </div>
           <Button
             type="button"
-            onClick={handleAddEffects}
+            onClick={() =>
+              dialog.open("add-effects", {
+                addEffectsData: {
+                  photoId,
+                  onEffectsApplied: onAddEffects
+                }
+              })
+            }
             className="cursor-pointer"
             disabled={isPending}
           >
             <Wand2 className="mr-2 size-4" />
-            {isPending ? "Applying..." : "Add Effects"}
+            Add Effects
           </Button>
         </DialogFooter>
       </DialogContent>
