@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
   DialogContent,
@@ -9,6 +10,7 @@ import {
   DialogHeader,
   DialogTitle
 } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
 import { IMAGE_EFFECTS } from "@/constants/image-effects";
 import { useDialogStore } from "@/hooks/use-dialog-store";
 import { addEffect } from "@/lib/actions/image-actions";
@@ -61,15 +63,14 @@ export function AddEffectsDialog({ photoId, onEffectsApplied }: AddEffectsDialog
         </DialogHeader>
         <div className="space-y-4">
           {IMAGE_EFFECTS.map((effect) => (
-            <label key={effect.value} className="flex items-center gap-2">
-              <input
-                type="checkbox"
+            <Label key={effect.value}>
+              <Checkbox
                 checked={selectedEffects.includes(effect.value)}
-                onChange={() => handleToggleEffect(effect.value)}
+                onCheckedChange={() => handleToggleEffect(effect.value)}
                 disabled={isPending}
               />
               {effect.label}
-            </label>
+            </Label>
           ))}
         </div>
         <DialogFooter>
