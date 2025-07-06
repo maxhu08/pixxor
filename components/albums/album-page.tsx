@@ -66,7 +66,6 @@ async function fetchImages(key: string) {
 
   if (imagesError) throw imagesError;
 
-  // Extract the images from the junction table response
   const images = (albumImagesData || [])
     .map((item: any) => item.images)
     .filter((image: any) => image !== null);
@@ -104,10 +103,7 @@ function AlbumSkeleton() {
       <div className="space-y-6">
         <div className="columns-1 gap-4 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-5">
           {Array.from({ length: 12 }).map((_, i) => (
-            <div
-              key={i}
-              className="mb-4 break-inside-avoid overflow-hidden rounded-lg border border-gray-200 bg-gray-50"
-            >
+            <div key={i} className="mb-4 break-inside-avoid overflow-hidden rounded-lg border">
               <Skeleton className={`w-full ${getRandomHeight()}`} />
             </div>
           ))}
@@ -218,7 +214,7 @@ function AlbumContent() {
         ) : images.length === 0 ? (
           <div className="py-12 text-center">
             <div className="mx-auto max-w-sm">
-              <div className="rounded-lg border-2 border-dashed border-gray-300 p-8">
+              <div className="rounded-lg border-2 border-dashed p-8">
                 <FileText className="mx-auto size-12 text-gray-400" />
                 <h3 className="mt-4 text-lg font-semibold text-gray-900">No images</h3>
                 <p className="mt-2 text-sm text-gray-500">
@@ -242,7 +238,7 @@ function AlbumContent() {
                       }
                     })
                   }
-                  className="group relative mb-4 break-inside-avoid overflow-hidden rounded-lg border border-gray-200 bg-gray-50 transition-shadow hover:shadow-md"
+                  className="group relative mb-4 break-inside-avoid overflow-hidden rounded-lg transition-shadow hover:shadow-md"
                 >
                   <Image
                     src={image.ufsUrl ?? image.url ?? "/placeholder.svg"}
