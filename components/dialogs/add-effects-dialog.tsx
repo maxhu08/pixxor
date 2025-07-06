@@ -9,6 +9,7 @@ import {
   DialogHeader,
   DialogTitle
 } from "@/components/ui/dialog";
+import { IMAGE_EFFECTS } from "@/constants/image-effects";
 import { useDialogStore } from "@/hooks/use-dialog-store";
 import { addEffect } from "@/lib/actions/image-actions";
 import { useState, useTransition } from "react";
@@ -18,8 +19,6 @@ interface AddEffectsDialogProps {
   photoId: string;
   onEffectsApplied?: () => void;
 }
-
-const EFFECTS = [{ label: "Monotone (Grayscale)", value: "monotone" }];
 
 export function AddEffectsDialog({ photoId, onEffectsApplied }: AddEffectsDialogProps) {
   const dialog = useDialogStore();
@@ -36,9 +35,14 @@ export function AddEffectsDialog({ photoId, onEffectsApplied }: AddEffectsDialog
   const handleApplyEffects = () => {
     startTransition(async () => {
       try {
-        for (const effect of selectedEffects) {
-          await addEffect(photoId, effect as any);
-        }
+        const effectsObj = IMAGE_EFFECTS.reduce(
+          (acc, effect) => {
+            acc[effect.value] = selectedEffects.includes(effect.value);
+            return acc;
+          },
+          {} as Record<string, boolean>
+        );
+        await addEffect(photoId, effectsObj);
         toast.success("Effects applied!");
         dialog.close();
         onEffectsApplied?.();
@@ -56,7 +60,7 @@ export function AddEffectsDialog({ photoId, onEffectsApplied }: AddEffectsDialog
           <DialogDescription>Select one or more effects to apply to your photo.</DialogDescription>
         </DialogHeader>
         <div className="space-y-4">
-          {EFFECTS.map((effect) => (
+          {IMAGE_EFFECTS.map((effect) => (
             <label key={effect.value} className="flex items-center gap-2">
               <input
                 type="checkbox"

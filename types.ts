@@ -7,5 +7,7 @@ export interface AlbumMember {
 export enum AlbumMemberRole {
   OWNER = "OWNER",
   MEMBER = "MEMBER",
-  VIEWER = "VIEWER",
+  VIEWER = "VIEWER"
 }
+
+export type ImageEffect = "monotone" | "inverted" | "horizontal-flip" | "vertical-flip";

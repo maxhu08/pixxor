@@ -1,10 +1,13 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { ImageEffect } from "@/types";
 import sharp from "sharp";
 import { UTApi } from "uploadthing/server";
 
-export async function addEffect(photoId: string, effect: "monotone") {
+export type EffectsInput = Partial<Record<ImageEffect, boolean>>;
+
+export async function addEffect(photoId: string, effects: EffectsInput) {
   const supabase = await createClient();
   const { data: image, error } = await supabase
     .from("images")
@@ -22,18 +25,31 @@ export async function addEffect(photoId: string, effect: "monotone") {
   if (!res.ok) throw new Error("Failed to fetch image from storage");
 
   const arrayBuffer = await res.arrayBuffer();
-  const buffer = Buffer.from(arrayBuffer);
+  let processed = Buffer.from(arrayBuffer as ArrayBuffer);
+  let sharpInstance = sharp(processed);
 
-  // apply grayscale effect with sharp
-  let processedBuffer: Buffer;
-  if (effect === "monotone") {
-    processedBuffer = await sharp(buffer).grayscale().png().toBuffer();
-  } else {
-    throw new Error("Unsupported effect");
+  if (effects["monotone"]) {
+    sharpInstance = sharpInstance.grayscale();
+  }
+  if (effects["inverted"]) {
+    sharpInstance = sharpInstance.negate();
+  }
+  if (effects["horizontal-flip"]) {
+    sharpInstance = sharpInstance.flip();
+  }
+  if (effects["vertical-flip"]) {
+    sharpInstance = sharpInstance.flop();
   }
 
-  const fileName = image.filename.replace(/(\.[^.]+)?$/, "-monotone$1");
-  const file = new File([processedBuffer], fileName, { type: "image/png" });
+  processed = Buffer.from(await sharpInstance.png().toBuffer());
+
+  const suffix =
+    Object.entries(effects)
+      .filter(([_, v]) => v)
+      .map(([k]) => k.replace(/-/g, ""))
+      .join("-") || "effect";
+  const fileName = image.filename.replace(/(\.[^.]+)?$/, `-${suffix}$1`);
+  const file = new File([processed], fileName, { type: "image/png" });
 
   const utapi = new UTApi();
   const uploadRes = await utapi.uploadFiles([file]);
