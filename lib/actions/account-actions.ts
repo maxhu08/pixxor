@@ -18,7 +18,7 @@ export async function registerAction(email: string, password: string) {
     email,
     password,
     options: {
-      emailRedirectTo: `${origin}/callback`
+      emailRedirectTo: `${origin}/auth/callback`
     }
   });
 
@@ -87,7 +87,7 @@ export async function signInWithOAuthAction(provider: Provider) {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider,
     options: {
-      redirectTo: `${origin}/callback`
+      redirectTo: `${origin}/auth/callback`
     }
   });
 
