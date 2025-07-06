@@ -262,6 +262,8 @@ export function AlbumPage() {
     setMounted(true);
   }, []);
 
+  if (!mounted) return null;
+
   return (
     <div className="flex min-h-screen flex-col">
       <main className="flex-1">
@@ -269,13 +271,9 @@ export function AlbumPage() {
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="space-y-6">
               <ErrorBoundary FallbackComponent={AlbumErrorFallback}>
-                {mounted ? (
-                  <Suspense fallback={<AlbumSkeleton />}>
-                    <AlbumContent />
-                  </Suspense>
-                ) : (
-                  <AlbumSkeleton />
-                )}
+                <Suspense fallback={<AlbumSkeleton />}>
+                  <AlbumContent />
+                </Suspense>
               </ErrorBoundary>
             </div>
           </div>
