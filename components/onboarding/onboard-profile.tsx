@@ -63,7 +63,7 @@ export function OnboardProfile({ onSuccess }: { onSuccess: () => void }) {
       if (existingProfile) {
         const { error: updateError } = await supabase
           .from("users")
-          .update({ username })
+          .update({ name: username })
           .eq("id", user.id);
 
         if (updateError) {
@@ -73,8 +73,7 @@ export function OnboardProfile({ onSuccess }: { onSuccess: () => void }) {
       } else {
         const { error: insertError } = await supabase.from("users").insert({
           id: user.id,
-          username,
-          name: user.user_metadata?.name || username,
+          name: username,
           avatar_url: user.user_metadata?.avatar_url
         });
 
