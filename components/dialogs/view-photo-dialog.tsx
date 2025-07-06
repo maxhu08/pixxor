@@ -9,11 +9,12 @@ import {
   DialogHeader,
   DialogTitle
 } from "@/components/ui/dialog";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useDialogStore } from "@/hooks/use-dialog-store";
 import { addEffect } from "@/lib/actions/image-actions";
 import { Wand2 } from "lucide-react";
 import Image from "next/image";
-import { useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { toast } from "sonner";
 
 interface ViewPhotoDialogProps {
@@ -26,10 +27,19 @@ export function ViewPhotoDialog({ photoId, photoUrl, onAddEffects }: ViewPhotoDi
   const dialog = useDialogStore();
   const isDialogOpen = dialog.isOpen && dialog.type === "view-photo";
   const [isPending, startTransition] = useTransition();
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
+
+  // Reset image loaded state when dialog opens with a new image
+  useEffect(() => {
+    if (isDialogOpen) {
+      setIsImageLoaded(false);
+    }
+  }, [isDialogOpen, photoUrl]);
 
   const handleAddEffects = () => {
     startTransition(async () => {
       try {
+        setIsImageLoaded(false); // Hide image while applying effect
         await addEffect(photoId, "monotone");
         toast.success("Monotone effect applied!");
         dialog.close();
@@ -40,6 +50,12 @@ export function ViewPhotoDialog({ photoId, photoUrl, onAddEffects }: ViewPhotoDi
     });
   };
 
+  const handleImageLoad = () => {
+    setIsImageLoaded(true);
+  };
+
+  const isLoading = !isImageLoaded || isPending;
+
   return (
     <Dialog open={isDialogOpen} onOpenChange={dialog.close}>
       <DialogContent className="sm:max-w-[600px]">
@@ -48,7 +64,15 @@ export function ViewPhotoDialog({ photoId, photoUrl, onAddEffects }: ViewPhotoDi
           <DialogDescription>View your photo in full detail.</DialogDescription>
         </DialogHeader>
         <div className="relative aspect-video w-full overflow-hidden rounded-md">
-          <Image src={photoUrl} alt="photo" fill className="object-cover" priority />
+          {isLoading && <Skeleton className="absolute inset-0 z-10 h-full w-full rounded-md" />}
+          <Image
+            src={photoUrl || "/placeholder.svg"}
+            alt="photo"
+            fill
+            className={`object-cover transition-opacity duration-300 ${isLoading ? "opacity-0" : "opacity-100"}`}
+            priority
+            onLoad={handleImageLoad}
+          />
         </div>
         <DialogFooter className="flex flex-row items-center justify-between sm:justify-between">
           <Button variant="outline" onClick={() => dialog.close()} className="cursor-pointer">
