@@ -31,11 +31,11 @@ CREATE TABLE IF NOT EXISTS album_members (
     PRIMARY KEY (user_id, album_id)
 );
 
-CREATE TABLE IF NOT EXISTS album_image {
+CREATE TABLE IF NOT EXISTS album_image (
     album_id UUID NOT NULL REFERENCES albums(id) ON DELETE CASCADE,
     image_id UUID NOT NULL REFERENCES images(id) ON DELETE CASCADE,
     PRIMARY KEY (album_id, image_id)
-}
+);
 
 CREATE TABLE IF NOT EXISTS images (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
