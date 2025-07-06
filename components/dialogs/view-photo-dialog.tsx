@@ -10,17 +10,35 @@ import {
   DialogTitle
 } from "@/components/ui/dialog";
 import { useDialogStore } from "@/hooks/use-dialog-store";
+import { addEffect } from "@/lib/actions/image-actions";
 import { Wand2 } from "lucide-react";
 import Image from "next/image";
+import { useTransition } from "react";
+import { toast } from "sonner";
 
 interface ViewPhotoDialogProps {
+  photoId: string;
   photoUrl: string;
-  onAddEffects?: () => void;
+  onAddEffects: () => void;
 }
 
-export function ViewPhotoDialog({ photoUrl, onAddEffects = () => {} }: ViewPhotoDialogProps) {
+export function ViewPhotoDialog({ photoId, photoUrl, onAddEffects }: ViewPhotoDialogProps) {
   const dialog = useDialogStore();
   const isDialogOpen = dialog.isOpen && dialog.type === "view-photo";
+  const [isPending, startTransition] = useTransition();
+
+  const handleAddEffects = () => {
+    startTransition(async () => {
+      try {
+        await addEffect(photoId, "monotone");
+        toast.success("Monotone effect applied!");
+        dialog.close();
+        onAddEffects();
+      } catch (err: any) {
+        toast.error(err?.message || "Failed to apply effect");
+      }
+    });
+  };
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={dialog.close}>
@@ -36,9 +54,14 @@ export function ViewPhotoDialog({ photoUrl, onAddEffects = () => {} }: ViewPhoto
           <Button variant="outline" onClick={() => dialog.close()} className="cursor-pointer">
             Close
           </Button>
-          <Button type="button" onClick={onAddEffects} className="cursor-pointer">
+          <Button
+            type="button"
+            onClick={handleAddEffects}
+            className="cursor-pointer"
+            disabled={isPending}
+          >
             <Wand2 className="mr-2 size-4" />
-            Add Effects
+            {isPending ? "Applying..." : "Add Effects"}
           </Button>
         </DialogFooter>
       </DialogContent>

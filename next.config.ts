@@ -8,7 +8,16 @@ if (!SUPABASE_URL) {
 
 const nextConfig: NextConfig = {
   images: {
-    remotePatterns: [new URL("https://ra59skly5c.ufs.sh/**")]
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "ra59skly5c.ufs.sh"
+      },
+      {
+        protocol: "https",
+        hostname: "utfs.io"
+      }
+    ]
   },
   experimental: {
     reactCompiler: true

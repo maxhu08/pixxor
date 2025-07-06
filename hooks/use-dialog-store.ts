@@ -47,6 +47,8 @@ interface DialogData {
   };
   viewPhotoData?: {
     photoUrl: string;
+    photoId: string;
+    onAddEffects: () => void;
   };
 }
 

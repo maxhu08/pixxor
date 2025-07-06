@@ -59,6 +59,7 @@ export const DialogProvider = () => {
       />
       <ViewPhotoDialog
         photoUrl={dialog.data.viewPhotoData?.photoUrl as string}
+        photoId={dialog.data.viewPhotoData?.photoId as string}
         onAddEffects={() => {}}
       />
     </>

@@ -191,7 +191,13 @@ function AlbumContent() {
                 <div
                   key={image.id}
                   onClick={() =>
-                    dialog.open("view-photo", { viewPhotoData: { photoUrl: image.url } })
+                    dialog.open("view-photo", {
+                      viewPhotoData: {
+                        photoUrl: image.url,
+                        photoId: image.id,
+                        onAddEffects: () => {}
+                      }
+                    })
                   }
                   className="group relative mb-4 break-inside-avoid overflow-hidden rounded-lg border border-gray-200 bg-gray-50 transition-shadow hover:shadow-md"
                 >
