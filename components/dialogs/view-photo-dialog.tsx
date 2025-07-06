@@ -11,11 +11,10 @@ import {
 } from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useDialogStore } from "@/hooks/use-dialog-store";
-import { addEffect } from "@/lib/actions/image-actions";
+import { createClient } from "@/lib/supabase/client";
 import { Trash2, Wand2 } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState, useTransition } from "react";
-import { toast } from "sonner";
 
 interface ViewPhotoDialogProps {
   photoId: string;
@@ -28,26 +27,46 @@ export function ViewPhotoDialog({ photoId, photoUrl, onAddEffects }: ViewPhotoDi
   const isDialogOpen = dialog.isOpen && dialog.type === "view-photo";
   const [isPending, startTransition] = useTransition();
   const [isImageLoaded, setIsImageLoaded] = useState(false);
+  const [userRole, setUserRole] = useState<"OWNER" | "MEMBER" | "VIEWER" | null>(null);
 
   useEffect(() => {
+    const fetchRole = async () => {
+      const supabase = createClient();
+
+      const {
+        data: { user },
+        error: userError
+      } = await supabase.auth.getUser();
+
+      if (userError || !user) return;
+
+      const { data: imageData, error: imageError } = await supabase
+        .from("images")
+        .select("album_id")
+        .eq("id", photoId)
+        .single();
+
+      if (imageError || !imageData) return;
+
+      const albumId = imageData.album_id;
+
+      const { data: memberData, error: memberError } = await supabase
+        .from("album_members")
+        .select("role")
+        .eq("album_id", albumId)
+        .eq("user_id", user.id)
+        .single();
+
+      if (memberError || !memberData) return;
+
+      setUserRole(memberData.role);
+    };
+
     if (isDialogOpen) {
       setIsImageLoaded(false);
+      fetchRole();
     }
-  }, [isDialogOpen, photoUrl]);
-
-  const handleAddEffects = () => {
-    startTransition(async () => {
-      try {
-        setIsImageLoaded(false);
-        await addEffect(photoId, "monotone");
-        toast.success("Monotone effect applied!");
-        dialog.close();
-        onAddEffects();
-      } catch (err: any) {
-        toast.error(err?.message || "Failed to apply effect");
-      }
-    });
-  };
+  }, [isDialogOpen, photoId]);
 
   const handleImageLoad = () => {
     setIsImageLoaded(true);
@@ -78,39 +97,45 @@ export function ViewPhotoDialog({ photoId, photoUrl, onAddEffects }: ViewPhotoDi
             <Button variant="outline" onClick={() => dialog.close()} className="cursor-pointer">
               Close
             </Button>
+
+            {userRole && userRole !== "VIEWER" && (
+              <Button
+                type="button"
+                variant="destructive"
+                onClick={() =>
+                  dialog.open("delete-photo", {
+                    deletePhotoData: {
+                      photoId
+                    }
+                  })
+                }
+                className="cursor-pointer"
+                disabled={isPending}
+              >
+                <Trash2 className="mr-2 size-4" />
+                Delete Photo
+              </Button>
+            )}
+          </div>
+
+          {userRole && userRole !== "VIEWER" && (
             <Button
               type="button"
-              variant="destructive"
               onClick={() =>
-                dialog.open("delete-photo", {
-                  deletePhotoData: {
-                    photoId
+                dialog.open("add-effects", {
+                  addEffectsData: {
+                    photoId,
+                    onEffectsApplied: onAddEffects
                   }
                 })
               }
               className="cursor-pointer"
               disabled={isPending}
             >
-              <Trash2 className="mr-2 size-4" />
-              Delete Photo
+              <Wand2 className="mr-2 size-4" />
+              Add Effects
             </Button>
-          </div>
-          <Button
-            type="button"
-            onClick={() =>
-              dialog.open("add-effects", {
-                addEffectsData: {
-                  photoId,
-                  onEffectsApplied: onAddEffects
-                }
-              })
-            }
-            className="cursor-pointer"
-            disabled={isPending}
-          >
-            <Wand2 className="mr-2 size-4" />
-            Add Effects
-          </Button>
+          )}
         </DialogFooter>
       </DialogContent>
     </Dialog>
