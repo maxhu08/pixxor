@@ -18,13 +18,13 @@ export function CreateAlbumButton({ onSuccess }: CreateAlbumButtonProps) {
       onClick={() => {
         dialog.open("create-album", {
           createAlbumData: {
-            onSuccess,
-          },
+            onSuccess
+          }
         });
       }}
     >
       <div className="flex items-center">
-        <PlusCircle className="mr-2 h-4 w-4" />
+        <PlusCircle className="mr-2 size-4" />
         Create Album
       </div>
     </Button>

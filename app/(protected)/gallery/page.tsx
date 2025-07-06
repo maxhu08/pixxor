@@ -264,7 +264,7 @@ function AlbumsContent() {
             <div ref={loadMoreRef} className="py-8 text-center">
               {isLoadingMore && (
                 <div className="flex items-center justify-center space-x-2">
-                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-300 border-t-blue-600" />
+                  <div className="size-4 animate-spin rounded-full border-2 border-gray-300 border-t-blue-600" />
                   <span className="text-sm text-gray-500">Loading more albums...</span>
                 </div>
               )}

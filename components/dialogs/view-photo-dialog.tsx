@@ -113,7 +113,7 @@ export function ViewPhotoDialog({ photoId, photoUrl, onAddEffects }: ViewPhotoDi
                 className="cursor-pointer"
                 disabled={isPending}
               >
-                <Trash2 className="mr-2 size-4" />
+                <Trash2 />
                 Delete Photo
               </Button>
             )}
@@ -133,7 +133,7 @@ export function ViewPhotoDialog({ photoId, photoUrl, onAddEffects }: ViewPhotoDi
               className="cursor-pointer"
               disabled={isPending}
             >
-              <Wand2 className="mr-2 size-4" />
+              <Wand2 />
               Add Effects
             </Button>
           )}

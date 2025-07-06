@@ -114,7 +114,7 @@ function AlbumSkeleton() {
         </div>
         <div className="py-4 text-center">
           <div className="flex items-center justify-center space-x-2">
-            <Skeleton className="h-4 w-4 rounded-full" />
+            <Skeleton className="size-4 rounded-full" />
             <Skeleton className="h-4 w-24" />
           </div>
         </div>
