@@ -25,11 +25,17 @@ CREATE TABLE IF NOT EXISTS albums (
 CREATE TYPE album_member_role AS ENUM ('OWNER', 'MEMBER', 'VIEWER');
 
 CREATE TABLE IF NOT EXISTS album_members (
-  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-  album_id UUID NOT NULL REFERENCES albums(id) ON DELETE CASCADE,
-  role album_member_role NOT NULL DEFAULT 'MEMBER',
-  PRIMARY KEY (user_id, album_id)
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    album_id UUID NOT NULL REFERENCES albums(id) ON DELETE CASCADE,
+    role album_member_role NOT NULL DEFAULT 'MEMBER',
+    PRIMARY KEY (user_id, album_id)
 );
+
+CREATE TABLE IF NOT EXISTS album_image {
+    album_id UUID NOT NULL REFERENCES albums(id) ON DELETE CASCADE,
+    image_id UUID NOT NULL REFERENCES images(id) ON DELETE CASCADE,
+    PRIMARY KEY (album_id, image_id)
+}
 
 CREATE TABLE IF NOT EXISTS images (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
