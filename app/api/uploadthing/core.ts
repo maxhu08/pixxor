@@ -1,5 +1,6 @@
+import type { UUID } from "crypto";
 import { createClient } from "@/lib/supabase/server";
-import { handleImageUpload } from "@/utils/handle-image-upload";
+import { uploadImageToAlbum } from "@/utils/handle-image-upload";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
 
@@ -21,8 +22,8 @@ export const ourFileRouter = {
   imageUploader: f({
     image: {
       maxFileSize: "4MB",
-      maxFileCount: 1,
-    },
+      maxFileCount: 1
+    }
   })
     .middleware(async ({ req }) => {
       const user = await auth(req);
@@ -35,16 +36,16 @@ export const ourFileRouter = {
         throw new UploadThingError("Missing album ID header");
       }
 
-      return { userId: user.id, albumId };
+      return { userId: user.id as UUID, albumId: albumId as UUID };
     })
     .onUploadComplete(async ({ metadata, file }) => {
-      await handleImageUpload(file, metadata.userId, metadata.albumId);
+      await uploadImageToAlbum(metadata.userId, file, metadata.albumId);
 
       return {
         uploadedBy: metadata.userId,
-        albumId: metadata.albumId,
+        albumId: metadata.albumId
       };
-    }),
+    })
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof ourFileRouter;

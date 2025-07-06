@@ -35,17 +35,26 @@ async function fetchImages(key: string) {
   const supabase = createClient();
 
   let query = supabase
-    .from("images")
-    .select("id, url, filename, created_at")
+    .from("album_image")
+    .select(
+      `
+      images!inner(
+        id,
+        url,
+        filename,
+        created_at
+      )
+    `
+    )
     .eq("album_id", albumId)
-    .order("created_at", { ascending: false })
+    .order("created_at", { foreignTable: "images", ascending: false })
     .limit(PAGE_SIZE);
 
   if (cursorData && cursorData !== "0") {
     try {
       const cursor = JSON.parse(cursorData);
       if (cursor.lastCreatedAt) {
-        query = query.lt("created_at", cursor.lastCreatedAt);
+        query = query.lt("images.created_at", cursor.lastCreatedAt);
       }
     } catch {
       const page = Number.parseInt(cursorData);
@@ -53,10 +62,16 @@ async function fetchImages(key: string) {
     }
   }
 
-  const { data: imagesData, error: imagesError } = await query;
+  const { data: albumImagesData, error: imagesError } = await query;
+
   if (imagesError) throw imagesError;
 
-  return imagesData || [];
+  // Extract the images from the junction table response
+  const images = (albumImagesData || [])
+    .map((item: any) => item.images)
+    .filter((image: any) => image !== null);
+
+  return images;
 }
 
 function AlbumErrorFallback({ error }: { error: Error }) {
