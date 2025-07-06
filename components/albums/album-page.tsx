@@ -186,7 +186,7 @@ function AlbumContent() {
           </div>
         ) : (
           <>
-            <div className="columns-1 gap-4 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-5">
+            <div className="cursor-pointer columns-1 gap-4 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-5">
               {images.map((image) => (
                 <div
                   key={image.id}
@@ -208,6 +208,7 @@ function AlbumContent() {
                     height={600}
                     className="h-auto w-full object-cover transition-transform group-hover:scale-105"
                   />
+                  <div className="pointer-events-none absolute inset-0 transition-all duration-200 group-hover:bg-black/10 group-hover:backdrop-blur-[1.5px]" />
                 </div>
               ))}
             </div>
