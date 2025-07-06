@@ -16,10 +16,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import useSWR, { mutate } from "swr";
 
 function onImageUploaded(albumId: UUID) {
-  mutate(
-    (key: string) =>
-      typeof key === "string" && key.startsWith(`album-images:${albumId}`),
-  );
+  mutate((key: string) => typeof key === "string" && key.startsWith(`album-images:${albumId}`));
 }
 
 async function fetchAlbum(albumId: UUID) {
@@ -101,7 +98,7 @@ function AlbumContent() {
     async function fetchRole() {
       const supabase = createClient();
       const {
-        data: { user },
+        data: { user }
       } = await supabase.auth.getUser();
       if (!user) return;
       const { data: member, error } = await supabase
@@ -122,7 +119,7 @@ function AlbumContent() {
     isLoadingMore,
     isEmpty,
     isReachingEnd,
-    loadMoreRef,
+    loadMoreRef
   } = useInfiniteScroll(`album-images:${albumId}`, {
     fetcher: fetchImages,
     pageSize: PAGE_SIZE,
@@ -131,7 +128,7 @@ function AlbumContent() {
       if (!lastPage || lastPage.length === 0) return null;
       const lastImage = lastPage[lastPage.length - 1];
       return { lastCreatedAt: lastImage.created_at };
-    },
+    }
   });
 
   const dialog = useDialogStore();
@@ -147,9 +144,7 @@ function AlbumContent() {
             </Link>
           </Button>
           <Separator orientation="vertical" />
-          <h3 className="max-w-[300px] truncate text-2xl font-bold">
-            {album.name}
-          </h3>
+          <h3 className="max-w-[300px] truncate text-2xl font-bold">{album.name}</h3>
         </div>
         <div className="flex items-center gap-2">
           <Button
@@ -157,8 +152,8 @@ function AlbumContent() {
               dialog.open("upload-image-to-album", {
                 uploadImageToAlbumData: {
                   albumId,
-                  onSuccess: () => onImageUploaded(albumId),
-                },
+                  onSuccess: () => onImageUploaded(albumId)
+                }
               })
             }
             disabled={userRole === "VIEWER"}
@@ -167,7 +162,7 @@ function AlbumContent() {
             Upload
           </Button>
           {userRole === "VIEWER" && (
-            <span className="text-xs text-red-500 ml-2">
+            <span className="ml-2 text-xs text-red-500">
               You do not have permission to upload images to this album.
             </span>
           )}
@@ -182,9 +177,7 @@ function AlbumContent() {
             <div className="mx-auto max-w-sm">
               <div className="rounded-lg border-2 border-dashed border-gray-300 p-8">
                 <FileText className="mx-auto size-12 text-gray-400" />
-                <h3 className="mt-4 text-lg font-semibold text-gray-900">
-                  No images
-                </h3>
+                <h3 className="mt-4 text-lg font-semibold text-gray-900">No images</h3>
                 <p className="mt-2 text-sm text-gray-500">
                   This album doesn't contain any images yet.
                 </p>
@@ -197,6 +190,9 @@ function AlbumContent() {
               {images.map((image) => (
                 <div
                   key={image.id}
+                  onClick={() =>
+                    dialog.open("view-photo", { viewPhotoData: { photoUrl: image.url } })
+                  }
                   className="group relative mb-4 break-inside-avoid overflow-hidden rounded-lg border border-gray-200 bg-gray-50 transition-shadow hover:shadow-md"
                 >
                   <Image
@@ -215,9 +211,7 @@ function AlbumContent() {
                 {isLoadingMore && (
                   <div className="flex items-center justify-center space-x-2">
                     <div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-300 border-t-blue-600" />
-                    <span className="text-sm text-gray-500">
-                      Loading more...
-                    </span>
+                    <span className="text-sm text-gray-500">Loading more...</span>
                   </div>
                 )}
               </div>
@@ -258,4 +252,3 @@ export function AlbumPage() {
     </div>
   );
 }
-

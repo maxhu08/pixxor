@@ -8,6 +8,7 @@ import { ManageAlbumMemberRoleDialog } from "@/components/dialogs/manage-album-m
 import { RemoveAlbumMemberDialog } from "@/components/dialogs/remove-album-member-dialog";
 import { SignOutDialog } from "@/components/dialogs/sign-out-dialog";
 import { UploadImageToAlbumDialog } from "@/components/dialogs/upload-image-to-album-dialog";
+import { ViewPhotoDialog } from "@/components/dialogs/view-photo-dialog";
 //
 import { useDialogStore } from "@/hooks/use-dialog-store";
 //
@@ -37,17 +38,13 @@ export const DialogProvider = () => {
           albumId={dialog.data.manageAlbumMemberRoleData?.albumId as string}
           member={dialog.data.manageAlbumMemberRoleData?.member}
           currentRole={dialog.data.manageAlbumMemberRoleData?.currentRole}
-          onAlbumMemberRoleUpdated={
-            dialog.data.manageAlbumMemberRoleData?.onAlbumMemberRoleUpdated
-          }
+          onAlbumMemberRoleUpdated={dialog.data.manageAlbumMemberRoleData?.onAlbumMemberRoleUpdated}
         />
       )}
       <RemoveAlbumMemberDialog
         albumId={dialog.data.removeAlbumMemberData?.albumId as string}
         memberId={dialog.data.removeAlbumMemberData?.memberId as string}
-        onAlbumMemberRemoved={
-          dialog.data.removeAlbumMemberData?.onAlbumMemberRemoved as () => void
-        }
+        onAlbumMemberRemoved={dialog.data.removeAlbumMemberData?.onAlbumMemberRemoved as () => void}
       />
       <InviteMembersToAlbumDialog
         albumId={dialog.data.inviteMembersToAlbumData?.albumId as string}
@@ -58,9 +55,11 @@ export const DialogProvider = () => {
       />
       <DeleteAlbumDialog
         albumId={dialog.data.deleteAlbumData?.albumId as string}
-        onAlbumDeleted={
-          dialog.data.deleteAlbumData?.onAlbumDeleted ?? (() => {})
-        }
+        onAlbumDeleted={dialog.data.deleteAlbumData?.onAlbumDeleted ?? (() => {})}
+      />
+      <ViewPhotoDialog
+        photoUrl={dialog.data.viewPhotoData?.photoUrl as string}
+        onAddEffects={() => {}}
       />
     </>
   );

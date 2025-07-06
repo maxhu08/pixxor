@@ -9,7 +9,8 @@ export type DialogType =
   | "invite-members-to-album"
   | "upload-image-to-album"
   | "manage-album-member-role"
-  | "remove-album-member";
+  | "remove-album-member"
+  | "view-photo";
 
 interface DialogData {
   deleteAlbumData?: {
@@ -34,10 +35,7 @@ interface DialogData {
       name: string;
     };
     currentRole: AlbumMemberRole;
-    onAlbumMemberRoleUpdated: (
-      memberId: string,
-      newRole: AlbumMemberRole,
-    ) => void;
+    onAlbumMemberRoleUpdated: (memberId: string, newRole: AlbumMemberRole) => void;
   };
   removeAlbumMemberData?: {
     albumId: string;
@@ -46,6 +44,9 @@ interface DialogData {
   };
   createAlbumData?: {
     onSuccess?: () => void;
+  };
+  viewPhotoData?: {
+    photoUrl: string;
   };
 }
 
@@ -65,7 +66,7 @@ export const useDialogStore = create<DialogStore>((set) => ({
     set((state) => ({
       isOpen: true,
       type,
-      data: { ...state.data, ...newData },
+      data: { ...state.data, ...newData }
     })),
-  close: () => set({ type: null, isOpen: false }),
+  close: () => set({ type: null, isOpen: false })
 }));
