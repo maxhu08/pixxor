@@ -33,7 +33,7 @@ const Page = async () => {
             </p>
           </div>
           <div className="flex flex-col place-items-center justify-center gap-4 sm:flex-row">
-            <Link href={signedIn ? "/gallery" : "/auth/login"}>
+            <Link href={signedIn ? "/gallery" : "/login"}>
               <Button size="lg" className="group cursor-pointer text-lg has-[>svg]:px-8">
                 {signedIn ? "Go to Gallery" : "Get Started"}
                 <ArrowRight className="size-5 transform transition-transform duration-200 group-hover:translate-x-1" />

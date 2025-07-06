@@ -9,7 +9,7 @@ export default async function AuthButton() {
   const supabase = await createClient();
 
   const {
-    data: { user },
+    data: { user }
   } = await supabase.auth.getUser();
 
   if (!hasEnvVars) {
@@ -25,7 +25,7 @@ export default async function AuthButton() {
   if (!user) {
     return (
       <Button variant="ghost" asChild>
-        <Link href="/auth/login">
+        <Link href="/login">
           <LogIn />
           <span>Sign in</span>
         </Link>
@@ -33,11 +33,7 @@ export default async function AuthButton() {
     );
   }
 
-  const { data } = await supabase
-    .from("users")
-    .select("name")
-    .eq("id", user.id)
-    .single();
+  const { data } = await supabase.from("users").select("name").eq("id", user.id).single();
 
   if (!data) return null;
 

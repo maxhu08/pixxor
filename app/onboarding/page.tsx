@@ -14,7 +14,7 @@ export default async function Page() {
     .maybeSingle();
 
   if (error) {
-    redirect("/auth/login");
+    redirect("/login");
   }
 
   if (profile?.onboarded) {

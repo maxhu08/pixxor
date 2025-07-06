@@ -10,7 +10,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
   } = await supabase.auth.getUser();
 
   if (userError || !user) {
-    return redirect("/auth/login");
+    return redirect("/login");
   }
 
   const { data: profile, error: profileError } = await supabase
