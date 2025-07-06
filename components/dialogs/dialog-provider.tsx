@@ -53,7 +53,7 @@ export const DialogProvider = () => {
       />
       <UploadImageToAlbumDialog
         albumId={dialog.data.uploadImageToAlbumData?.albumId as string}
-        onSuccess={dialog.data.uploadImageToAlbumData?.onSuccess}
+        onSuccess={dialog.data.uploadImageToAlbumData?.onSuccess ?? ((newImage: any) => {})}
       />
       <DeleteAlbumDialog
         albumId={dialog.data.deleteAlbumData?.albumId as string}
