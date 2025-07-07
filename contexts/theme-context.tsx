@@ -50,7 +50,7 @@ export interface UseThemeProps {
 export interface ThemeProviderProps extends React.PropsWithChildren {
   /** List of all available palettes */
   palettes?: Palette[];
-  /** Forced theme name for the current page (wip) */
+  /** Forced theme name for the current page */
   forcedTheme?: string;
   /** Disable all CSS transitions when switching themes */
   disableTransitionOnChange?: boolean;

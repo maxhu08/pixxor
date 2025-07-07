@@ -72,7 +72,7 @@ export function ManageAlbumMemberRoleDialog({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            {member ? `Manage Role for ${member.name} (WIP)` : "No member data available"}
+            {member ? `Manage Role for ${member.name}` : "No member data available"}
           </DialogTitle>
         </DialogHeader>
 

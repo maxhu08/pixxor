@@ -116,7 +116,7 @@ export function AlbumCard({
               }
               className="cursor-pointer"
             >
-              <UserPlus className="mr-2 size-4" /> Invite (WIP)
+              <UserPlus className="mr-2 size-4" /> Invite
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() =>
@@ -129,7 +129,7 @@ export function AlbumCard({
               }
               className="cursor-pointer"
             >
-              <Settings className="mr-2 size-4" /> Manage (WIP)
+              <Settings className="mr-2 size-4" /> Manage
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem
