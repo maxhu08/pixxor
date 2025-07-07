@@ -31,6 +31,7 @@ export function UploadImageToAlbumDialog({
         </DialogHeader>
         <div className="my-4">
           <UploadDropzone
+            className="bg-background border-muted-foreground ut-upload-icon:text-muted-foreground ut-label:text-foreground ut-allowed-content:text-muted-foreground ut-button:bg-primary ut-button:text-primary-foreground ut-button:hover:bg-primary/90 cursor-pointer"
             endpoint="imageUploader"
             headers={{ "x-album-id": albumId }}
             onClientUploadComplete={(res) => {
@@ -46,7 +47,6 @@ export function UploadImageToAlbumDialog({
             onUploadError={(error: Error) => {
               toast.error(`Upload failed: ${error.message}`);
             }}
-            className="ut-upload-dropzone"
           />
         </div>
         <DialogFooter>
