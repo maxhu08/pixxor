@@ -26,15 +26,10 @@ export const UserActionsDropdown: FC<UserActionsDropdownProps> = ({ username }) 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button
-          variant="ghost"
-          className="hover:text-foreground flex cursor-pointer items-center gap-2 hover:bg-white/20"
-        >
-          <div className="flex items-center gap-1">
-            <User size={16} />
-            <span>{username}</span>
-          </div>
-          <ChevronDown size={16} />
+        <Button variant="ghost" className="cursor-pointer">
+          <User />
+          {username}
+          <ChevronDown />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
