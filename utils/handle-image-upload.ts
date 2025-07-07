@@ -50,7 +50,7 @@ export async function addImageToAlbum(imageId: UUID, albumId: UUID, userId: UUID
   }
 
   const { error: albumImageInsertError } = await supabase
-    .from("album_images")
+    .from("album_image")
     .insert({ album_id: albumId, image_id: imageId, user_id: userId });
 
   if (albumImageInsertError) {
