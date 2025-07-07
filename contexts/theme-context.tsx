@@ -68,7 +68,29 @@ const MEDIA = "(prefers-color-scheme: dark)";
 const ThemeContext = createContext<UseThemeProps | undefined>(undefined);
 
 const DEFAULT_THEME: Theme = {
-  palette: getPalette("lilac_mist") ?? { name: "system" },
+  palette: {
+    name: "lilac_mist",
+    colors: {
+      "--color-background": "oklch(99.2% 0.006 334)",
+      "--color-foreground": "oklch(36.8% 0.096 333.6)",
+      "--color-card": "oklch(99.2% 0.006 334)",
+      "--color-card-foreground": "oklch(36.8% 0.096 333.6)",
+      "--color-popover": "oklch(99.2% 0.006 334)",
+      "--color-popover-foreground": "oklch(36.8% 0.096 333.6)",
+      "--color-primary": "oklch(56.4% 0.172 347)",
+      "--color-primary-foreground": "oklch(99.2% 0.006 334)",
+      "--color-secondary": "oklch(91.3% 0.03 322.4 / 0.851)",
+      "--color-secondary-foreground": "oklch(75.6% 0.108 343)",
+      "--color-muted": "oklch(91.3% 0.03 322.4 / 0.851)",
+      "--color-muted-foreground": "oklch(75.6% 0.108 343)",
+      "--color-accent": "oklch(91.3% 0.03 322.4 / 0.851)",
+      "--color-accent-foreground": "oklch(75.6% 0.108 343)",
+      "--color-destructive": "oklch(71.6% 0.177 24.9)",
+      "--color-border": "oklch(91.3% 0.03 322.4 / 0.851)",
+      "--color-input": "oklch(91.3% 0.03 322.4 / 0.851)",
+      "--color-ring": "oklch(56.4% 0.172 347)"
+    }
+  },
   favoritePalettes: ["light", "dark"],
   sortPalettesBy: "name",
   sortPalettesAscending: true
@@ -304,9 +326,9 @@ function Theme({
     <ThemeContext.Provider value={providerValue}>
       <ThemeScript
         {...{
+          defaultTheme,
           forcedTheme,
           storageKey,
-          defaultPalette: defaultTheme.palette.name,
           nonce,
           scriptProps
         }}
@@ -316,7 +338,7 @@ function Theme({
   );
 }
 
-function script(storageKey: string, defaultTheme: string, forcedTheme: string) {
+function script(storageKey: string, defaultTheme: Theme, forcedTheme: string) {
   const el = document.documentElement;
 
   function updateDOM(theme: string) {
@@ -325,9 +347,8 @@ function script(storageKey: string, defaultTheme: string, forcedTheme: string) {
     if (theme === "light" || theme === "dark") {
       el.style.colorScheme = theme;
     } else {
-      const { colors }: { colors: Record<string, string> } = JSON.parse(
-        localStorage.getItem(storageKey) || "{}"
-      ).palette;
+      const { colors }: { colors: Record<string, string> } =
+        JSON.parse(localStorage.getItem(storageKey) || "{}").palette || defaultTheme.palette;
 
       if (colors) {
         Object.entries(colors).forEach(([k, v]) => {
@@ -346,7 +367,7 @@ function script(storageKey: string, defaultTheme: string, forcedTheme: string) {
   globalThis.__THEME__ = theme;
 
   try {
-    const themeName = forcedTheme || theme.palette?.name || defaultTheme;
+    const themeName = forcedTheme || theme.palette?.name || defaultTheme.palette.name;
     updateDOM(!forcedTheme && themeName === "system" ? getSystemTheme() : themeName);
   } catch {
     //
@@ -357,11 +378,11 @@ const ThemeScript = memo(
   ({
     forcedTheme,
     storageKey,
-    defaultPalette,
+    defaultTheme,
     nonce,
     scriptProps
-  }: Omit<ThemeProviderProps, "children"> & { defaultPalette: string }) => {
-    const scriptArgs = JSON.stringify([storageKey, defaultPalette, forcedTheme]).slice(1, -1);
+  }: Omit<ThemeProviderProps, "children">) => {
+    const scriptArgs = JSON.stringify([storageKey, defaultTheme, forcedTheme]).slice(1, -1);
 
     return (
       <script

@@ -90,7 +90,7 @@ function resolvePalette(palette: UnresolvedPalette): Palette {
   };
 }
 
-export function getPalette(name: string): Palette | undefined {
+export function getPalette(name: string): Palette {
   return paletteMap[name];
 }
 
