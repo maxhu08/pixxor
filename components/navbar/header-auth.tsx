@@ -37,11 +37,5 @@ export default async function AuthButton() {
 
   if (!data) return null;
 
-  return (
-    <div className="flex items-center gap-3">
-      <div className="grid grid-cols-[repeat(3,max-content)] place-items-center gap-2">
-        <UserActionsDropdown username={data.name} />
-      </div>
-    </div>
-  );
+  return <UserActionsDropdown username={data.name} />;
 }
