@@ -64,7 +64,6 @@ export async function loginAction(formData: FormData) {
     // user might not exist yet since they are only in auth.users -> create new user
     const { error: insertError } = await supabase.from("users").insert({
       id: user.id,
-      name: user.user_metadata.full_name || user.email,
       avatar_url: user.user_metadata.avatar_url || null
     });
 
