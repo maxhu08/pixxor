@@ -18,7 +18,7 @@ export const Navbar: FC = () => {
             <span className="font-mono">pixxor</span>
           </Link>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center">
           <HeaderAuth />
           <ThemeSwitcher />
         </div>
