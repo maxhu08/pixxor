@@ -91,7 +91,7 @@ const DEFAULT_THEME: Theme = {
       "--color-ring": "oklch(56.4% 0.172 347)"
     }
   },
-  favoritePalettes: ["light", "dark"],
+  favoritePalettes: ["light", "dark", "lilac_mist"],
   sortPalettesBy: "name",
   sortPalettesAscending: true
 };
