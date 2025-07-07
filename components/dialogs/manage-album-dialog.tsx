@@ -6,7 +6,7 @@ import {
   DialogContent,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
+  DialogTitle
 } from "@/components/ui/dialog";
 import { useDialogStore } from "@/hooks/use-dialog-store";
 import { AlbumMember, AlbumMemberRole } from "@/types";
@@ -17,10 +17,7 @@ interface ManageAlbumDialogProps {
   albumId: string;
 }
 
-export function ManageAlbumDialog({
-  members,
-  albumId,
-}: ManageAlbumDialogProps) {
+export function ManageAlbumDialog({ members, albumId }: ManageAlbumDialogProps) {
   const dialog = useDialogStore();
   const [isPending, startTransition] = useTransition();
   const [localMembers, setLocalMembers] = useState<AlbumMember[]>(members);
@@ -41,10 +38,10 @@ export function ManageAlbumDialog({
         m.id === memberId
           ? {
               ...m,
-              role: newRole,
+              role: newRole
             }
-          : m,
-      ),
+          : m
+      )
     );
   }
 
@@ -57,15 +54,10 @@ export function ManageAlbumDialog({
         <div className="max-h-72 space-y-4 overflow-y-auto">
           {localMembers.length === 0 && <p>No members in this album.</p>}
           {localMembers.map((member) => (
-            <div
-              key={member.id}
-              className="flex items-center justify-between rounded border p-2"
-            >
+            <div key={member.id} className="flex items-center justify-between rounded border p-2">
               <div>
                 <p className="font-medium">{member.name}</p>
-                <p className="text-muted-foreground text-sm">
-                  Role: {member.role}
-                </p>
+                <p className="text-muted-foreground text-sm">Role: {member.role}</p>
               </div>
               <div className="flex gap-2">
                 <Button
@@ -79,11 +71,11 @@ export function ManageAlbumDialog({
                         albumId,
                         member: {
                           id: member.id,
-                          name: member.name,
+                          name: member.name
                         },
                         currentRole: member.role,
-                        onAlbumMemberRoleUpdated: updateLocalMemberRole,
-                      },
+                        onAlbumMemberRoleUpdated: updateLocalMemberRole
+                      }
                     })
                   }
                 >
@@ -99,9 +91,8 @@ export function ManageAlbumDialog({
                       removeAlbumMemberData: {
                         albumId,
                         memberId: member.id,
-                        onAlbumMemberRemoved: () =>
-                          removeLocalAlbumMember(member.id),
-                      },
+                        onAlbumMemberRemoved: () => removeLocalAlbumMember(member.id)
+                      }
                     });
                   }}
                 >

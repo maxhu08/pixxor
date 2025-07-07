@@ -1,5 +1,5 @@
 export const metadata = {
-  title: "Manage Account",
+  title: "Manage Account"
 };
 
 const Page = () => {

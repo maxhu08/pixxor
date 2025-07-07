@@ -7,7 +7,7 @@ export function useArrowKeyNavigation({
   onRight,
   containerRef,
   enabled = true,
-  preventDefault = true,
+  preventDefault = true
 }: {
   onUp?: () => void;
   onDown?: () => void;
@@ -24,7 +24,7 @@ export function useArrowKeyNavigation({
       ArrowUp: onUp,
       ArrowDown: onDown,
       ArrowLeft: onLeft,
-      ArrowRight: onRight,
+      ArrowRight: onRight
     };
 
     const handleKeyDown = (e: KeyboardEvent) => {

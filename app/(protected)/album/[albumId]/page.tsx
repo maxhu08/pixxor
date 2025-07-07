@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { Metadata } from "next";
 
 export async function generateMetadata({
-  params,
+  params
 }: {
   params: Promise<{ albumId: string }>;
 }): Promise<Metadata> {
@@ -22,7 +22,7 @@ export async function generateMetadata({
   }
 
   return {
-    title: album.name,
+    title: album.name
   };
 }
 

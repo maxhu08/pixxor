@@ -7,7 +7,7 @@ import {
   DropdownMenuContent,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
-  DropdownMenuTrigger,
+  DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { useTheme } from "@/contexts/theme-context";
 import { Laptop, LoaderCircle, Moon, Palette, Sun } from "lucide-react";
@@ -40,51 +40,31 @@ export function ThemeSwitcher() {
       <DropdownMenu>
         <DropdownMenuTrigger asChild className="cursor-pointer">
           <Button variant="ghost" size="sm">
-            {mounted ? (
-              getThemeIcon()
-            ) : (
-              <LoaderCircle className="size-4 animate-spin" />
-            )}
+            {mounted ? getThemeIcon() : <LoaderCircle className="size-4 animate-spin" />}
             <span className="sr-only">Switch theme</span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-content" align="start">
           <DropdownMenuRadioGroup
-            value={
-              ["light", "dark", "system"].includes(paletteName)
-                ? paletteName
-                : "custom"
-            }
+            value={["light", "dark", "system"].includes(paletteName) ? paletteName : "custom"}
             onValueChange={(value) => {
               if (value === "custom") setIsDrawerOpen(true);
               else setPaletteName(value);
             }}
           >
-            <DropdownMenuRadioItem
-              className="flex cursor-pointer gap-2"
-              value="light"
-            >
+            <DropdownMenuRadioItem className="flex cursor-pointer gap-2" value="light">
               <Sun className="size-4" />
               <span>Light</span>
             </DropdownMenuRadioItem>
-            <DropdownMenuRadioItem
-              className="flex cursor-pointer gap-2"
-              value="dark"
-            >
+            <DropdownMenuRadioItem className="flex cursor-pointer gap-2" value="dark">
               <Moon className="size-4" />
               <span>Dark</span>
             </DropdownMenuRadioItem>
-            <DropdownMenuRadioItem
-              className="flex cursor-pointer gap-2"
-              value="system"
-            >
+            <DropdownMenuRadioItem className="flex cursor-pointer gap-2" value="system">
               <Laptop className="size-4" />
               <span>System</span>
             </DropdownMenuRadioItem>
-            <DropdownMenuRadioItem
-              className="flex cursor-pointer gap-2"
-              value="custom"
-            >
+            <DropdownMenuRadioItem className="flex cursor-pointer gap-2" value="custom">
               <Palette className="size-4" />
               <span>Custom</span>
             </DropdownMenuRadioItem>

@@ -5,7 +5,7 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
+  DialogTitle
 } from "@/components/ui/dialog";
 import { useDialogStore } from "@/hooks/use-dialog-store";
 import { signOutAction } from "@/lib/actions/account-actions";
@@ -37,16 +37,10 @@ export function SignOutDialog() {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Sign Out</DialogTitle>
-          <DialogDescription>
-            Are you sure you want to sign out?
-          </DialogDescription>
+          <DialogDescription>Are you sure you want to sign out?</DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <Button
-            variant="outline"
-            onClick={() => dialog.close()}
-            className="cursor-pointer"
-          >
+          <Button variant="outline" onClick={() => dialog.close()} className="cursor-pointer">
             Cancel
           </Button>
           <Button

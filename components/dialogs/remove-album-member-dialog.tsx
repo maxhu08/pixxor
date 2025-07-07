@@ -5,7 +5,7 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
+  DialogTitle
 } from "@/components/ui/dialog";
 import { useDialogStore } from "@/hooks/use-dialog-store";
 import { removeAlbumMember } from "@/lib/actions/album-actions";
@@ -22,7 +22,7 @@ interface RemoveAlbumMemberDialogProps {
 export function RemoveAlbumMemberDialog({
   memberId,
   albumId,
-  onAlbumMemberRemoved,
+  onAlbumMemberRemoved
 }: RemoveAlbumMemberDialogProps) {
   const dialog = useDialogStore();
 
@@ -56,11 +56,7 @@ export function RemoveAlbumMemberDialog({
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <Button
-            variant="outline"
-            onClick={dialog.close}
-            className="cursor-pointer"
-          >
+          <Button variant="outline" onClick={dialog.close} className="cursor-pointer">
             Cancel
           </Button>
           <Button

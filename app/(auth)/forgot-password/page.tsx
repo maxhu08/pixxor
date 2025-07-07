@@ -1,7 +1,7 @@
 import { ForgotPasswordForm } from "@/components/forgot-password-form";
 
 export const metadata = {
-  title: "Forgot Password",
+  title: "Forgot Password"
 };
 
 export default function Page() {

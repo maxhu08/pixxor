@@ -7,13 +7,13 @@ import {
   DrawerDescription,
   DrawerHeader,
   DrawerTitle,
-  DrawerTrigger,
+  DrawerTrigger
 } from "@/components/ui/drawer";
 
 export function ThemeDrawer({
   trigger,
   open,
-  onOpenChange,
+  onOpenChange
 }: {
   trigger?: React.ReactNode;
   open?: boolean;

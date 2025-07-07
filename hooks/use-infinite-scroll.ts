@@ -12,10 +12,7 @@ interface UseInfiniteScrollOptions<T> {
   getNextPageParam?: (lastPage: T[], allPages: T[][]) => any;
 }
 
-export function useInfiniteScroll<T>(
-  baseKey: string,
-  options: UseInfiniteScrollOptions<T>,
-) {
+export function useInfiniteScroll<T>(baseKey: string, options: UseInfiniteScrollOptions<T>) {
   const {
     fetcher,
     pageSize,
@@ -23,7 +20,7 @@ export function useInfiniteScroll<T>(
     threshold = 0,
     revalidateFirstPage = true,
     suspense = false,
-    getNextPageParam,
+    getNextPageParam
   } = options;
 
   const getKey = useCallback(
@@ -38,25 +35,26 @@ export function useInfiniteScroll<T>(
 
       return `${baseKey}:${pageIndex}`;
     },
-    [baseKey, getNextPageParam],
+    [baseKey, getNextPageParam]
   );
 
-  const { data, size, setSize, isLoading, isValidating, error, mutate } =
-    useSWRInfinite(getKey, fetcher, {
+  const { data, size, setSize, isLoading, isValidating, error, mutate } = useSWRInfinite(
+    getKey,
+    fetcher,
+    {
       revalidateFirstPage,
-      suspense,
-    });
+      suspense
+    }
+  );
 
   const items = data ? data.flat() : [];
   const isEmpty = data?.[0]?.length === 0;
-  const isReachingEnd =
-    isEmpty || (data && data[data.length - 1]?.length < pageSize);
-  const isLoadingMore =
-    isLoading || (size > 0 && data && typeof data[size - 1] === "undefined");
+  const isReachingEnd = isEmpty || (data && data[data.length - 1]?.length < pageSize);
+  const isLoadingMore = isLoading || (size > 0 && data && typeof data[size - 1] === "undefined");
 
   const { ref: loadMoreRef, inView } = useInView({
     threshold,
-    rootMargin,
+    rootMargin
   });
 
   useEffect(() => {
@@ -76,6 +74,6 @@ export function useInfiniteScroll<T>(
     size,
     setSize,
     mutate,
-    loadMoreRef,
+    loadMoreRef
   };
 }

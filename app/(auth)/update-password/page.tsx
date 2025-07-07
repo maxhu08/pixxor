@@ -1,7 +1,7 @@
 import { UpdatePasswordForm } from "@/components/update-password-form";
 
 export const metadata = {
-  title: "Update Password",
+  title: "Update Password"
 };
 
 export default function Page() {

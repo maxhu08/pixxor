@@ -6,7 +6,7 @@ import {
   DialogContent,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
+  DialogTitle
 } from "@/components/ui/dialog";
 import { useDialogStore } from "@/hooks/use-dialog-store";
 import { changeAlbumMemberRole } from "@/lib/actions/album-actions";
@@ -17,7 +17,7 @@ import { toast } from "sonner";
 const ROLE_OPTIONS = [
   { label: "Owner", value: AlbumMemberRole.OWNER },
   { label: "Member", value: AlbumMemberRole.MEMBER },
-  { label: "Viewer", value: AlbumMemberRole.VIEWER },
+  { label: "Viewer", value: AlbumMemberRole.VIEWER }
 ];
 
 interface ManageAlbumMemberRoleDialogProps {
@@ -27,26 +27,22 @@ interface ManageAlbumMemberRoleDialogProps {
     name: string;
   };
   currentRole: AlbumMemberRole;
-  onAlbumMemberRoleUpdated: (
-    memberId: string,
-    newRole: AlbumMemberRole,
-  ) => void;
+  onAlbumMemberRoleUpdated: (memberId: string, newRole: AlbumMemberRole) => void;
 }
 
 export function ManageAlbumMemberRoleDialog({
   albumId,
   member,
   currentRole,
-  onAlbumMemberRoleUpdated,
+  onAlbumMemberRoleUpdated
 }: ManageAlbumMemberRoleDialogProps) {
   const dialog = useDialogStore();
   const [isPending, startTransition] = useTransition();
 
-  const isDialogOpen =
-    dialog.isOpen && dialog.type === "manage-album-member-role";
+  const isDialogOpen = dialog.isOpen && dialog.type === "manage-album-member-role";
 
   const [selectedRole, setSelectedRole] = useState<AlbumMemberRole>(
-    currentRole ?? AlbumMemberRole.MEMBER,
+    currentRole ?? AlbumMemberRole.MEMBER
   );
 
   useEffect(() => {
@@ -76,9 +72,7 @@ export function ManageAlbumMemberRoleDialog({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            {member
-              ? `Manage Role for ${member.name} (WIP)`
-              : "No member data available"}
+            {member ? `Manage Role for ${member.name} (WIP)` : "No member data available"}
           </DialogTitle>
         </DialogHeader>
 
@@ -91,9 +85,7 @@ export function ManageAlbumMemberRoleDialog({
               id="role-select"
               className="w-full rounded border border-gray-300 p-2"
               value={selectedRole}
-              onChange={(e) =>
-                setSelectedRole(e.target.value as AlbumMemberRole)
-              }
+              onChange={(e) => setSelectedRole(e.target.value as AlbumMemberRole)}
               disabled={isPending}
             >
               {ROLE_OPTIONS.map(({ label, value }) => (
@@ -119,11 +111,7 @@ export function ManageAlbumMemberRoleDialog({
             Cancel
           </Button>
           {member && (
-            <Button
-              onClick={onSave}
-              disabled={isPending}
-              className="cursor-pointer"
-            >
+            <Button onClick={onSave} disabled={isPending} className="cursor-pointer">
               Save
             </Button>
           )}

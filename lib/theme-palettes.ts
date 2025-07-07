@@ -10,10 +10,7 @@ export type Palette = {
 };
 
 type UnresolvedPalette = Omit<Palette, "colors"> &
-  (
-    | { type?: "shadcn"; colors: ShadcnColors }
-    | { type: "monkeytype"; colors: MonkeytypeColors }
-  );
+  ({ type?: "shadcn"; colors: ShadcnColors } | { type: "monkeytype"; colors: MonkeytypeColors });
 
 type ShadcnColors = Record<
   | "background"
@@ -69,7 +66,7 @@ const shadcnToMonkeytypeMap = {
   destructive: "error",
   border: "subAlt",
   input: "subAlt",
-  ring: "main",
+  ring: "main"
 } as const satisfies Record<keyof ShadcnColors, keyof MonkeytypeColors>;
 
 function resolvePalette(palette: UnresolvedPalette): Palette {
@@ -77,12 +74,10 @@ function resolvePalette(palette: UnresolvedPalette): Palette {
   switch (palette.type) {
     case "monkeytype": {
       colors = Object.fromEntries(
-        Object.entries(shadcnToMonkeytypeMap).map(
-          ([shadcnKey, monkeytypeKey]) => [
-            shadcnKey,
-            palette.colors[monkeytypeKey],
-          ],
-        ),
+        Object.entries(shadcnToMonkeytypeMap).map(([shadcnKey, monkeytypeKey]) => [
+          shadcnKey,
+          palette.colors[monkeytypeKey]
+        ])
       );
     }
   }
@@ -90,8 +85,8 @@ function resolvePalette(palette: UnresolvedPalette): Palette {
   return {
     ...palette,
     colors: Object.fromEntries(
-      Object.entries(colors).map(([key, value]) => [`--color-${key}`, value]),
-    ) as Palette["colors"],
+      Object.entries(colors).map(([key, value]) => [`--color-${key}`, value])
+    ) as Palette["colors"]
   };
 }
 
@@ -120,8 +115,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       destructive: "oklch(0.577 0.245 27.325)",
       border: "oklch(0.922 0 0)",
       input: "oklch(0.922 0 0)",
-      ring: "oklch(0.708 0 0)",
-    },
+      ring: "oklch(0.708 0 0)"
+    }
   },
   {
     name: "dark",
@@ -143,8 +138,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       destructive: "oklch(0.704 0.191 22.216)",
       border: "oklch(1 0 0 / 10%)",
       input: "oklch(1 0 0 / 15%)",
-      ring: "oklch(0.556 0 0)",
-    },
+      ring: "oklch(0.556 0 0)"
+    }
   },
   {
     name: "8008",
@@ -159,8 +154,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(58.4% 0.203 26.2)",
       errorExtra: "oklch(37.8% 0.133 26.3)",
       colorfulError: "oklch(84.5% 0.18 116.9)",
-      colorfulErrorExtra: "oklch(62.8% 0.131 116.7)",
-    },
+      colorfulErrorExtra: "oklch(62.8% 0.131 116.7)"
+    }
   },
   {
     name: "80s_after_dark",
@@ -175,8 +170,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(96.7% 0.14 107)",
       errorExtra: "oklch(96.7% 0.14 107)",
       colorfulError: "oklch(96.7% 0.14 107)",
-      colorfulErrorExtra: "oklch(96.7% 0.14 107)",
-    },
+      colorfulErrorExtra: "oklch(96.7% 0.14 107)"
+    }
   },
   {
     name: "9009",
@@ -191,8 +186,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(66.8% 0.094 28.2)",
       errorExtra: "oklch(58.3% 0.079 28)",
       colorfulError: "oklch(66.8% 0.094 28.2)",
-      colorfulErrorExtra: "oklch(58.3% 0.079 28)",
-    },
+      colorfulErrorExtra: "oklch(58.3% 0.079 28)"
+    }
   },
   {
     name: "aether",
@@ -207,8 +202,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(67.9% 0.209 24.4)",
       errorExtra: "oklch(57.7% 0.234 23.9)",
       colorfulError: "oklch(67.9% 0.209 24.4)",
-      colorfulErrorExtra: "oklch(57.7% 0.234 23.9)",
-    },
+      colorfulErrorExtra: "oklch(57.7% 0.234 23.9)"
+    }
   },
   {
     name: "alduin",
@@ -223,8 +218,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(57.8% 0.104 20.8)",
       errorExtra: "oklch(30.8% 0.071 38.2)",
       colorfulError: "oklch(57.8% 0.104 20.8)",
-      colorfulErrorExtra: "oklch(30.8% 0.071 38.2)",
-    },
+      colorfulErrorExtra: "oklch(30.8% 0.071 38.2)"
+    }
   },
   {
     name: "alpine",
@@ -239,8 +234,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(59.3% 0.218 27.1)",
       errorExtra: "oklch(47.8% 0.165 26.1)",
       colorfulError: "oklch(59.3% 0.218 27.1)",
-      colorfulErrorExtra: "oklch(47.8% 0.165 26.1)",
-    },
+      colorfulErrorExtra: "oklch(47.8% 0.165 26.1)"
+    }
   },
   {
     name: "anti_hero",
@@ -255,8 +250,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(89.2% 0.092 212.2)",
       errorExtra: "oklch(61.4% 0.075 234.5)",
       colorfulError: "oklch(89.2% 0.092 212.2)",
-      colorfulErrorExtra: "oklch(61.4% 0.075 234.5)",
-    },
+      colorfulErrorExtra: "oklch(61.4% 0.075 234.5)"
+    }
   },
   {
     name: "arch",
@@ -271,8 +266,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(66.8% 0.219 21.8)",
       errorExtra: "oklch(50.2% 0.17 22.6)",
       colorfulError: "oklch(66.8% 0.219 21.8)",
-      colorfulErrorExtra: "oklch(50.2% 0.17 22.6)",
-    },
+      colorfulErrorExtra: "oklch(50.2% 0.17 22.6)"
+    }
   },
   {
     name: "aurora",
@@ -287,8 +282,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(58.9% 0.17 337.1)",
       errorExtra: "oklch(50.3% 0.146 345.5)",
       colorfulError: "oklch(58.9% 0.17 337.1)",
-      colorfulErrorExtra: "oklch(50.3% 0.146 345.5)",
-    },
+      colorfulErrorExtra: "oklch(50.3% 0.146 345.5)"
+    }
   },
   {
     name: "beach",
@@ -303,8 +298,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(71.6% 0.177 24.9)",
       errorExtra: "oklch(71.6% 0.177 24.9)",
       colorfulError: "oklch(71.6% 0.177 24.9)",
-      colorfulErrorExtra: "oklch(71.6% 0.177 24.9)",
-    },
+      colorfulErrorExtra: "oklch(71.6% 0.177 24.9)"
+    }
   },
   {
     name: "bento",
@@ -319,8 +314,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(61.4% 0.227 23.8)",
       errorExtra: "oklch(63.4% 0.213 25.7)",
       colorfulError: "oklch(63.3% 0.244 25.2)",
-      colorfulErrorExtra: "oklch(63.4% 0.213 25.7)",
-    },
+      colorfulErrorExtra: "oklch(63.4% 0.213 25.7)"
+    }
   },
   {
     name: "bingsu",
@@ -335,8 +330,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(43.2% 0.161 7)",
       errorExtra: "oklch(33.1% 0.122 6)",
       colorfulError: "oklch(43.2% 0.161 7)",
-      colorfulErrorExtra: "oklch(33.1% 0.122 6)",
-    },
+      colorfulErrorExtra: "oklch(33.1% 0.122 6)"
+    }
   },
   {
     name: "bliss",
@@ -351,8 +346,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(55% 0.16 24)",
       errorExtra: "oklch(44.4% 0.116 23)",
       colorfulError: "oklch(55% 0.16 24)",
-      colorfulErrorExtra: "oklch(44.4% 0.116 23)",
-    },
+      colorfulErrorExtra: "oklch(44.4% 0.116 23)"
+    }
   },
   {
     name: "blue_dolphin",
@@ -367,8 +362,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(87.1% 0.092 341.4)",
       errorExtra: "oklch(74.8% 0.153 18)",
       colorfulError: "oklch(79.3% 0.13 306.6)",
-      colorfulErrorExtra: "oklch(74.8% 0.153 18)",
-    },
+      colorfulErrorExtra: "oklch(74.8% 0.153 18)"
+    }
   },
   {
     name: "blueberry_dark",
@@ -383,8 +378,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(62.2% 0.193 5.5)",
       errorExtra: "oklch(74.5% 0.085 358)",
       colorfulError: "oklch(62.2% 0.193 5.5)",
-      colorfulErrorExtra: "oklch(74.5% 0.085 358)",
-    },
+      colorfulErrorExtra: "oklch(74.5% 0.085 358)"
+    }
   },
   {
     name: "blueberry_light",
@@ -399,8 +394,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(62.2% 0.193 5.5)",
       errorExtra: "oklch(74.5% 0.085 358)",
       colorfulError: "oklch(62.2% 0.193 5.5)",
-      colorfulErrorExtra: "oklch(74.5% 0.085 358)",
-    },
+      colorfulErrorExtra: "oklch(74.5% 0.085 358)"
+    }
   },
   {
     name: "botanical",
@@ -415,8 +410,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(87% 0.059 46.4)",
       errorExtra: "oklch(77% 0.123 44.7)",
       colorfulError: "oklch(87% 0.059 46.4)",
-      colorfulErrorExtra: "oklch(77% 0.123 44.7)",
-    },
+      colorfulErrorExtra: "oklch(77% 0.123 44.7)"
+    }
   },
   {
     name: "bouquet",
@@ -431,8 +426,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(59.2% 0.182 33.6)",
       errorExtra: "oklch(44.5% 0.134 34.2)",
       colorfulError: "oklch(59.2% 0.182 33.6)",
-      colorfulErrorExtra: "oklch(44.5% 0.134 34.2)",
-    },
+      colorfulErrorExtra: "oklch(44.5% 0.134 34.2)"
+    }
   },
   {
     name: "breeze",
@@ -447,8 +442,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(56.2% 0.102 298.4)",
       errorExtra: "oklch(51% 0.138 353)",
       colorfulError: "oklch(95.4% 0.156 108.6)",
-      colorfulErrorExtra: "oklch(81.8% 0.141 158.4)",
-    },
+      colorfulErrorExtra: "oklch(81.8% 0.141 158.4)"
+    }
   },
   {
     name: "bushido",
@@ -463,8 +458,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(64.3% 0.196 21.2)",
       errorExtra: "oklch(47.5% 0.138 20.3)",
       colorfulError: "oklch(88.2% 0.159 102.9)",
-      colorfulErrorExtra: "oklch(74.7% 0.134 102.8)",
-    },
+      colorfulErrorExtra: "oklch(74.7% 0.134 102.8)"
+    }
   },
   {
     name: "cafe",
@@ -479,8 +474,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(54.4% 0.194 24.4)",
       errorExtra: "oklch(47.9% 0.18 24.6)",
       colorfulError: "oklch(54.4% 0.194 24.4)",
-      colorfulErrorExtra: "oklch(47.9% 0.18 24.6)",
-    },
+      colorfulErrorExtra: "oklch(47.9% 0.18 24.6)"
+    }
   },
   {
     name: "camping",
@@ -495,8 +490,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(54.6% 0.124 22.6)",
       errorExtra: "oklch(43.8% 0.095 22.6)",
       colorfulError: "oklch(54.6% 0.124 22.6)",
-      colorfulErrorExtra: "oklch(43.8% 0.095 22.6)",
-    },
+      colorfulErrorExtra: "oklch(43.8% 0.095 22.6)"
+    }
   },
   {
     name: "carbon",
@@ -511,8 +506,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(60.2% 0.22 27)",
       errorExtra: "oklch(41.3% 0.116 17.6)",
       colorfulError: "oklch(60.2% 0.22 27)",
-      colorfulErrorExtra: "oklch(41.3% 0.116 17.6)",
-    },
+      colorfulErrorExtra: "oklch(41.3% 0.116 17.6)"
+    }
   },
   {
     name: "catppuccin",
@@ -527,8 +522,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(75.6% 0.13 2.8)",
       errorExtra: "oklch(78.2% 0.09 8.8)",
       colorfulError: "oklch(75.6% 0.13 2.8)",
-      colorfulErrorExtra: "oklch(78.2% 0.09 8.8)",
-    },
+      colorfulErrorExtra: "oklch(78.2% 0.09 8.8)"
+    }
   },
   {
     name: "chaos_theory",
@@ -543,8 +538,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(68.9% 0.202 18.4)",
       errorExtra: "oklch(52.4% 0.151 18.6)",
       colorfulError: "oklch(68.9% 0.202 18.4)",
-      colorfulErrorExtra: "oklch(52.4% 0.151 18.6)",
-    },
+      colorfulErrorExtra: "oklch(52.4% 0.151 18.6)"
+    }
   },
   {
     name: "cheesecake",
@@ -559,8 +554,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(84.8% 0.209 146.4)",
       errorExtra: "oklch(84.8% 0.209 146.4)",
       colorfulError: "oklch(84.8% 0.209 146.4)",
-      colorfulErrorExtra: "oklch(84.8% 0.209 146.4)",
-    },
+      colorfulErrorExtra: "oklch(84.8% 0.209 146.4)"
+    }
   },
   {
     name: "cherry_blossom",
@@ -575,8 +570,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(58.2% 0.166 18.2)",
       errorExtra: "oklch(56.3% 0.205 22.5)",
       colorfulError: "oklch(60% 0.235 25)",
-      colorfulErrorExtra: "oklch(34.7% 0.13 23.2)",
-    },
+      colorfulErrorExtra: "oklch(34.7% 0.13 23.2)"
+    }
   },
   {
     name: "comfy",
@@ -591,8 +586,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(58.1% 0.166 13.1)",
       errorExtra: "oklch(58.1% 0.166 13.1)",
       colorfulError: "oklch(58.1% 0.166 13.1)",
-      colorfulErrorExtra: "oklch(58.1% 0.166 13.1)",
-    },
+      colorfulErrorExtra: "oklch(58.1% 0.166 13.1)"
+    }
   },
   {
     name: "copper",
@@ -607,8 +602,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(47.1% 0.163 26.2)",
       errorExtra: "oklch(59.4% 0.241 29)",
       colorfulError: "oklch(47.1% 0.163 26.2)",
-      colorfulErrorExtra: "oklch(59.4% 0.241 29)",
-    },
+      colorfulErrorExtra: "oklch(59.4% 0.241 29)"
+    }
   },
   {
     name: "creamsicle",
@@ -623,8 +618,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(42.8% 0.217 303.2)",
       errorExtra: "oklch(42.8% 0.217 303.2)",
       colorfulError: "oklch(42.8% 0.217 303.2)",
-      colorfulErrorExtra: "oklch(42.8% 0.217 303.2)",
-    },
+      colorfulErrorExtra: "oklch(42.8% 0.217 303.2)"
+    }
   },
   {
     name: "cy_red",
@@ -639,8 +634,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(71.3% 0.086 273.6)",
       errorExtra: "oklch(49.6% 0.106 271.6)",
       colorfulError: "oklch(71.3% 0.086 273.6)",
-      colorfulErrorExtra: "oklch(49.6% 0.106 271.6)",
-    },
+      colorfulErrorExtra: "oklch(49.6% 0.106 271.6)"
+    }
   },
   {
     name: "cyberspace",
@@ -655,8 +650,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(69.5% 0.195 23.7)",
       errorExtra: "oklch(56.2% 0.203 26.8)",
       colorfulError: "oklch(69.5% 0.195 23.7)",
-      colorfulErrorExtra: "oklch(56.2% 0.203 26.8)",
-    },
+      colorfulErrorExtra: "oklch(56.2% 0.203 26.8)"
+    }
   },
   // {
   //   name: "dark",
@@ -686,8 +681,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(66.4% 0.178 356.5)",
       errorExtra: "oklch(66.4% 0.178 356.5)",
       colorfulError: "oklch(68.5% 0.127 176.7)",
-      colorfulErrorExtra: "oklch(66.4% 0.178 356.5)",
-    },
+      colorfulErrorExtra: "oklch(66.4% 0.178 356.5)"
+    }
   },
   {
     name: "dark_note",
@@ -702,8 +697,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(62.8% 0.258 29.2)",
       errorExtra: "oklch(58.9% 0.057 228.2)",
       colorfulError: "",
-      colorfulErrorExtra: "",
-    },
+      colorfulErrorExtra: ""
+    }
   },
   {
     name: "darling",
@@ -718,8 +713,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(59.3% 0.166 255.7)",
       errorExtra: "oklch(59.3% 0.166 255.7)",
       colorfulError: "oklch(59.3% 0.166 255.7)",
-      colorfulErrorExtra: "oklch(59.3% 0.166 255.7)",
-    },
+      colorfulErrorExtra: "oklch(59.3% 0.166 255.7)"
+    }
   },
   {
     name: "deku",
@@ -734,8 +729,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(52.3% 0.167 26.9)",
       errorExtra: "oklch(29.2% 0.1 26.1)",
       colorfulError: "oklch(82.9% 0.168 102.3)",
-      colorfulErrorExtra: "oklch(60.9% 0.125 104.6)",
-    },
+      colorfulErrorExtra: "oklch(60.9% 0.125 104.6)"
+    }
   },
   {
     name: "desert_oasis",
@@ -750,8 +745,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(72.1% 0.171 134)",
       errorExtra: "oklch(52.9% 0.123 133)",
       colorfulError: "oklch(72.1% 0.171 134)",
-      colorfulErrorExtra: "oklch(52.9% 0.123 133)",
-    },
+      colorfulErrorExtra: "oklch(52.9% 0.123 133)"
+    }
   },
   {
     name: "dev",
@@ -766,8 +761,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(50.5% 0.189 22.9)",
       errorExtra: "oklch(39.8% 0.146 22.4)",
       colorfulError: "oklch(50.5% 0.189 22.9)",
-      colorfulErrorExtra: "oklch(39.8% 0.146 22.4)",
-    },
+      colorfulErrorExtra: "oklch(39.8% 0.146 22.4)"
+    }
   },
   {
     name: "diner",
@@ -782,8 +777,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(54.8% 0.123 29.2)",
       errorExtra: "oklch(41.3% 0.116 17.6)",
       colorfulError: "oklch(54.8% 0.123 29.2)",
-      colorfulErrorExtra: "oklch(41.3% 0.116 17.6)",
-    },
+      colorfulErrorExtra: "oklch(41.3% 0.116 17.6)"
+    }
   },
   {
     name: "dino",
@@ -798,8 +793,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(69.5% 0.195 23.7)",
       errorExtra: "oklch(56.2% 0.203 26.8)",
       colorfulError: "oklch(69.5% 0.195 23.7)",
-      colorfulErrorExtra: "oklch(56.2% 0.203 26.8)",
-    },
+      colorfulErrorExtra: "oklch(56.2% 0.203 26.8)"
+    }
   },
   {
     name: "discord",
@@ -814,8 +809,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(62.3% 0.181 25.4)",
       errorExtra: "oklch(62.3% 0.181 25.4)",
       colorfulError: "oklch(62.3% 0.181 25.4)",
-      colorfulErrorExtra: "oklch(62.3% 0.181 25.4)",
-    },
+      colorfulErrorExtra: "oklch(62.3% 0.181 25.4)"
+    }
   },
   {
     name: "dmg",
@@ -830,8 +825,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(49.6% 0.187 359.8)",
       errorExtra: "oklch(47.1% 0.135 357.2)",
       colorfulError: "oklch(66.4% 0.11 127.7)",
-      colorfulErrorExtra: "oklch(44.8% 0.096 143.8)",
-    },
+      colorfulErrorExtra: "oklch(44.8% 0.096 143.8)"
+    }
   },
   {
     name: "dollar",
@@ -846,8 +841,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(55% 0.226 29.2)",
       errorExtra: "oklch(73.9% 0.139 21)",
       colorfulError: "oklch(58.2% 0.166 18.2)",
-      colorfulErrorExtra: "oklch(41.3% 0.116 17.6)",
-    },
+      colorfulErrorExtra: "oklch(41.3% 0.116 17.6)"
+    }
   },
   {
     name: "dots",
@@ -862,8 +857,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(58.4% 0.203 26.2)",
       errorExtra: "oklch(37.8% 0.133 26.3)",
       colorfulError: "oklch(58.4% 0.203 26.2)",
-      colorfulErrorExtra: "oklch(37.8% 0.133 26.3)",
-    },
+      colorfulErrorExtra: "oklch(37.8% 0.133 26.3)"
+    }
   },
   {
     name: "dracula",
@@ -878,8 +873,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(68.2% 0.206 24.4)",
       errorExtra: "oklch(95.5% 0.134 112.8)",
       colorfulError: "oklch(68.2% 0.206 24.4)",
-      colorfulErrorExtra: "oklch(95.5% 0.134 112.8)",
-    },
+      colorfulErrorExtra: "oklch(95.5% 0.134 112.8)"
+    }
   },
   {
     name: "drowning",
@@ -894,8 +889,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(58.4% 0.135 16.4)",
       errorExtra: "oklch(41.3% 0.116 17.6)",
       colorfulError: "oklch(58.4% 0.135 16.4)",
-      colorfulErrorExtra: "oklch(41.3% 0.116 17.6)",
-    },
+      colorfulErrorExtra: "oklch(41.3% 0.116 17.6)"
+    }
   },
   {
     name: "dualshot",
@@ -910,8 +905,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(54.4% 0.194 24.4)",
       errorExtra: "oklch(47.9% 0.18 24.6)",
       colorfulError: "oklch(54.4% 0.194 24.4)",
-      colorfulErrorExtra: "oklch(47.9% 0.18 24.6)",
-    },
+      colorfulErrorExtra: "oklch(47.9% 0.18 24.6)"
+    }
   },
   {
     name: "earthsong",
@@ -926,8 +921,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(41.3% 0.116 17.6)",
       errorExtra: "oklch(70% 0.191 26.8)",
       colorfulError: "oklch(41.3% 0.116 17.6)",
-      colorfulErrorExtra: "oklch(70% 0.191 26.8)",
-    },
+      colorfulErrorExtra: "oklch(70% 0.191 26.8)"
+    }
   },
   {
     name: "everblush",
@@ -942,8 +937,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(68.9% 0.141 21.4)",
       errorExtra: "oklch(72% 0.139 21.1)",
       colorfulError: "oklch(68.9% 0.141 21.4)",
-      colorfulErrorExtra: "oklch(72% 0.139 21.1)",
-    },
+      colorfulErrorExtra: "oklch(72% 0.139 21.1)"
+    }
   },
   {
     name: "evil_eye",
@@ -958,8 +953,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(58.2% 0.166 18.2)",
       errorExtra: "oklch(41.3% 0.116 17.6)",
       colorfulError: "oklch(58.2% 0.166 18.2)",
-      colorfulErrorExtra: "oklch(41.3% 0.116 17.6)",
-    },
+      colorfulErrorExtra: "oklch(41.3% 0.116 17.6)"
+    }
   },
   {
     name: "ez_mode",
@@ -974,8 +969,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(78.6% 0.223 142.5)",
       errorExtra: "oklch(69.6% 0.197 142.3)",
       colorfulError: "oklch(78.6% 0.223 142.5)",
-      colorfulErrorExtra: "oklch(69.6% 0.197 142.3)",
-    },
+      colorfulErrorExtra: "oklch(69.6% 0.197 142.3)"
+    }
   },
   {
     name: "fire",
@@ -990,8 +985,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(43.1% 0.19 271)",
       errorExtra: "oklch(43.9% 0.112 276.4)",
       colorfulError: "oklch(43.1% 0.19 271)",
-      colorfulErrorExtra: "oklch(43.9% 0.112 276.4)",
-    },
+      colorfulErrorExtra: "oklch(43.9% 0.112 276.4)"
+    }
   },
   {
     name: "fledgling",
@@ -1006,8 +1001,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(62.4% 0.235 21.3)",
       errorExtra: "oklch(50.3% 0.204 25.3)",
       colorfulError: "oklch(63.2% 0.253 24.7)",
-      colorfulErrorExtra: "oklch(0% 0 0)",
-    },
+      colorfulErrorExtra: "oklch(0% 0 0)"
+    }
   },
   {
     name: "fleuriste",
@@ -1022,8 +1017,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(42.9% 0.176 29.2)",
       errorExtra: "oklch(40.9% 0.152 27.3)",
       colorfulError: "oklch(50.3% 0.143 23.8)",
-      colorfulErrorExtra: "oklch(56.6% 0.146 23)",
-    },
+      colorfulErrorExtra: "oklch(56.6% 0.146 23)"
+    }
   },
   {
     name: "floret",
@@ -1038,8 +1033,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(46% 0.119 51.4)",
       errorExtra: "oklch(50.6% 0.095 223.9)",
       colorfulError: "oklch(46% 0.119 51.4)",
-      colorfulErrorExtra: "oklch(61.1% 0.048 216.3)",
-    },
+      colorfulErrorExtra: "oklch(61.1% 0.048 216.3)"
+    }
   },
   {
     name: "froyo",
@@ -1054,8 +1049,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(73.3% 0.136 27.9)",
       errorExtra: "oklch(63.9% 0.144 28.5)",
       colorfulError: "oklch(73.3% 0.136 27.9)",
-      colorfulErrorExtra: "oklch(63.9% 0.144 28.5)",
-    },
+      colorfulErrorExtra: "oklch(63.9% 0.144 28.5)"
+    }
   },
   {
     name: "frozen_llama",
@@ -1070,8 +1065,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(59.2% 0.222 26.9)",
       errorExtra: "oklch(59.2% 0.222 26.9)",
       colorfulError: "oklch(59.2% 0.222 26.9)",
-      colorfulErrorExtra: "oklch(59.2% 0.222 26.9)",
-    },
+      colorfulErrorExtra: "oklch(59.2% 0.222 26.9)"
+    }
   },
   {
     name: "fruit_chew",
@@ -1086,8 +1081,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(52% 0.187 28)",
       errorExtra: "oklch(47.8% 0.165 26.1)",
       colorfulError: "oklch(52% 0.187 28)",
-      colorfulErrorExtra: "oklch(47.8% 0.165 26.1)",
-    },
+      colorfulErrorExtra: "oklch(47.8% 0.165 26.1)"
+    }
   },
   {
     name: "fundamentals",
@@ -1102,8 +1097,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(44.6% 0.088 303)",
       errorExtra: "oklch(34.9% 0.067 302.5)",
       colorfulError: "oklch(44.6% 0.088 303)",
-      colorfulErrorExtra: "oklch(34.9% 0.067 302.5)",
-    },
+      colorfulErrorExtra: "oklch(34.9% 0.067 302.5)"
+    }
   },
   {
     name: "future_funk",
@@ -1118,8 +1113,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(66.7% 0.208 356.2)",
       errorExtra: "oklch(52.8% 0.198 0.2)",
       colorfulError: "oklch(66.7% 0.208 356.2)",
-      colorfulErrorExtra: "oklch(52.8% 0.198 0.2)",
-    },
+      colorfulErrorExtra: "oklch(52.8% 0.198 0.2)"
+    }
   },
   {
     name: "github",
@@ -1134,8 +1129,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(55.4% 0.169 26)",
       errorExtra: "oklch(55.4% 0.169 26)",
       colorfulError: "oklch(55.4% 0.169 26)",
-      colorfulErrorExtra: "oklch(55.4% 0.169 26)",
-    },
+      colorfulErrorExtra: "oklch(55.4% 0.169 26)"
+    }
   },
   {
     name: "godspeed",
@@ -1150,8 +1145,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(58.2% 0.166 18.2)",
       errorExtra: "oklch(41.3% 0.116 17.6)",
       colorfulError: "oklch(58.2% 0.166 18.2)",
-      colorfulErrorExtra: "oklch(41.3% 0.116 17.6)",
-    },
+      colorfulErrorExtra: "oklch(41.3% 0.116 17.6)"
+    }
   },
   {
     name: "graen",
@@ -1166,8 +1161,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(32.7% 0.108 16.9)",
       errorExtra: "oklch(31.2% 0.118 20.6)",
       colorfulError: "oklch(32.7% 0.108 16.9)",
-      colorfulErrorExtra: "oklch(31.2% 0.118 20.6)",
-    },
+      colorfulErrorExtra: "oklch(31.2% 0.118 20.6)"
+    }
   },
   {
     name: "grand_prix",
@@ -1182,8 +1177,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(67.5% 0.209 36)",
       errorExtra: "oklch(67.5% 0.209 36)",
       colorfulError: "oklch(67.5% 0.209 36)",
-      colorfulErrorExtra: "oklch(67.5% 0.209 36)",
-    },
+      colorfulErrorExtra: "oklch(67.5% 0.209 36)"
+    }
   },
   {
     name: "grape",
@@ -1198,8 +1193,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(67.2% 0.228 5.7)",
       errorExtra: "oklch(52.8% 0.193 8.8)",
       colorfulError: "oklch(67.2% 0.228 5.7)",
-      colorfulErrorExtra: "oklch(52.8% 0.193 8.8)",
-    },
+      colorfulErrorExtra: "oklch(52.8% 0.193 8.8)"
+    }
   },
   {
     name: "gruvbox_dark",
@@ -1214,8 +1209,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(66% 0.218 30.4)",
       errorExtra: "oklch(54.6% 0.203 28.7)",
       colorfulError: "oklch(54.6% 0.203 28.7)",
-      colorfulErrorExtra: "oklch(43.7% 0.179 28.3)",
-    },
+      colorfulErrorExtra: "oklch(43.7% 0.179 28.3)"
+    }
   },
   {
     name: "gruvbox_light",
@@ -1230,8 +1225,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(54.6% 0.203 28.7)",
       errorExtra: "oklch(43.7% 0.179 28.3)",
       colorfulError: "oklch(54.6% 0.203 28.7)",
-      colorfulErrorExtra: "oklch(43.7% 0.179 28.3)",
-    },
+      colorfulErrorExtra: "oklch(43.7% 0.179 28.3)"
+    }
   },
   {
     name: "hammerhead",
@@ -1246,8 +1241,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(59.3% 0.218 27.1)",
       errorExtra: "oklch(47.8% 0.165 26.1)",
       colorfulError: "oklch(59.3% 0.218 27.1)",
-      colorfulErrorExtra: "oklch(47.8% 0.165 26.1)",
-    },
+      colorfulErrorExtra: "oklch(47.8% 0.165 26.1)"
+    }
   },
   {
     name: "hanok",
@@ -1262,8 +1257,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(58.2% 0.166 18.2)",
       errorExtra: "oklch(41.3% 0.116 17.6)",
       colorfulError: "oklch(58.2% 0.166 18.2)",
-      colorfulErrorExtra: "oklch(41.3% 0.116 17.6)",
-    },
+      colorfulErrorExtra: "oklch(41.3% 0.116 17.6)"
+    }
   },
   {
     name: "hedge",
@@ -1278,8 +1273,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(56.7% 0.178 24.1)",
       errorExtra: "oklch(40% 0.112 16.4)",
       colorfulError: "oklch(67.8% 0.156 35.2)",
-      colorfulErrorExtra: "oklch(78.1% 0.127 57.9)",
-    },
+      colorfulErrorExtra: "oklch(78.1% 0.127 57.9)"
+    }
   },
   {
     name: "honey",
@@ -1294,8 +1289,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(59.3% 0.208 26.3)",
       errorExtra: "oklch(36.4% 0.111 24.5)",
       colorfulError: "oklch(59.3% 0.208 26.3)",
-      colorfulErrorExtra: "oklch(36.4% 0.111 24.5)",
-    },
+      colorfulErrorExtra: "oklch(36.4% 0.111 24.5)"
+    }
   },
   {
     name: "horizon",
@@ -1310,8 +1305,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(61.8% 0.167 9.1)",
       errorExtra: "oklch(65.7% 0.229 26.3)",
       colorfulError: "oklch(61.8% 0.167 9.1)",
-      colorfulErrorExtra: "oklch(61.8% 0.167 9.1)",
-    },
+      colorfulErrorExtra: "oklch(61.8% 0.167 9.1)"
+    }
   },
   {
     name: "husqy",
@@ -1326,8 +1321,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(58.4% 0.203 26.2)",
       errorExtra: "oklch(37.8% 0.133 26.3)",
       colorfulError: "oklch(58.4% 0.203 26.2)",
-      colorfulErrorExtra: "oklch(37.8% 0.133 26.3)",
-    },
+      colorfulErrorExtra: "oklch(37.8% 0.133 26.3)"
+    }
   },
   {
     name: "iceberg_dark",
@@ -1342,8 +1337,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(69.2% 0.132 21)",
       errorExtra: "oklch(76.8% 0.094 56.2)",
       colorfulError: "oklch(69.2% 0.132 21)",
-      colorfulErrorExtra: "oklch(76.8% 0.094 56.2)",
-    },
+      colorfulErrorExtra: "oklch(76.8% 0.094 56.2)"
+    }
   },
   {
     name: "iceberg_light",
@@ -1358,8 +1353,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(60.7% 0.16 2.4)",
       errorExtra: "oklch(57.4% 0.187 5.7)",
       colorfulError: "oklch(60.7% 0.16 2.4)",
-      colorfulErrorExtra: "oklch(57.4% 0.187 5.7)",
-    },
+      colorfulErrorExtra: "oklch(57.4% 0.187 5.7)"
+    }
   },
   {
     name: "incognito",
@@ -1374,8 +1369,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(62% 0.196 24.9)",
       errorExtra: "oklch(62% 0.196 24.9)",
       colorfulError: "oklch(51.5% 0.161 24.8)",
-      colorfulErrorExtra: "oklch(51.5% 0.161 24.8)",
-    },
+      colorfulErrorExtra: "oklch(51.5% 0.161 24.8)"
+    }
   },
   {
     name: "ishtar",
@@ -1390,8 +1385,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(51% 0.192 30)",
       errorExtra: "oklch(37.8% 0.133 26.3)",
       colorfulError: "oklch(84.5% 0.18 116.9)",
-      colorfulErrorExtra: "oklch(62.8% 0.131 116.7)",
-    },
+      colorfulErrorExtra: "oklch(62.8% 0.131 116.7)"
+    }
   },
   {
     name: "iv_clover",
@@ -1406,8 +1401,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(58.3% 0.043 14.5)",
       errorExtra: "oklch(59.9% 0.043 14.5)",
       colorfulError: "oklch(66.2% 0.072 75.4)",
-      colorfulErrorExtra: "oklch(69.5% 0.072 75.6)",
-    },
+      colorfulErrorExtra: "oklch(69.5% 0.072 75.6)"
+    }
   },
   {
     name: "iv_spade",
@@ -1422,8 +1417,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(61.6% 0.042 14.4)",
       errorExtra: "oklch(64.9% 0.042 14.3)",
       colorfulError: "oklch(69.5% 0.072 75.6)",
-      colorfulErrorExtra: "oklch(72.7% 0.071 75.7)",
-    },
+      colorfulErrorExtra: "oklch(72.7% 0.071 75.7)"
+    }
   },
   {
     name: "joker",
@@ -1438,8 +1433,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(59.3% 0.218 27.1)",
       errorExtra: "oklch(47.8% 0.165 26.1)",
       colorfulError: "oklch(59.3% 0.218 27.1)",
-      colorfulErrorExtra: "oklch(47.8% 0.165 26.1)",
-    },
+      colorfulErrorExtra: "oklch(47.8% 0.165 26.1)"
+    }
   },
   {
     name: "laser",
@@ -1454,8 +1449,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(80.9% 0.199 123.4)",
       errorExtra: "oklch(55.9% 0.137 122.7)",
       colorfulError: "oklch(80.9% 0.199 123.4)",
-      colorfulErrorExtra: "oklch(55.9% 0.137 122.7)",
-    },
+      colorfulErrorExtra: "oklch(55.9% 0.137 122.7)"
+    }
   },
   {
     name: "lavender",
@@ -1470,8 +1465,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(58.2% 0.166 18.2)",
       errorExtra: "oklch(41.3% 0.116 17.6)",
       colorfulError: "oklch(58.2% 0.166 18.2)",
-      colorfulErrorExtra: "oklch(41.3% 0.116 17.6)",
-    },
+      colorfulErrorExtra: "oklch(41.3% 0.116 17.6)"
+    }
   },
   {
     name: "leather",
@@ -1486,8 +1481,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(58.2% 0.166 18.2)",
       errorExtra: "oklch(41.3% 0.116 17.6)",
       colorfulError: "oklch(58.2% 0.166 18.2)",
-      colorfulErrorExtra: "oklch(41.3% 0.116 17.6)",
-    },
+      colorfulErrorExtra: "oklch(41.3% 0.116 17.6)"
+    }
   },
   {
     name: "lil_dragon",
@@ -1502,8 +1497,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(78.5% 0.135 346.8)",
       errorExtra: "oklch(73.6% 0.17 344.9)",
       colorfulError: "oklch(78.5% 0.135 346.8)",
-      colorfulErrorExtra: "oklch(73.6% 0.17 344.9)",
-    },
+      colorfulErrorExtra: "oklch(73.6% 0.17 344.9)"
+    }
   },
   {
     name: "lilac_mist",
@@ -1518,8 +1513,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(71.6% 0.177 24.9)",
       errorExtra: "oklch(71.6% 0.177 24.9)",
       colorfulError: "oklch(68.1% 0.115 324.6)",
-      colorfulErrorExtra: "oklch(58.7% 0.202 331.6)",
-    },
+      colorfulErrorExtra: "oklch(58.7% 0.202 331.6)"
+    }
   },
   {
     name: "lime",
@@ -1534,8 +1529,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(62.3% 0.209 32.9)",
       errorExtra: "oklch(41.3% 0.116 17.6)",
       colorfulError: "oklch(62.3% 0.209 32.9)",
-      colorfulErrorExtra: "oklch(41.3% 0.116 17.6)",
-    },
+      colorfulErrorExtra: "oklch(41.3% 0.116 17.6)"
+    }
   },
   {
     name: "luna",
@@ -1550,8 +1545,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(82.9% 0.138 85.9)",
       errorExtra: "oklch(70.2% 0.13 83.9)",
       colorfulError: "oklch(82.9% 0.138 85.9)",
-      colorfulErrorExtra: "oklch(70.2% 0.13 83.9)",
-    },
+      colorfulErrorExtra: "oklch(70.2% 0.13 83.9)"
+    }
   },
   {
     name: "macroblank",
@@ -1566,8 +1561,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(53.6% 0.185 32.4)",
       errorExtra: "oklch(97.8% 0.011 17.3)",
       colorfulError: "oklch(97.8% 0.011 17.3)",
-      colorfulErrorExtra: "oklch(94.2% 0.056 81.9)",
-    },
+      colorfulErrorExtra: "oklch(94.2% 0.056 81.9)"
+    }
   },
   {
     name: "magic_girl",
@@ -1582,8 +1577,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(92.4% 0.102 91.3)",
       errorExtra: "oklch(66.4% 0.178 356.5)",
       colorfulError: "oklch(92.1% 0.119 94)",
-      colorfulErrorExtra: "oklch(66.4% 0.178 356.5)",
-    },
+      colorfulErrorExtra: "oklch(66.4% 0.178 356.5)"
+    }
   },
   {
     name: "mashu",
@@ -1598,8 +1593,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(59.2% 0.182 33.6)",
       errorExtra: "oklch(44.5% 0.134 34.2)",
       colorfulError: "oklch(59.2% 0.182 33.6)",
-      colorfulErrorExtra: "oklch(44.5% 0.134 34.2)",
-    },
+      colorfulErrorExtra: "oklch(44.5% 0.134 34.2)"
+    }
   },
   {
     name: "matcha_moccha",
@@ -1614,8 +1609,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(66% 0.218 30.4)",
       errorExtra: "oklch(54.6% 0.203 28.7)",
       colorfulError: "oklch(66% 0.218 30.4)",
-      colorfulErrorExtra: "oklch(54.6% 0.203 28.7)",
-    },
+      colorfulErrorExtra: "oklch(54.6% 0.203 28.7)"
+    }
   },
   {
     name: "material",
@@ -1630,8 +1625,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(66% 0.218 30.4)",
       errorExtra: "oklch(54.6% 0.203 28.7)",
       colorfulError: "oklch(66% 0.218 30.4)",
-      colorfulErrorExtra: "oklch(54.6% 0.203 28.7)",
-    },
+      colorfulErrorExtra: "oklch(54.6% 0.203 28.7)"
+    }
   },
   {
     name: "matrix",
@@ -1646,8 +1641,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(58.4% 0.203 26.2)",
       errorExtra: "oklch(37.8% 0.133 26.3)",
       colorfulError: "oklch(58.4% 0.203 26.2)",
-      colorfulErrorExtra: "oklch(37.8% 0.133 26.3)",
-    },
+      colorfulErrorExtra: "oklch(37.8% 0.133 26.3)"
+    }
   },
   {
     name: "menthol",
@@ -1662,8 +1657,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(60.3% 0.201 25.6)",
       errorExtra: "oklch(49.8% 0.176 26.5)",
       colorfulError: "oklch(60.3% 0.201 25.6)",
-      colorfulErrorExtra: "oklch(49.8% 0.176 26.5)",
-    },
+      colorfulErrorExtra: "oklch(49.8% 0.176 26.5)"
+    }
   },
   {
     name: "metaverse",
@@ -1678,8 +1673,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(58.4% 0.203 26.2)",
       errorExtra: "oklch(37.8% 0.133 26.3)",
       colorfulError: "oklch(85.9% 0.175 110.6)",
-      colorfulErrorExtra: "oklch(55.3% 0.115 113.2)",
-    },
+      colorfulErrorExtra: "oklch(55.3% 0.115 113.2)"
+    }
   },
   {
     name: "metropolis",
@@ -1694,8 +1689,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(59.2% 0.182 33.6)",
       errorExtra: "oklch(44.5% 0.134 34.2)",
       colorfulError: "oklch(59.2% 0.182 33.6)",
-      colorfulErrorExtra: "oklch(44.5% 0.134 34.2)",
-    },
+      colorfulErrorExtra: "oklch(44.5% 0.134 34.2)"
+    }
   },
   {
     name: "mexican",
@@ -1710,8 +1705,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(58.4% 0.203 26.2)",
       errorExtra: "oklch(37.8% 0.133 26.3)",
       colorfulError: "oklch(58.4% 0.203 26.2)",
-      colorfulErrorExtra: "oklch(37.8% 0.133 26.3)",
-    },
+      colorfulErrorExtra: "oklch(37.8% 0.133 26.3)"
+    }
   },
   {
     name: "miami",
@@ -1726,8 +1721,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(95.7% 0.122 103.4)",
       errorExtra: "oklch(75.3% 0.095 103.6)",
       colorfulError: "oklch(95.7% 0.122 103.4)",
-      colorfulErrorExtra: "oklch(75.3% 0.095 103.6)",
-    },
+      colorfulErrorExtra: "oklch(75.3% 0.095 103.6)"
+    }
   },
   {
     name: "miami_nights",
@@ -1742,8 +1737,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(95.7% 0.122 103.4)",
       errorExtra: "oklch(74.4% 0.093 103.5)",
       colorfulError: "oklch(95.7% 0.122 103.4)",
-      colorfulErrorExtra: "oklch(74.4% 0.093 103.5)",
-    },
+      colorfulErrorExtra: "oklch(74.4% 0.093 103.5)"
+    }
   },
   {
     name: "midnight",
@@ -1758,8 +1753,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(63.6% 0.104 20.4)",
       errorExtra: "oklch(68.4% 0.078 47.1)",
       colorfulError: "oklch(63.6% 0.104 20.4)",
-      colorfulErrorExtra: "oklch(68.4% 0.078 47.1)",
-    },
+      colorfulErrorExtra: "oklch(68.4% 0.078 47.1)"
+    }
   },
   {
     name: "milkshake",
@@ -1774,8 +1769,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(78.4% 0.102 8)",
       errorExtra: "oklch(73.7% 0.11 7.7)",
       colorfulError: "oklch(78.4% 0.102 8)",
-      colorfulErrorExtra: "oklch(73.7% 0.11 7.7)",
-    },
+      colorfulErrorExtra: "oklch(73.7% 0.11 7.7)"
+    }
   },
   {
     name: "mint",
@@ -1790,8 +1785,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(67.4% 0.197 4.2)",
       errorExtra: "oklch(50.3% 0.144 4.3)",
       colorfulError: "oklch(67.4% 0.197 4.2)",
-      colorfulErrorExtra: "oklch(50.3% 0.144 4.3)",
-    },
+      colorfulErrorExtra: "oklch(50.3% 0.144 4.3)"
+    }
   },
   {
     name: "mizu",
@@ -1806,8 +1801,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(60.6% 0.121 15.3)",
       errorExtra: "oklch(44% 0.082 14.6)",
       colorfulError: "oklch(60.6% 0.121 15.3)",
-      colorfulErrorExtra: "oklch(44% 0.082 14.6)",
-    },
+      colorfulErrorExtra: "oklch(44% 0.082 14.6)"
+    }
   },
   {
     name: "modern_dolch",
@@ -1822,8 +1817,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(65.2% 0.133 11.3)",
       errorExtra: "oklch(49.7% 0.119 9)",
       colorfulError: "oklch(65.2% 0.133 11.3)",
-      colorfulErrorExtra: "oklch(49.7% 0.119 9)",
-    },
+      colorfulErrorExtra: "oklch(49.7% 0.119 9)"
+    }
   },
   {
     name: "modern_dolch_light",
@@ -1838,8 +1833,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(73.9% 0.118 9.6)",
       errorExtra: "oklch(63.8% 0.173 13.1)",
       colorfulError: "oklch(73.9% 0.118 9.6)",
-      colorfulErrorExtra: "oklch(63.8% 0.173 13.1)",
-    },
+      colorfulErrorExtra: "oklch(63.8% 0.173 13.1)"
+    }
   },
   {
     name: "modern_ink",
@@ -1854,8 +1849,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(55.2% 0.227 29.2)",
       errorExtra: "oklch(47.5% 0.195 29.2)",
       colorfulError: "oklch(0% 0 0)",
-      colorfulErrorExtra: "oklch(0% 0 0)",
-    },
+      colorfulErrorExtra: "oklch(0% 0 0)"
+    }
   },
   {
     name: "monokai",
@@ -1870,8 +1865,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(64.2% 0.24 7.5)",
       errorExtra: "oklch(76.7% 0.168 62.4)",
       colorfulError: "oklch(64.2% 0.24 7.5)",
-      colorfulErrorExtra: "oklch(76.7% 0.168 62.4)",
-    },
+      colorfulErrorExtra: "oklch(76.7% 0.168 62.4)"
+    }
   },
   {
     name: "moonlight",
@@ -1886,8 +1881,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(50.5% 0.189 22.9)",
       errorExtra: "oklch(39.8% 0.146 22.4)",
       colorfulError: "oklch(50.5% 0.189 22.9)",
-      colorfulErrorExtra: "oklch(39.8% 0.146 22.4)",
-    },
+      colorfulErrorExtra: "oklch(39.8% 0.146 22.4)"
+    }
   },
   {
     name: "mountain",
@@ -1902,8 +1897,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(67% 0.039 18.2)",
       errorExtra: "oklch(73.4% 0.045 14.7)",
       colorfulError: "oklch(72.9% 0.043 102.8)",
-      colorfulErrorExtra: "oklch(80.4% 0.047 103.4)",
-    },
+      colorfulErrorExtra: "oklch(80.4% 0.047 103.4)"
+    }
   },
   {
     name: "mr_sleeves",
@@ -1918,8 +1913,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(60.9% 0.117 21.1)",
       errorExtra: "oklch(44% 0.082 14.6)",
       colorfulError: "oklch(73.5% 0.052 246.7)",
-      colorfulErrorExtra: "oklch(57.7% 0.041 247.3)",
-    },
+      colorfulErrorExtra: "oklch(57.7% 0.041 247.3)"
+    }
   },
   {
     name: "ms_cupcakes",
@@ -1934,8 +1929,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(82.9% 0.198 127)",
       errorExtra: "oklch(74.1% 0.168 126.3)",
       colorfulError: "oklch(82.9% 0.198 127)",
-      colorfulErrorExtra: "oklch(71% 0.162 126.6)",
-    },
+      colorfulErrorExtra: "oklch(71% 0.162 126.6)"
+    }
   },
   {
     name: "muted",
@@ -1950,8 +1945,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(85.3% 0.052 0.1)",
       errorExtra: "oklch(85.3% 0.052 0.1)",
       colorfulError: "oklch(85.3% 0.052 0.1)",
-      colorfulErrorExtra: "oklch(85.3% 0.052 0.1)",
-    },
+      colorfulErrorExtra: "oklch(85.3% 0.052 0.1)"
+    }
   },
   {
     name: "nautilus",
@@ -1966,8 +1961,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(58.4% 0.203 26.2)",
       errorExtra: "oklch(37.8% 0.133 26.3)",
       colorfulError: "oklch(58.4% 0.203 26.2)",
-      colorfulErrorExtra: "oklch(37.8% 0.133 26.3)",
-    },
+      colorfulErrorExtra: "oklch(37.8% 0.133 26.3)"
+    }
   },
   {
     name: "nebula",
@@ -1982,8 +1977,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(58.2% 0.166 18.2)",
       errorExtra: "oklch(41.3% 0.116 17.6)",
       colorfulError: "oklch(58.2% 0.166 18.2)",
-      colorfulErrorExtra: "oklch(41.3% 0.116 17.6)",
-    },
+      colorfulErrorExtra: "oklch(41.3% 0.116 17.6)"
+    }
   },
   {
     name: "night_runner",
@@ -1998,8 +1993,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(58.4% 0.203 26.2)",
       errorExtra: "oklch(37.8% 0.133 26.3)",
       colorfulError: "oklch(58.4% 0.203 26.2)",
-      colorfulErrorExtra: "oklch(37.8% 0.133 26.3)",
-    },
+      colorfulErrorExtra: "oklch(37.8% 0.133 26.3)"
+    }
   },
   {
     name: "nord",
@@ -2014,8 +2009,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(60.6% 0.121 15.3)",
       errorExtra: "oklch(44% 0.082 14.6)",
       colorfulError: "oklch(60.6% 0.121 15.3)",
-      colorfulErrorExtra: "oklch(44% 0.082 14.6)",
-    },
+      colorfulErrorExtra: "oklch(44% 0.082 14.6)"
+    }
   },
   {
     name: "nord_light",
@@ -2030,8 +2025,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(60.6% 0.121 15.3)",
       errorExtra: "oklch(44% 0.082 14.6)",
       colorfulError: "oklch(60.6% 0.121 15.3)",
-      colorfulErrorExtra: "oklch(44% 0.082 14.6)",
-    },
+      colorfulErrorExtra: "oklch(44% 0.082 14.6)"
+    }
   },
   {
     name: "norse",
@@ -2046,8 +2041,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(41.1% 0.117 23.8)",
       errorExtra: "oklch(38.1% 0.124 25.3)",
       colorfulError: "oklch(58.2% 0.166 18.2)",
-      colorfulErrorExtra: "oklch(41.3% 0.116 17.6)",
-    },
+      colorfulErrorExtra: "oklch(41.3% 0.116 17.6)"
+    }
   },
   {
     name: "oblivion",
@@ -2062,8 +2057,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(60.5% 0.192 31.5)",
       errorExtra: "oklch(47.8% 0.144 31.7)",
       colorfulError: "oklch(60.5% 0.192 31.5)",
-      colorfulErrorExtra: "oklch(47.8% 0.144 31.7)",
-    },
+      colorfulErrorExtra: "oklch(47.8% 0.144 31.7)"
+    }
   },
   {
     name: "olive",
@@ -2078,8 +2073,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(56.1% 0.196 26.3)",
       errorExtra: "oklch(47.4% 0.158 25.6)",
       colorfulError: "oklch(56.1% 0.196 26.3)",
-      colorfulErrorExtra: "oklch(47.4% 0.158 25.6)",
-    },
+      colorfulErrorExtra: "oklch(47.4% 0.158 25.6)"
+    }
   },
   {
     name: "olivia",
@@ -2094,8 +2089,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(60.6% 0.121 15.3)",
       errorExtra: "oklch(44% 0.082 14.6)",
       colorfulError: "oklch(60.7% 0.199 19.9)",
-      colorfulErrorExtra: "oklch(49.7% 0.159 19.9)",
-    },
+      colorfulErrorExtra: "oklch(49.7% 0.159 19.9)"
+    }
   },
   {
     name: "onedark",
@@ -2110,8 +2105,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(67.1% 0.145 17)",
       errorExtra: "oklch(56.7% 0.21 22.9)",
       colorfulError: "oklch(56.7% 0.21 22.9)",
-      colorfulErrorExtra: "oklch(62.9% 0.257 27.5)",
-    },
+      colorfulErrorExtra: "oklch(62.9% 0.257 27.5)"
+    }
   },
   {
     name: "our_theme",
@@ -2126,8 +2121,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(87.2% 0.176 93.5)",
       errorExtra: "oklch(87.2% 0.176 93.5)",
       colorfulError: "oklch(58.6% 0.221 259.8)",
-      colorfulErrorExtra: "oklch(58.6% 0.221 259.8)",
-    },
+      colorfulErrorExtra: "oklch(58.6% 0.221 259.8)"
+    }
   },
   {
     name: "paper",
@@ -2142,8 +2137,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(55.2% 0.227 29.2)",
       errorExtra: "oklch(55.2% 0.227 29.2)",
       colorfulError: "oklch(55.2% 0.227 29.2)",
-      colorfulErrorExtra: "oklch(55.2% 0.227 29.2)",
-    },
+      colorfulErrorExtra: "oklch(55.2% 0.227 29.2)"
+    }
   },
   {
     name: "passion_fruit",
@@ -2158,8 +2153,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(79.3% 0.161 93.7)",
       errorExtra: "oklch(79.3% 0.161 93.7)",
       colorfulError: "oklch(79.3% 0.161 93.7)",
-      colorfulErrorExtra: "oklch(79.3% 0.161 93.7)",
-    },
+      colorfulErrorExtra: "oklch(79.3% 0.161 93.7)"
+    }
   },
   {
     name: "pastel",
@@ -2174,8 +2169,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(70.7% 0.185 25.9)",
       errorExtra: "oklch(54.8% 0.176 32.7)",
       colorfulError: "oklch(70.7% 0.185 25.9)",
-      colorfulErrorExtra: "oklch(54.8% 0.176 32.7)",
-    },
+      colorfulErrorExtra: "oklch(54.8% 0.176 32.7)"
+    }
   },
   {
     name: "peach_blossom",
@@ -2190,8 +2185,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(70.7% 0.185 25.9)",
       errorExtra: "oklch(63.6% 0.193 17.1)",
       colorfulError: "oklch(70.7% 0.185 25.9)",
-      colorfulErrorExtra: "oklch(63.6% 0.193 17.1)",
-    },
+      colorfulErrorExtra: "oklch(63.6% 0.193 17.1)"
+    }
   },
   {
     name: "peaches",
@@ -2206,8 +2201,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(70.7% 0.185 25.9)",
       errorExtra: "oklch(54.8% 0.176 32.7)",
       colorfulError: "oklch(70.7% 0.185 25.9)",
-      colorfulErrorExtra: "oklch(54.8% 0.176 32.7)",
-    },
+      colorfulErrorExtra: "oklch(54.8% 0.176 32.7)"
+    }
   },
   {
     name: "phantom",
@@ -2222,8 +2217,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(72.3% 0.159 10.3)",
       errorExtra: "oklch(61.2% 0.18 24.1)",
       colorfulError: "oklch(74% 0.163 10.2)",
-      colorfulErrorExtra: "oklch(78.7% 0.137 50.6)",
-    },
+      colorfulErrorExtra: "oklch(78.7% 0.137 50.6)"
+    }
   },
   {
     name: "pink_lemonade",
@@ -2238,8 +2233,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(71.6% 0.177 24.9)",
       errorExtra: "oklch(71.6% 0.177 24.9)",
       colorfulError: "oklch(71.6% 0.177 24.9)",
-      colorfulErrorExtra: "oklch(71.6% 0.177 24.9)",
-    },
+      colorfulErrorExtra: "oklch(71.6% 0.177 24.9)"
+    }
   },
   {
     name: "pulse",
@@ -2254,8 +2249,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(58.4% 0.203 26.2)",
       errorExtra: "oklch(37.8% 0.133 26.3)",
       colorfulError: "oklch(58.4% 0.203 26.2)",
-      colorfulErrorExtra: "oklch(37.8% 0.133 26.3)",
-    },
+      colorfulErrorExtra: "oklch(37.8% 0.133 26.3)"
+    }
   },
   {
     name: "purpleish",
@@ -2270,8 +2265,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(70.4% 0.187 23.2)",
       errorExtra: "oklch(70.4% 0.187 23.2)",
       colorfulError: "oklch(70.4% 0.187 23.2)",
-      colorfulErrorExtra: "oklch(70.4% 0.187 23.2)",
-    },
+      colorfulErrorExtra: "oklch(70.4% 0.187 23.2)"
+    }
   },
   {
     name: "rainbow_trail",
@@ -2286,8 +2281,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(62.8% 0.257 28.8)",
       errorExtra: "",
       colorfulError: "oklch(62.8% 0.257 28.8)",
-      colorfulErrorExtra: "",
-    },
+      colorfulErrorExtra: ""
+    }
   },
   {
     name: "red_dragon",
@@ -2302,8 +2297,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(37.9% 0.126 23.5)",
       errorExtra: "oklch(31.1% 0.101 22.4)",
       colorfulError: "oklch(37.9% 0.126 23.5)",
-      colorfulErrorExtra: "oklch(31.1% 0.101 22.4)",
-    },
+      colorfulErrorExtra: "oklch(31.1% 0.101 22.4)"
+    }
   },
   {
     name: "red_samurai",
@@ -2318,8 +2313,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(73.5% 0.119 217.1)",
       errorExtra: "oklch(48.7% 0.078 211.7)",
       colorfulError: "oklch(73.5% 0.119 217.1)",
-      colorfulErrorExtra: "oklch(47.6% 0.078 217)",
-    },
+      colorfulErrorExtra: "oklch(47.6% 0.078 217)"
+    }
   },
   {
     name: "repose_dark",
@@ -2334,8 +2329,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(67.2% 0.216 20.8)",
       errorExtra: "oklch(56% 0.172 15)",
       colorfulError: "oklch(67.2% 0.216 20.8)",
-      colorfulErrorExtra: "oklch(56% 0.172 15)",
-    },
+      colorfulErrorExtra: "oklch(56% 0.172 15)"
+    }
   },
   {
     name: "repose_light",
@@ -2350,8 +2345,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(56% 0.172 15)",
       errorExtra: "oklch(47.8% 0.162 21.2)",
       colorfulError: "oklch(56% 0.172 15)",
-      colorfulErrorExtra: "oklch(47.8% 0.162 21.2)",
-    },
+      colorfulErrorExtra: "oklch(47.8% 0.162 21.2)"
+    }
   },
   {
     name: "retro",
@@ -2366,8 +2361,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(60.6% 0.121 15.3)",
       errorExtra: "oklch(44% 0.082 14.6)",
       colorfulError: "oklch(60.6% 0.121 15.3)",
-      colorfulErrorExtra: "oklch(44% 0.082 14.6)",
-    },
+      colorfulErrorExtra: "oklch(44% 0.082 14.6)"
+    }
   },
   {
     name: "retrocast",
@@ -2382,8 +2377,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(68.7% 0.203 22.6)",
       errorExtra: "oklch(56.3% 0.159 15.8)",
       colorfulError: "oklch(68.7% 0.203 22.6)",
-      colorfulErrorExtra: "oklch(56.3% 0.159 15.8)",
-    },
+      colorfulErrorExtra: "oklch(56.3% 0.159 15.8)"
+    }
   },
   {
     name: "rgb",
@@ -2398,8 +2393,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(94.9% 0 0)",
       errorExtra: "oklch(76.7% 0 0)",
       colorfulError: "oklch(94.9% 0 0)",
-      colorfulErrorExtra: "oklch(76.7% 0 0)",
-    },
+      colorfulErrorExtra: "oklch(76.7% 0 0)"
+    }
   },
   {
     name: "rose_pine",
@@ -2414,8 +2409,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(69.8% 0.156 4.2)",
       errorExtra: "oklch(83.6% 0.054 21.1)",
       colorfulError: "oklch(69.8% 0.156 4.2)",
-      colorfulErrorExtra: "oklch(83.6% 0.054 21.1)",
-    },
+      colorfulErrorExtra: "oklch(83.6% 0.054 21.1)"
+    }
   },
   {
     name: "rose_pine_dawn",
@@ -2430,8 +2425,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(59.9% 0.107 2.7)",
       errorExtra: "oklch(69.6% 0.106 23)",
       colorfulError: "oklch(59.9% 0.107 2.7)",
-      colorfulErrorExtra: "oklch(69.6% 0.106 23)",
-    },
+      colorfulErrorExtra: "oklch(69.6% 0.106 23)"
+    }
   },
   {
     name: "rose_pine_moon",
@@ -2446,8 +2441,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(69.8% 0.156 4.2)",
       errorExtra: "oklch(83.6% 0.054 21.1)",
       colorfulError: "oklch(69.8% 0.156 4.2)",
-      colorfulErrorExtra: "oklch(83.6% 0.054 21.1)",
-    },
+      colorfulErrorExtra: "oklch(83.6% 0.054 21.1)"
+    }
   },
   {
     name: "rudy",
@@ -2462,8 +2457,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(60.6% 0.121 15.3)",
       errorExtra: "oklch(44% 0.082 14.6)",
       colorfulError: "oklch(60.6% 0.121 15.3)",
-      colorfulErrorExtra: "oklch(44% 0.082 14.6)",
-    },
+      colorfulErrorExtra: "oklch(44% 0.082 14.6)"
+    }
   },
   {
     name: "ryujinscales",
@@ -2478,8 +2473,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(58.2% 0.166 18.2)",
       errorExtra: "oklch(41.3% 0.116 17.6)",
       colorfulError: "oklch(58.2% 0.166 18.2)",
-      colorfulErrorExtra: "oklch(41.3% 0.116 17.6)",
-    },
+      colorfulErrorExtra: "oklch(41.3% 0.116 17.6)"
+    }
   },
   {
     name: "serika",
@@ -2494,8 +2489,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(58.4% 0.203 26.2)",
       errorExtra: "oklch(37.8% 0.133 26.3)",
       colorfulError: "oklch(58.4% 0.203 26.2)",
-      colorfulErrorExtra: "oklch(37.8% 0.133 26.3)",
-    },
+      colorfulErrorExtra: "oklch(37.8% 0.133 26.3)"
+    }
   },
   {
     name: "serika_dark",
@@ -2510,8 +2505,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(58.2% 0.166 18.2)",
       errorExtra: "oklch(41.3% 0.116 17.6)",
       colorfulError: "oklch(58.2% 0.166 18.2)",
-      colorfulErrorExtra: "oklch(41.3% 0.116 17.6)",
-    },
+      colorfulErrorExtra: "oklch(41.3% 0.116 17.6)"
+    }
   },
   {
     name: "sewing_tin",
@@ -2526,8 +2521,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(69.7% 0.093 64.2)",
       errorExtra: "oklch(69.7% 0.093 64.2)",
       colorfulError: "oklch(69.7% 0.093 64.2)",
-      colorfulErrorExtra: "oklch(69.7% 0.093 64.2)",
-    },
+      colorfulErrorExtra: "oklch(69.7% 0.093 64.2)"
+    }
   },
   {
     name: "sewing_tin_light",
@@ -2542,8 +2537,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(86.6% 0.102 84.7)",
       errorExtra: "oklch(86.6% 0.102 84.7)",
       colorfulError: "oklch(86.6% 0.102 84.7)",
-      colorfulErrorExtra: "oklch(86.6% 0.102 84.7)",
-    },
+      colorfulErrorExtra: "oklch(86.6% 0.102 84.7)"
+    }
   },
   {
     name: "shadow",
@@ -2558,8 +2553,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(100% 0 0)",
       errorExtra: "oklch(88.2% 0 0)",
       colorfulError: "oklch(100% 0 0)",
-      colorfulErrorExtra: "oklch(88.2% 0 0)",
-    },
+      colorfulErrorExtra: "oklch(88.2% 0 0)"
+    }
   },
   {
     name: "shoko",
@@ -2574,8 +2569,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(60.6% 0.121 15.3)",
       errorExtra: "oklch(44% 0.082 14.6)",
       colorfulError: "oklch(60.6% 0.121 15.3)",
-      colorfulErrorExtra: "oklch(44% 0.082 14.6)",
-    },
+      colorfulErrorExtra: "oklch(44% 0.082 14.6)"
+    }
   },
   {
     name: "slambook",
@@ -2590,8 +2585,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(65.9% 0.283 342.6)",
       errorExtra: "oklch(54% 0.214 28.5)",
       colorfulError: "oklch(54% 0.214 28.5)",
-      colorfulErrorExtra: "oklch(72.7% 0.232 140.2)",
-    },
+      colorfulErrorExtra: "oklch(72.7% 0.232 140.2)"
+    }
   },
   {
     name: "snes",
@@ -2606,8 +2601,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(58.2% 0.166 18.2)",
       errorExtra: "oklch(41.3% 0.116 17.6)",
       colorfulError: "oklch(58.2% 0.166 18.2)",
-      colorfulErrorExtra: "oklch(41.3% 0.116 17.6)",
-    },
+      colorfulErrorExtra: "oklch(41.3% 0.116 17.6)"
+    }
   },
   {
     name: "soaring_skies",
@@ -2622,8 +2617,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(67.6% 0.203 29.6)",
       errorExtra: "oklch(52% 0.153 29.2)",
       colorfulError: "oklch(67.6% 0.203 29.6)",
-      colorfulErrorExtra: "oklch(52% 0.153 29.2)",
-    },
+      colorfulErrorExtra: "oklch(52% 0.153 29.2)"
+    }
   },
   {
     name: "solarized_dark",
@@ -2638,8 +2633,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(59.2% 0.202 355.9)",
       errorExtra: "oklch(46.8% 0.163 356.7)",
       colorfulError: "oklch(59.2% 0.202 355.9)",
-      colorfulErrorExtra: "oklch(46.8% 0.163 356.7)",
-    },
+      colorfulErrorExtra: "oklch(46.8% 0.163 356.7)"
+    }
   },
   {
     name: "solarized_light",
@@ -2654,8 +2649,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(59.2% 0.202 355.9)",
       errorExtra: "oklch(46.8% 0.163 356.7)",
       colorfulError: "oklch(59.2% 0.202 355.9)",
-      colorfulErrorExtra: "oklch(46.8% 0.163 356.7)",
-    },
+      colorfulErrorExtra: "oklch(46.8% 0.163 356.7)"
+    }
   },
   {
     name: "solarized_osaka",
@@ -2670,8 +2665,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(58.6% 0.206 27.1)",
       errorExtra: "oklch(46.8% 0.163 356.7)",
       colorfulError: "oklch(59.2% 0.202 355.9)",
-      colorfulErrorExtra: "oklch(46.8% 0.163 356.7)",
-    },
+      colorfulErrorExtra: "oklch(46.8% 0.163 356.7)"
+    }
   },
   {
     name: "sonokai",
@@ -2686,8 +2681,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(69.4% 0.194 12)",
       errorExtra: "oklch(79.1% 0.112 65.8)",
       colorfulError: "oklch(69.4% 0.194 12)",
-      colorfulErrorExtra: "oklch(79.1% 0.112 65.8)",
-    },
+      colorfulErrorExtra: "oklch(79.1% 0.112 65.8)"
+    }
   },
   {
     name: "stealth",
@@ -2702,8 +2697,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(62.7% 0.191 41.1)",
       errorExtra: "oklch(38.5% 0.112 38.8)",
       colorfulError: "oklch(62.7% 0.191 41.1)",
-      colorfulErrorExtra: "oklch(38.5% 0.112 38.8)",
-    },
+      colorfulErrorExtra: "oklch(38.5% 0.112 38.8)"
+    }
   },
   {
     name: "strawberry",
@@ -2718,8 +2713,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(87.6% 0.161 92.2)",
       errorExtra: "oklch(76.6% 0.15 90.8)",
       colorfulError: "oklch(87.6% 0.161 92.2)",
-      colorfulErrorExtra: "oklch(76.6% 0.15 90.8)",
-    },
+      colorfulErrorExtra: "oklch(76.6% 0.15 90.8)"
+    }
   },
   {
     name: "striker",
@@ -2734,8 +2729,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(66% 0.218 30.4)",
       errorExtra: "oklch(54.6% 0.203 28.7)",
       colorfulError: "oklch(66% 0.218 30.4)",
-      colorfulErrorExtra: "oklch(54.6% 0.203 28.7)",
-    },
+      colorfulErrorExtra: "oklch(54.6% 0.203 28.7)"
+    }
   },
   {
     name: "suisei",
@@ -2750,8 +2745,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(61.2% 0.227 23.9)",
       errorExtra: "oklch(54.2% 0.212 23.4)",
       colorfulError: "oklch(61.2% 0.227 23.9)",
-      colorfulErrorExtra: "oklch(54.2% 0.212 23.4)",
-    },
+      colorfulErrorExtra: "oklch(54.2% 0.212 23.4)"
+    }
   },
   {
     name: "sunset",
@@ -2766,8 +2761,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(71.1% 0.151 259.3)",
       errorExtra: "oklch(52.1% 0.106 251.6)",
       colorfulError: "oklch(71.1% 0.151 259.3)",
-      colorfulErrorExtra: "oklch(52.1% 0.106 251.6)",
-    },
+      colorfulErrorExtra: "oklch(52.1% 0.106 251.6)"
+    }
   },
   {
     name: "superuser",
@@ -2782,8 +2777,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(69.5% 0.195 23.7)",
       errorExtra: "oklch(56.2% 0.203 26.8)",
       colorfulError: "oklch(69.5% 0.195 23.7)",
-      colorfulErrorExtra: "oklch(56.2% 0.203 26.8)",
-    },
+      colorfulErrorExtra: "oklch(56.2% 0.203 26.8)"
+    }
   },
   {
     name: "sweden",
@@ -2798,8 +2793,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(61.9% 0.204 25.4)",
       errorExtra: "oklch(48.1% 0.151 24.9)",
       colorfulError: "oklch(69.2% 0.176 17)",
-      colorfulErrorExtra: "oklch(60.4% 0.209 21.4)",
-    },
+      colorfulErrorExtra: "oklch(60.4% 0.209 21.4)"
+    }
   },
   {
     name: "tangerine",
@@ -2814,8 +2809,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(70.8% 0.185 128)",
       errorExtra: "oklch(57.2% 0.149 127.5)",
       colorfulError: "oklch(70.8% 0.185 128)",
-      colorfulErrorExtra: "oklch(57.2% 0.149 127.5)",
-    },
+      colorfulErrorExtra: "oklch(57.2% 0.149 127.5)"
+    }
   },
   {
     name: "taro",
@@ -2830,8 +2825,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(91.1% 0.172 98.6)",
       errorExtra: "oklch(95.8% 0.061 93.1)",
       colorfulError: "oklch(91.1% 0.172 98.6)",
-      colorfulErrorExtra: "oklch(95.8% 0.061 93.1)",
-    },
+      colorfulErrorExtra: "oklch(95.8% 0.061 93.1)"
+    }
   },
   {
     name: "terminal",
@@ -2846,8 +2841,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(46.6% 0.176 27.6)",
       errorExtra: "oklch(35.9% 0.133 27.1)",
       colorfulError: "oklch(46.6% 0.176 27.6)",
-      colorfulErrorExtra: "oklch(35.9% 0.133 27.1)",
-    },
+      colorfulErrorExtra: "oklch(35.9% 0.133 27.1)"
+    }
   },
   {
     name: "terra",
@@ -2862,8 +2857,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(82.8% 0.104 102.9)",
       errorExtra: "oklch(60.5% 0.076 103.9)",
       colorfulError: "oklch(82.8% 0.104 102.9)",
-      colorfulErrorExtra: "oklch(60.5% 0.076 103.9)",
-    },
+      colorfulErrorExtra: "oklch(60.5% 0.076 103.9)"
+    }
   },
   {
     name: "terrazzo",
@@ -2878,8 +2873,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(45.5% 0.173 15.9)",
       errorExtra: "oklch(45.5% 0.173 15.9)",
       colorfulError: "oklch(45.5% 0.173 15.9)",
-      colorfulErrorExtra: "oklch(45.5% 0.173 15.9)",
-    },
+      colorfulErrorExtra: "oklch(45.5% 0.173 15.9)"
+    }
   },
   {
     name: "terror_below",
@@ -2894,8 +2889,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(60.6% 0.121 15.3)",
       errorExtra: "oklch(44% 0.082 14.6)",
       colorfulError: "oklch(60.6% 0.121 15.3)",
-      colorfulErrorExtra: "oklch(44% 0.082 14.6)",
-    },
+      colorfulErrorExtra: "oklch(44% 0.082 14.6)"
+    }
   },
   {
     name: "tiramisu",
@@ -2910,8 +2905,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(66% 0.179 40.5)",
       errorExtra: "oklch(66% 0.179 40.5)",
       colorfulError: "oklch(66% 0.179 40.5)",
-      colorfulErrorExtra: "oklch(66% 0.179 40.5)",
-    },
+      colorfulErrorExtra: "oklch(66% 0.179 40.5)"
+    }
   },
   {
     name: "trackday",
@@ -2926,8 +2921,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(63.1% 0.186 24.2)",
       errorExtra: "oklch(65.5% 0.226 26.1)",
       colorfulError: "oklch(64.5% 0.24 27.3)",
-      colorfulErrorExtra: "oklch(51.6% 0.186 26.7)",
-    },
+      colorfulErrorExtra: "oklch(51.6% 0.186 26.7)"
+    }
   },
   {
     name: "trance",
@@ -2942,8 +2937,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(77.4% 0.146 174.9)",
       errorExtra: "oklch(57.6% 0.076 181.3)",
       colorfulError: "oklch(77.4% 0.146 174.9)",
-      colorfulErrorExtra: "oklch(57.6% 0.076 181.3)",
-    },
+      colorfulErrorExtra: "oklch(57.6% 0.076 181.3)"
+    }
   },
   {
     name: "tron_orange",
@@ -2958,8 +2953,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(62.8% 0.258 29.2)",
       errorExtra: "oklch(62.8% 0.258 29.2)",
       colorfulError: "oklch(62.8% 0.258 29.2)",
-      colorfulErrorExtra: "oklch(62.8% 0.258 29.2)",
-    },
+      colorfulErrorExtra: "oklch(62.8% 0.258 29.2)"
+    }
   },
   {
     name: "vaporwave",
@@ -2974,8 +2969,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(45% 0.166 289.4)",
       errorExtra: "oklch(35.6% 0.124 289.5)",
       colorfulError: "oklch(78.3% 0.143 226.2)",
-      colorfulErrorExtra: "oklch(68.4% 0.119 222.4)",
-    },
+      colorfulErrorExtra: "oklch(68.4% 0.119 222.4)"
+    }
   },
   {
     name: "vesper",
@@ -2990,8 +2985,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(74.4% 0.155 21.5)",
       errorExtra: "oklch(57.1% 0.116 21.4)",
       colorfulError: "oklch(93% 0.103 175.1)",
-      colorfulErrorExtra: "oklch(93% 0.103 175.1)",
-    },
+      colorfulErrorExtra: "oklch(93% 0.103 175.1)"
+    }
   },
   {
     name: "viridescent",
@@ -3006,8 +3001,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(66.6% 0.221 25.6)",
       errorExtra: "oklch(49.7% 0.161 25.2)",
       colorfulError: "oklch(55% 0.16 24)",
-      colorfulErrorExtra: "oklch(44.4% 0.116 23)",
-    },
+      colorfulErrorExtra: "oklch(44.4% 0.116 23)"
+    }
   },
   {
     name: "voc",
@@ -3022,8 +3017,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(51.3% 0.156 25.4)",
       errorExtra: "oklch(41.1% 0.117 24.4)",
       colorfulError: "oklch(51.3% 0.156 25.4)",
-      colorfulErrorExtra: "oklch(41.1% 0.117 24.4)",
-    },
+      colorfulErrorExtra: "oklch(41.1% 0.117 24.4)"
+    }
   },
   {
     name: "vscode",
@@ -3038,8 +3033,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(64.8% 0.21 25.2)",
       errorExtra: "oklch(64.8% 0.21 25.2)",
       colorfulError: "oklch(64.8% 0.21 25.2)",
-      colorfulErrorExtra: "oklch(64.8% 0.21 25.2)",
-    },
+      colorfulErrorExtra: "oklch(64.8% 0.21 25.2)"
+    }
   },
   {
     name: "watermelon",
@@ -3054,8 +3049,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(54.4% 0.194 24.4)",
       errorExtra: "oklch(47.9% 0.18 24.6)",
       colorfulError: "oklch(54.4% 0.194 24.4)",
-      colorfulErrorExtra: "oklch(47.9% 0.18 24.6)",
-    },
+      colorfulErrorExtra: "oklch(47.9% 0.18 24.6)"
+    }
   },
   {
     name: "wavez",
@@ -3070,8 +3065,8 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(58.2% 0.166 18.2)",
       errorExtra: "oklch(41.3% 0.116 17.6)",
       colorfulError: "oklch(58.2% 0.166 18.2)",
-      colorfulErrorExtra: "oklch(41.3% 0.116 17.6)",
-    },
+      colorfulErrorExtra: "oklch(41.3% 0.116 17.6)"
+    }
   },
   {
     name: "witch_girl",
@@ -3086,13 +3081,13 @@ const unresolvedPalettes: UnresolvedPalette[] = [
       error: "oklch(70.5% 0.031 41.7)",
       errorExtra: "oklch(70.5% 0.031 41.7)",
       colorfulError: "oklch(70.5% 0.031 41.7)",
-      colorfulErrorExtra: "oklch(70.5% 0.031 41.7)",
-    },
-  },
+      colorfulErrorExtra: "oklch(70.5% 0.031 41.7)"
+    }
+  }
 ];
 
 const paletteMap: Record<string, Palette> = Object.fromEntries(
-  unresolvedPalettes.map((p) => [p.name, resolvePalette(p)]),
+  unresolvedPalettes.map((p) => [p.name, resolvePalette(p)])
 );
 
 export const palettes: Palette[] = Object.values(paletteMap);

@@ -58,9 +58,8 @@ export function FetchDataSteps() {
           >
             Table Editor
           </a>{" "}
-          for your Supabase project to create a table and insert some example
-          data. If you&apos;re stuck for creativity, you can copy and paste the
-          following into the{" "}
+          for your Supabase project to create a table and insert some example data. If you&apos;re
+          stuck for creativity, you can copy and paste the following into the{" "}
           <a
             href="https://supabase.com/dashboard/project/_/sql/new"
             className="text-foreground/80 font-bold hover:underline"
@@ -76,8 +75,8 @@ export function FetchDataSteps() {
 
       <TutorialStep title="Query Supabase data from Next.js">
         <p>
-          To create a Supabase client and query data from an Async Server
-          Component, create a new page.tsx file at{" "}
+          To create a Supabase client and query data from an Async Server Component, create a new
+          page.tsx file at{" "}
           <span className="bg-muted text-secondary-foreground relative rounded border px-[0.3rem] py-[0.2rem] font-mono text-xs font-medium">
             /app/notes/page.tsx
           </span>{" "}
@@ -97,13 +96,11 @@ export function FetchDataSteps() {
           >
             Supabase UI library
           </a>{" "}
-          and try installing some blocks. For example, you can install a
-          Realtime Chat block by running:
+          and try installing some blocks. For example, you can install a Realtime Chat block by
+          running:
         </p>
         <CodeBlock
-          code={
-            "npx shadcn@latest add https://supabase.com/ui/r/realtime-chat-nextjs.json"
-          }
+          code={"npx shadcn@latest add https://supabase.com/ui/r/realtime-chat-nextjs.json"}
         />
       </TutorialStep>
 

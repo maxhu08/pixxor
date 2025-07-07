@@ -15,17 +15,17 @@ export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
   title: "pixxor",
   description:
-    "Share your photos, add stunning effects, and organize albums effortlessly with pixxor.",
+    "Share your photos, add stunning effects, and organize albums effortlessly with pixxor."
 };
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
   display: "swap",
-  subsets: ["latin"],
+  subsets: ["latin"]
 });
 
 export default async function RootLayout({
-  children,
+  children
 }: Readonly<{
   children: React.ReactNode;
 }>) {

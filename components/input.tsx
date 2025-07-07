@@ -1,11 +1,7 @@
 import { cn } from "@/lib/utils";
 import * as React from "react";
 
-export function Input({
-  className,
-  children,
-  ...props
-}: React.ComponentProps<"div">) {
+export function Input({ className, children, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       className={cn(
@@ -15,7 +11,7 @@ export function Input({
         "dark:bg-input/30",
         "file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium",
         "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
-        className,
+        className
       )}
       {...props}
     >
@@ -24,11 +20,7 @@ export function Input({
   );
 }
 
-export function InputField({
-  className,
-  type,
-  ...props
-}: React.ComponentProps<"input">) {
+export function InputField({ className, type, ...props }: React.ComponentProps<"input">) {
   return (
     <input
       type={type}
@@ -36,23 +28,19 @@ export function InputField({
       className={cn(
         "placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground flex-grow bg-transparent py-1 text-base outline-none",
         "file:text-foreground md:text-sm",
-        className,
+        className
       )}
       {...props}
     />
   );
 }
 
-export function InputIcon({
-  className,
-  children,
-  ...props
-}: React.ComponentProps<"div">) {
+export function InputIcon({ className, children, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       className={cn(
         "flex aspect-square h-full items-center justify-center [&_svg:not([class*='size-'])]:size-4",
-        className,
+        className
       )}
       {...props}
     >
