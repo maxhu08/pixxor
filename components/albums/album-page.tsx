@@ -215,9 +215,9 @@ function AlbumContent() {
           <div className="py-12 text-center">
             <div className="mx-auto max-w-sm">
               <div className="rounded-lg border-2 border-dashed p-8">
-                <FileText className="mx-auto size-12 text-gray-400" />
-                <h3 className="mt-4 text-lg font-semibold text-gray-900">No images</h3>
-                <p className="mt-2 text-sm text-gray-500">
+                <FileText className="text-primary mx-auto size-12" />
+                <h3 className="mt-4 text-lg font-semibold">No images</h3>
+                <p className="text-muted-foreground mt-2 text-sm">
                   This album doesn't contain any images yet.
                 </p>
               </div>
