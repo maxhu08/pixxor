@@ -29,26 +29,24 @@ export function UploadImageToAlbumDialog({
         <DialogHeader>
           <DialogTitle>Upload Image to Album</DialogTitle>
         </DialogHeader>
-        <div className="my-4">
-          <UploadDropzone
-            className="bg-background border-muted-foreground ut-upload-icon:text-muted-foreground ut-label:text-foreground ut-allowed-content:text-muted-foreground ut-button:bg-primary ut-button:text-primary-foreground ut-button:hover:bg-primary/90 cursor-pointer"
-            endpoint="imageUploader"
-            headers={{ "x-album-id": albumId }}
-            onClientUploadComplete={(res) => {
-              if (res && res[0]) {
-                onSuccess(res[0]);
-                toast.success(`Upload completed to album ${albumId}!`);
-              } else {
-                toast.success(`Upload completed to album ${albumId}!`);
-                onSuccess(null);
-              }
-              dialog.close();
-            }}
-            onUploadError={(error: Error) => {
-              toast.error(`Upload failed: ${error.message}`);
-            }}
-          />
-        </div>
+        <UploadDropzone
+          className="bg-background border-muted-foreground ut-upload-icon:text-muted-foreground ut-label:text-foreground ut-allowed-content:text-muted-foreground ut-button:bg-primary ut-button:text-primary-foreground ut-button:hover:bg-primary/90 ut-button:cursor-pointer cursor-pointer"
+          endpoint="imageUploader"
+          headers={{ "x-album-id": albumId }}
+          onClientUploadComplete={(res) => {
+            if (res && res[0]) {
+              onSuccess(res[0]);
+              toast.success(`Upload completed to album ${albumId}!`);
+            } else {
+              toast.success(`Upload completed to album ${albumId}!`);
+              onSuccess(null);
+            }
+            dialog.close();
+          }}
+          onUploadError={(error: Error) => {
+            toast.error(`Upload failed: ${error.message}`);
+          }}
+        />
         <DialogFooter>
           <Button variant="outline" className="cursor-pointer" onClick={() => dialog.close()}>
             Cancel
