@@ -116,7 +116,7 @@ export function AlbumCard({
               }
               className="cursor-pointer"
             >
-              <UserPlus className="mr-2 size-4" /> Invite
+              <UserPlus /> Invite
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() =>
@@ -129,7 +129,7 @@ export function AlbumCard({
               }
               className="cursor-pointer"
             >
-              <Settings className="mr-2 size-4" /> Manage
+              <Settings /> Manage
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem
@@ -143,7 +143,7 @@ export function AlbumCard({
               }
               className="text-destructive cursor-pointer"
             >
-              <Trash2 className="text-destructive mr-2 size-4" /> Delete Album
+              <Trash2 className="text-destructive" /> Delete
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

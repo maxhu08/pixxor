@@ -52,7 +52,7 @@ export function SignOutDialog() {
           >
             {isPending ? (
               <>
-                <LoaderCircle className="mr-2 size-4 animate-spin" />
+                <LoaderCircle className="animate-spin" />
                 Signing out...
               </>
             ) : (

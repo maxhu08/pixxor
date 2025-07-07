@@ -24,7 +24,7 @@ export function CreateAlbumButton({ onSuccess }: CreateAlbumButtonProps) {
       }}
     >
       <div className="flex items-center">
-        <PlusCircle className="mr-2 size-4" />
+        <PlusCircle />
         Create Album
       </div>
     </Button>

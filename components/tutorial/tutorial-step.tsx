@@ -3,7 +3,7 @@ import { Checkbox } from "../ui/checkbox";
 export function TutorialStep({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <li className="relative">
-      <Checkbox id={title} name={title} className={`peer absolute top-[3px] mr-2`} />
+      <Checkbox id={title} name={title} className="peer absolute top-[3px]" />
       <label
         htmlFor={title}
         className={`text-foreground relative text-base font-medium peer-checked:line-through`}

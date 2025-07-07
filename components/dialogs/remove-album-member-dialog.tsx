@@ -68,7 +68,7 @@ export function RemoveAlbumMemberDialog({
           >
             {isPending ? (
               <>
-                <LoaderCircle className="mr-2 size-4 animate-spin" />
+                <LoaderCircle className="animate-spin" />
                 Removing...
               </>
             ) : (
