@@ -33,7 +33,7 @@ export default async function AuthButton() {
     );
   }
 
-  const { data } = await supabase.from("users").select("name").eq("id", user.id).single();
+  const { data } = await supabase.from("users").select("name").eq("id", user.id).maybeSingle();
 
   if (!data) return null;
 
